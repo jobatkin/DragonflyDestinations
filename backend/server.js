@@ -6,6 +6,7 @@ const environment = process.env.NODE_ENV || "local";
 dotenv.config({ path: `./.env.${environment}` }); // support multiple environments, see package.json
 
 require("./dbConnect"); // first run 'npm install sequelize mysql2'
+const initialiseCountries = require('./data/initCountries')
 
 // parse requests of content-type - application / json;
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use("/images", express.static("public/images")); // required for image mappi
 // set port, listen for requests
 const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}.`);
+  await initialiseCountries();
 });

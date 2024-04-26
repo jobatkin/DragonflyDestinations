@@ -7,7 +7,7 @@ class Country extends Model { }
 // Sequelize will create this table if it doesn't exist on startup
 Country.init({
         code: {
-            type: DataTypes.STRING, allowNull: false, primaryKey: true
+            type: DataTypes.STRING(5), allowNull: false, primaryKey: true
         },
         name: {
             type: DataTypes.STRING, allowNull: false, required: true
@@ -40,14 +40,11 @@ Country.init({
             type: DataTypes.INTEGER, allowNull: false, required: true
         }, 
         region: {
-            type: DataTypes.STRING, allowNull: false, required: true
+            type: DataTypes.STRING(100), allowNull: false, required: true
         }, 
         subregion: {
-            type: DataTypes.STRING
-        },  
-        flagID: {
-            type: DataTypes.INTEGER, allowNull: false, required: true
-        }                                                    
+            type: DataTypes.STRING(100)
+        }                                                  
     },
     {
         sequelize: sequelizeInstance, modelName: 'countries', // use lowercase plural format

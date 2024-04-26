@@ -1,14 +1,20 @@
 'use strict'
-const User = require('./user') // 1. require the model
-const Country = require('./country') // 1. require the model
+const User = require('./user') 
+const Country = require('./country') 
+const Flag = require('./flag') 
 
 async function init() {
-    await User.sync(); // 2. sync the model
-    await Country.sync(); // 2. sync the model
+    // sync all models - creates tables
+    await User.sync(); 
+    await Country.sync(); 
+    await Flag.sync(); 
 };
 init();
 
+Flag.belongsTo(Country, { foreignKey: { name: 'countryCode', allowNull: false } })
+
 module.exports = {
-    User, // 3. export the model
+    User, 
     Country,
+    Flag
 };
