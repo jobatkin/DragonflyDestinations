@@ -1,7 +1,7 @@
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import Link from "next/link";
 
-interface CalloutModuleProps {
+export interface CalloutModuleProps {
     title: string,
     children: React.ReactNode,
     button1?: CalloutButtonProps,
@@ -9,14 +9,14 @@ interface CalloutModuleProps {
     shadow?: Boolean
 }
 
-interface CalloutButtonProps {
+export interface CalloutButtonProps {
     text: string,
     link: string,
     color?: string
 }
 
 function CalloutModule({title, children, button1, button2, shadow = false}: CalloutModuleProps) {
-    const boxStyles = { display: 'flex', flexDirection: 'column', boxShadow: 'none', padding: '2em' };
+    const boxStyles = { display: 'flex', flexDirection: 'column', boxShadow: 'none', padding: '1em 2em' };
     if (shadow) boxStyles.boxShadow = '2px 2px 10px 5px rgba(0,0,0,0.5)';
     
     const hasButtons = button1 || button2;

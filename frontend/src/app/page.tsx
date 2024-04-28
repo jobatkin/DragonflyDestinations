@@ -1,7 +1,6 @@
+import HomeSection from "@/components/HomeSection";
 import styles from "./page.module.css";
 import { Container, Grid } from "@mui/material";
-import CalloutModule from "@/components/CalloutModule";
-import CountryCard from "@/components/CountryCard";
 
 // Save as app/posts/page.jsx and copy layout.jsx from /about
 async function getRandomCountries(limit: number) {
@@ -12,7 +11,9 @@ async function getRandomCountries(limit: number) {
         // This will activate the closest `error.js` Error Boundary
        throw new Error("Failed to fetch countries");
     }
-    return res.json();
+    const json = await res.json();
+    const countries = json.data;
+    return countries.map(country => ({...country, flagImg: country.flag.svgLink}));
 
     //temp data hardcoded for testing
 
@@ -30,31 +31,31 @@ async function getRandomCountries(limit: number) {
 }
 
 export default async function Home() {
-  const countries = await getRandomCountries(1);
-  const country = countries.data[0];
+  const sections = [
+      {
+          title: "Discover your next destination",
+          button1: { text: "Discover", link: "/discover" },
+          description: (
+              <>
+                  <p>Browse and filter through hundreds of countries to find your next dream destination. 
+                    Travel the world from your own home by searching and discovering
+                    both little-known and major countries and learning interesting facts.
+                  </p>
+                  <p>Build up your knowledge and find your new ultimate wishlist of travel locations.</p>
+              </>
+          ),
+      },
+  ];
+  const countries = await getRandomCountries(sections.length);
 
   return (
     <main className={styles.main}>
       <div className={styles.description}>
         <Container maxWidth="xl">
-          <Grid container columnSpacing={5}>
-            <Grid item md={6} xs={12}>
-                <CalloutModule title="Discover your next destination" button1={{text: "Discover", link:'/discover'}}>
-                  <p>Browse and filter through hundreds of countries to find your next dream destination.
-                    Travel the world from your own home by searching and discovering both little-known and major
-                    countries and learning interesting facts. Build up your knowledge and find your new ultimate
-                    wishlist of travel locations.
-                  </p>
-                </CalloutModule>
-            </Grid>
-            <Grid item md={1} sx={{display: {xs: "none", md: "flex"}}}></Grid>
-            <Grid item md={5} xs={12}>
-              <CountryCard 
-                name={country.name} capital={country.capital} 
-                region={country.region} subregion={country.subregion} 
-                flagImg={country.flag.svgLink}
-                population={country.population} area={country.area}/>
-            </Grid>
+          <Grid container columnSpacing={5} sx={{alignItems: 'center'}}>
+            {sections.map((section, index) => 
+              <HomeSection key={section.title} title={section.title} country={countries[index]} description={section.description} />
+            )}
           </Grid>
         </Container>
       </div>
