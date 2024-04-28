@@ -24,22 +24,27 @@ export const ddThemeSettings = {
         fontSize: 16,
         h1: {
             fontSize: 34,
+            fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         },
         h2: {
             fontSize: 30,
+            fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         },
         h3: {
             fontSize: 26,
+            fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         },
         h4: {
             fontSize: 22,
+            fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         },
         h5: {
             fontSize: 18,
+            fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         }                                   
     },

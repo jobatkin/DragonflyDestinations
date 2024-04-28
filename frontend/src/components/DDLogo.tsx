@@ -8,7 +8,7 @@ function DDLogo({width = "100", body = "#000", wings = "#000"}: any) {
             id="Layer_1"
             viewBox="0 0 599.26 580.72"
             width={width}
-            style={{transform: "rotate(3deg)", verticalAlign: "middle", margin: "0 5px"}}
+            style={{transform: "rotate(3deg)", verticalAlign: "middle", margin: "0 5px -0.5em 5px"}}
         >
             <defs>
                 <style>{`.cls-1{stroke-width:0} .body{ fill: ${body}} .wings{ fill: ${wings}}`}</style>
