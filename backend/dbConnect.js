@@ -18,7 +18,6 @@ const connectMysql = async () => {
         process.exit(1);
     }
 }
-connectMysql();
 
 module.exports = {
     Sequelize: sequelize,

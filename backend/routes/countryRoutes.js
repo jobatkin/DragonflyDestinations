@@ -6,7 +6,11 @@ router.get('/', (req, res) => {
     Controllers.countryController.getCountries(req, res)
 })
 
-router.get('/:id', (req, res) => {
+router.get('/random', (req, res) => {
+    Controllers.countryController.getRandomCountries(req, res)
+})
+
+router.get('/:code', (req, res) => {
     Controllers.countryController.getCountry(req, res)
 })
 

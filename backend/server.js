@@ -5,7 +5,7 @@ const dotenv = require("dotenv"); // first do 'npm install dotenv'
 const environment = process.env.NODE_ENV || "local";
 dotenv.config({ path: `./.env.${environment}` }); // support multiple environments, see package.json
 
-require("./dbConnect"); // first run 'npm install sequelize mysql2'
+require("./dbConnect").connectMysql(); // first run 'npm install sequelize mysql2'
 const initialiseCountries = require('./data/initCountries')
 
 // parse requests of content-type - application / json;

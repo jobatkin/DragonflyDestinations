@@ -12,6 +12,7 @@ async function init() {
 init();
 
 Flag.belongsTo(Country, { foreignKey: { name: 'countryCode', allowNull: false } })
+Country.hasOne(Flag);
 
 module.exports = {
     User, 
