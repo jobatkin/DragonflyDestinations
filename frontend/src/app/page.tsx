@@ -1,94 +1,61 @@
-import Image from "next/image";
 import styles from "./page.module.css";
+import { Container, Grid } from "@mui/material";
+import CalloutModule from "@/components/CalloutModule";
+import CountryCard from "@/components/CountryCard";
 
-export default function Home() {
+// Save as app/posts/page.jsx and copy layout.jsx from /about
+async function getRandomCountries(limit: number) {
+    //const res = await fetch("/api/countries/random/?_limit=" + limit);
+
+    //if (!res.ok) {
+        // Recommendation: handle errors
+        // This will activate the closest `error.js` Error Boundary
+    //    throw new Error("Failed to fetch countries");
+    //}
+    //return res.json();
+
+    // temp data hardcoded for testing
+
+    return [
+      {
+        name: 'Australia',
+        capital: 'Canberra',
+        region: 'Oceania',
+        subregion: 'Australia and New Zealand',
+        flagImg: 'https://flagcdn.com/au.svg',
+        population: 25687041,
+        area: 7692024
+      }
+    ]
+}
+
+export default async function Home() {
+  const countries = await getRandomCountries(1);
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+        <Container maxWidth="xl">
+          <Grid container columnSpacing={5}>
+            <Grid item md={6} xs={12}>
+                <CalloutModule title="Discover your next destination" button1={{text: "Discover", link:'/discover'}}>
+                  <p>Browse and filter through hundreds of countries to find your next dream destination.
+                    Travel the world from your own home by searching and discovering both little-known and major
+                    countries and learning interesting facts. Build up your knowledge and find your new ultimate
+                    wishlist of travel locations.
+                  </p>
+                </CalloutModule>
+            </Grid>
+            <Grid item md={1} sx={{display: {xs: "none", md: "flex"}}}></Grid>
+            <Grid item md={5} xs={12}>
+              <CountryCard 
+                name={countries[0].name} capital={countries[0].capital} 
+                region={countries[0].region} subregion={countries[0].subregion} 
+                flagImg={countries[0].flagImg}
+                population={countries[0].population} area={countries[0].area}/>
+            </Grid>
+          </Grid>
+        </Container>
       </div>
     </main>
   );
