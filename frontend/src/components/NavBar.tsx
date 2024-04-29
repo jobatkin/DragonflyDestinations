@@ -85,13 +85,9 @@ function NavBar() {
                     {/* desktop menu links */}
                     <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex", justifyContent: 'center'}}}>
                         {pages.map((page) => (
-                            <Typography
-                                component={Link}
-                                color="#d8d8d8"
-                                key={page.link}
-                                href={page.link}
-                                sx={{m: 2, display: "block"}}
-                            >
+                            <Typography component={Link} color="primary.contrastText"
+                                key={page.link} href={page.link}
+                                sx={{m: 2, display: "block"}}>
                                 {page.label}
                             </Typography>
                         ))}

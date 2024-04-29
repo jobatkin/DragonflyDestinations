@@ -1,6 +1,7 @@
 import HomeSection from "@/components/HomeSection";
 import styles from "./page.module.css";
 import { Container, Grid } from "@mui/material";
+import { CountryWithFlag } from "@/types";
 
 // Save as app/posts/page.jsx and copy layout.jsx from /about
 async function getRandomCountries(limit: number) {
@@ -12,7 +13,7 @@ async function getRandomCountries(limit: number) {
        throw new Error("Failed to fetch countries");
     }
     const json = await res.json();
-    const countries = json.data;
+    const countries = json.data as CountryWithFlag[];
     return countries.map(country => ({...country, flagImg: country.flag.svgLink}));
 
     //temp data hardcoded for testing
@@ -45,6 +46,18 @@ export default async function Home() {
               </>
           ),
       },
+      {
+        title: "Be surprised by a random country",
+        button1: { text: "Surprise", link: "/surprise" },
+        description: (
+            <>
+                <p>Can't decide where to travel, or not even sure what the possibilities are?</p>
+                <p>Let our comprehensive list surprise you with a randomly chosen country. Learn all about
+                  where it is and what's it's like, then add it to your list if you like what you see!
+                </p>
+            </>
+        ),
+    },      
   ];
   const countries = await getRandomCountries(sections.length);
 
@@ -52,9 +65,9 @@ export default async function Home() {
     <main className={styles.main}>
       <div className={styles.description}>
         <Container maxWidth="xl">
-          <Grid container columnSpacing={5} sx={{alignItems: 'center'}}>
+          <Grid container columnSpacing={5} rowSpacing={5} sx={{alignItems: 'center'}}>
             {sections.map((section, index) => 
-              <HomeSection key={section.title} title={section.title} country={countries[index]} description={section.description} />
+              <HomeSection key={section.title} {...section} country={countries[index]} flagSide={index % 2 == 0 ? 'right' : 'left'} />
             )}
           </Grid>
         </Container>

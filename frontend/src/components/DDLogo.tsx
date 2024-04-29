@@ -1,7 +1,6 @@
-import { useTheme } from "@emotion/react";
-import * as React from "react";
+
+// JSX version of SVG logo - allows for dynamic colour and sizing
 function DDLogo({width = "100", body = "#000", wings = "#000"}: any) {
-    const theme = useTheme();
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -24,4 +23,5 @@ function DDLogo({width = "100", body = "#000", wings = "#000"}: any) {
         </svg>
     );
 }
+
 export default DDLogo;

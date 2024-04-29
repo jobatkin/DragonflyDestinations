@@ -1,13 +1,8 @@
 import { CardContent, Card, CardMedia, Typography, Grid } from "@mui/material";
+import { Country } from "@/types";
 
-export interface CountryCardProps {
-    name: string,
-    capital: string,
-    region: string,
-    subregion: string,
+export interface CountryCardProps extends Country {
     flagImg: string,
-    population: number,
-    area: number,
     colour?: string
 }
 
@@ -15,7 +10,7 @@ function CountryCard(props: CountryCardProps) {
     const colour = props.colour ? props.colour : 'primary';
 
     return (
-        <Card className="CountryCard" sx={{ backgroundColor: `${colour}.main`, color: `${colour}.contrastText` }}>
+        <Card className="CountryCard" sx={{ backgroundColor: `${colour}.main`, color: `${colour}.contrastText`, mx: '2em' }}>
             <CardMedia
                 sx={{ height: 140 }}
                 image={props.flagImg}

@@ -32,8 +32,8 @@ function CalloutModule({title, children, button1, button2, shadow = false}: Call
             </Typography>
             {hasButtons ? 
                 <ButtonGroup>
-                    {button1 && <Button component={Link} href={button1.link} variant="contained">{button1.text}</Button>}
-                    {button2 && <Button component={Link} href={button2.link} variant="outlined">{button2.text}</Button>}
+                    {button1 && <Button component={Link} href={button1.link} size="large" variant="contained">{button1.text}</Button>}
+                    {button2 && <Button component={Link} href={button2.link} size="large" variant="outlined">{button2.text}</Button>}
                 </ButtonGroup>
             : null}
         </Box>
