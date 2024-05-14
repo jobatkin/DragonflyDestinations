@@ -2,17 +2,11 @@ import { CardContent, Card, CardMedia, Typography, Grid } from "@mui/material";
 import { Country } from "@/types";
 
 export interface CountryCardProps extends Country {
-import { Country } from "@/types";
-
-export interface CountryCardProps extends Country {
     flagImg: string,
-    colour?: string
     colour?: string
 }
 
 function CountryCard(props: CountryCardProps) {
-    const colour = props.colour ? props.colour : 'primary';
-
     const colour = props.colour ? props.colour : 'primary';
 
     return (
@@ -27,7 +21,6 @@ function CountryCard(props: CountryCardProps) {
                     {props.name}
                 </Typography>
                 <Typography gutterBottom variant="h5" color="text.secondary">
-                    Where? {props.subregion}, {props.region}
                     Where? {props.subregion}, {props.region}
                 </Typography>      
                 <Grid container>

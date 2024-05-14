@@ -2,29 +2,21 @@ import HomeSection from "@/components/HomeSection";
 import styles from "./page.module.css";
 import { Container, Grid } from "@mui/material";
 import { CountryWithFlag } from "@/types";
-import { CountryWithFlag } from "@/types";
 
 // get the given number of random countries from backend API
 async function getRandomCountries(limit: number) {
     const res = await fetch(process.env.SERVER + "/api/countries/random/?limit=" + limit);
-    const res = await fetch(process.env.SERVER + "/api/countries/random/?limit=" + limit);
 
-    if (!res.ok) {
     if (!res.ok) {
         // Recommendation: handle errors
         // This will activate the closest `error.js` Error Boundary
        throw new Error("Failed to fetch countries");
     }
-    const json = await res.json();
-    const countries = json.data as CountryWithFlag[];
-    return countries.map(country => ({...country, flagImg: country.flag.svgLink}));
-       throw new Error("Failed to fetch countries");
-    }
+
     const json = await res.json();
     const countries = json.data as CountryWithFlag[];
     return countries.map(country => ({...country, flagImg: country.flag.svgLink}));
 
-    //temp data hardcoded for testing
     //temp data hardcoded for testing
 
     // return [
@@ -37,18 +29,7 @@ async function getRandomCountries(limit: number) {
     //     population: 25687041,
     //     area: 7692024
     //   }
-    // ]
-    // return [
-    //   {
-    //     name: 'Australia',
-    //     capital: 'Canberra',
-    //     region: 'Oceania',
-    //     subregion: 'Australia and New Zealand',
-    //     flagImg: 'https://flagcdn.com/au.svg',
-    //     population: 25687041,
-    //     area: 7692024
-    //   }
-    // ]
+    // ]}
 }
 
 // display homepage content
