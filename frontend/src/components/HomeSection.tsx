@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, ButtonProps } from "@mui/material";
 import CalloutModule, { CalloutButtonProps } from "./CalloutModule";
 import CountryCard, { CountryCardProps } from "./CountryCard";
 
@@ -17,7 +17,7 @@ function HomeSection(props: HomeSectionProps) {
 
     const calloutColumn = 
         <Grid item lg={6} md={7} xs={12}>
-            <CalloutModule title={props.title} button1={props.button1} colour={highlightColour}>
+            <CalloutModule title={props.title} button1={props.button1} colour={highlightColour as ButtonProps["color"]}>
                 {props.description}
             </CalloutModule>
         </Grid>;

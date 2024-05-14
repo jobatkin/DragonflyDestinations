@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Typography, ButtonProps } from "@mui/material";
 import Link from "next/link";
 
 export interface CalloutModuleProps {
@@ -6,18 +6,18 @@ export interface CalloutModuleProps {
     children: React.ReactNode,
     button1?: CalloutButtonProps,
     button2?: CalloutButtonProps,
-    colour?: string,
+    colour?: ButtonProps["color"], // automatically restricts possible values to only valid colour options for buttons
     shadow?: Boolean
 }
 
 export interface CalloutButtonProps {
     text: string,
-    link: string,
-    color?: string
+    link: string
 }
 
-function CalloutModule({title, children, button1, button2, colour = 'primary', shadow = false}: CalloutModuleProps) {
-    const boxStyles = { display: 'flex', flexDirection: 'column', boxShadow: 'none', padding: {xs: '0.5em', lg: '2em'} };
+function CalloutModule({title, children, button1, button2, colour, shadow = false}: CalloutModuleProps) {
+    const boxStyles = { display: 'flex', flexDirection: 'column', boxShadow: 'none', padding: {xs: '0.5em', lg: '2em'} }
+    const buttonColour = colour || 'primary'; 
     if (shadow) boxStyles.boxShadow = '2px 2px 10px 5px rgba(0,0,0,0.5)';
     
     const hasButtons = button1 || button2;
@@ -33,8 +33,8 @@ function CalloutModule({title, children, button1, button2, colour = 'primary', s
             </Typography>
             {hasButtons ? 
                 <ButtonGroup>
-                    {button1 && <Button component={Link} href={button1.link} size="large" variant="contained" color={colour}>{button1.text}</Button>}
-                    {button2 && <Button component={Link} href={button2.link} size="large" variant="outlined" color={colour}>{button2.text}</Button>}
+                    {button1 && <Button component={Link} href={button1.link} size="large" variant="contained" color={buttonColour}>{button1.text}</Button>}
+                    {button2 && <Button component={Link} href={button2.link} size="large" variant="outlined" color={buttonColour}>{button2.text}</Button>}
                 </ButtonGroup>
             : null}
         </Box>
