@@ -1,7 +1,7 @@
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import Link from "next/link";
 
-interface CalloutModuleProps {
+export interface CalloutModuleProps {
     title: string,
     children: React.ReactNode,
     button1?: CalloutButtonProps,
@@ -9,14 +9,14 @@ interface CalloutModuleProps {
     shadow?: Boolean
 }
 
-interface CalloutButtonProps {
+export interface CalloutButtonProps {
     text: string,
     link: string,
     color?: string
 }
 
 function CalloutModule({title, children, button1, button2, shadow = false}: CalloutModuleProps) {
-    const boxStyles = { display: 'flex', flexDirection: 'column', boxShadow: 'none', padding: '2em' };
+    const boxStyles = { display: 'flex', flexDirection: 'column', boxShadow: 'none', padding: {xs: '0.5em', lg: '2em'} };
     if (shadow) boxStyles.boxShadow = '2px 2px 10px 5px rgba(0,0,0,0.5)';
     
     const hasButtons = button1 || button2;
@@ -32,8 +32,8 @@ function CalloutModule({title, children, button1, button2, shadow = false}: Call
             </Typography>
             {hasButtons ? 
                 <ButtonGroup>
-                    {button1 && <Button component={Link} href={button1.link} variant="contained">{button1.text}</Button>}
-                    {button2 && <Button component={Link} href={button2.link} variant="outlined">{button2.text}</Button>}
+                    {button1 && <Button component={Link} href={button1.link} size="large" variant="contained">{button1.text}</Button>}
+                    {button2 && <Button component={Link} href={button2.link} size="large" variant="outlined">{button2.text}</Button>}
                 </ButtonGroup>
             : null}
         </Box>
