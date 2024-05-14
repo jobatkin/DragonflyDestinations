@@ -39,11 +39,11 @@ export default async function Home() {
       {
           title: "Discover your next destination",
           button1: { text: "Discover", link: "/discover" },
+          highlightColour: 'info',
           description: (
               <>
                   <p>Browse and filter through hundreds of countries to find your next dream destination. 
-                    Travel the world from your own home by searching and discovering
-                    both little-known and major countries and learning interesting facts.
+                    Travel the world from your own home by discovering little-known and major countries.
                   </p>
                   <p>Build up your knowledge and find your new ultimate wishlist of travel locations.</p>
               </>
@@ -52,6 +52,7 @@ export default async function Home() {
       {
         title: "Be surprised by a random country",
         button1: { text: "Surprise", link: "/surprise" },
+        highlightColour: 'primary',
         description: (
             <>
                 <p>Can't decide where to travel, or not even sure what the possibilities are?</p>
@@ -64,10 +65,11 @@ export default async function Home() {
       {
         title: "Share your travel experiences",
         button1: { text: "Connect", link: "/connect" },
+        highlightColour: 'secondary',
         description: (
             <>
                 <p>Have you travelled to some amazing countries, or maybe want to share experiences from your home country?</p>
-                <p>Read stories and comments from around the world, or ask questions to find more about what it's like to live
+                <p>Read stories and comments from around the world, or ask questions to find out what it's like to live
                   and travel in your favourite destinations.
                 </p>
             </>
@@ -76,11 +78,12 @@ export default async function Home() {
       {
         title: "Challenge your memory and knowledge",
         button1: { text: "Challenge", link: "/challenge" },
+        highlightColour: 'extra',
         description: (
             <>
-                <p>Think your geographical knowledge is pretty good? Challenge yourself in our neverending quiz!</p>
+                <p>Think your geographical knowledge ranks well? Challenge yourself in our neverending quiz!</p>
                 <p>Test your memory on flags, regions and capital cities of countries all around the globe and
-                  try to beat your streak and challenge yourself against our top players.
+                  compare your top streak against our top players.
                 </p>
             </>
         ),

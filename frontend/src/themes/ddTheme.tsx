@@ -21,6 +21,10 @@ export const ddThemeSettings = {
             main: '#252b48', // navy
             contrastText: '#e8e8e8' // lighter grey
         },
+        extra: {
+            main: '#445069', // navy
+            contrastText: '#e8e8e8' // lighter grey
+        },        
         mode: 'dark' as const // dark mode by default
     },
     typography: {

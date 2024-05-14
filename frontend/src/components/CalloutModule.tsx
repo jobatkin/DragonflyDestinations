@@ -6,6 +6,7 @@ export interface CalloutModuleProps {
     children: React.ReactNode,
     button1?: CalloutButtonProps,
     button2?: CalloutButtonProps,
+    colour?: string,
     shadow?: Boolean
 }
 
@@ -15,7 +16,7 @@ export interface CalloutButtonProps {
     color?: string
 }
 
-function CalloutModule({title, children, button1, button2, shadow = false}: CalloutModuleProps) {
+function CalloutModule({title, children, button1, button2, colour = 'primary', shadow = false}: CalloutModuleProps) {
     const boxStyles = { display: 'flex', flexDirection: 'column', boxShadow: 'none', padding: {xs: '0.5em', lg: '2em'} };
     if (shadow) boxStyles.boxShadow = '2px 2px 10px 5px rgba(0,0,0,0.5)';
     
@@ -32,8 +33,8 @@ function CalloutModule({title, children, button1, button2, shadow = false}: Call
             </Typography>
             {hasButtons ? 
                 <ButtonGroup>
-                    {button1 && <Button component={Link} href={button1.link} size="large" variant="contained">{button1.text}</Button>}
-                    {button2 && <Button component={Link} href={button2.link} size="large" variant="outlined">{button2.text}</Button>}
+                    {button1 && <Button component={Link} href={button1.link} size="large" variant="contained" color={colour}>{button1.text}</Button>}
+                    {button2 && <Button component={Link} href={button2.link} size="large" variant="outlined" color={colour}>{button2.text}</Button>}
                 </ButtonGroup>
             : null}
         </Box>
