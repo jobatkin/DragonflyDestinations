@@ -3,14 +3,18 @@ import { Country } from "@/types";
 
 export interface CountryCardProps extends Country {
     flagImg: string,
-    colour?: string
+    colour?: string,
+    single?: boolean
 }
 
+// Display a single Country Card, including flag, name, region/subregion, population and area
 function CountryCard(props: CountryCardProps) {
-    const colour = props.colour ? props.colour : 'primary';
+    const colour = props.colour ? props.colour : 'primary'; // base colour defaults to primary if not specified
+    const single = props.single === undefined ? true : props.single; // are we showing a single card at a time? true if not specified
+    const cardMargins = single ? {xs: '0.5em', lg: '2em'} : { xs: '0.5em' }; // margins around card change if in a grid or single
 
     return (
-        <Card className="CountryCard" sx={{ backgroundColor: `${colour}.main`, color: `${colour}.contrastText`, mx: {xs: '0.5em', lg:'2em'} }}>
+        <Card className="CountryCard" sx={{ backgroundColor: `${colour}.main`, color: `${colour}.contrastText`, mx: cardMargins }}>
             <CardMedia
                 sx={{ height: 150 }}
                 image={props.flagImg}

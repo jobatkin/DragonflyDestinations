@@ -26,6 +26,7 @@ const getRandomCountries = (req, res) => {
     })
 }
 
+// get a single country from the database identified by its code
 const getCountry = (req, res) => {
     Models.Country.find({ where: { code: req.params.code }}).then(function (data) {
         res.status(200).json({ result: 'Country data fetched successfully', data: data })

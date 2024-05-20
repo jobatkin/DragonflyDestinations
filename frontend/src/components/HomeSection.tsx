@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, ButtonProps } from "@mui/material";
 import CalloutModule, { CalloutButtonProps } from "./CalloutModule";
 import CountryCard, { CountryCardProps } from "./CountryCard";
 
@@ -7,14 +7,17 @@ interface HomeSectionProps {
     description: React.ReactNode,
     country: CountryCardProps,
     button1?: CalloutButtonProps,
-    flagSide?: string
+    flagSide?: string,
+    highlightColour?: string
 }
 
 function HomeSection(props: HomeSectionProps) {
     const flagSide = props.flagSide ? props.flagSide : 'right';
+    const highlightColour = props.highlightColour ? props.highlightColour : 'primary';
+
     const calloutColumn = 
         <Grid item lg={6} md={7} xs={12}>
-            <CalloutModule title={props.title} button1={props.button1}>
+            <CalloutModule title={props.title} button1={props.button1} colour={highlightColour as ButtonProps["color"]}>
                 {props.description}
             </CalloutModule>
         </Grid>;
@@ -22,7 +25,7 @@ function HomeSection(props: HomeSectionProps) {
     const countryColumn = 
         <Grid item md={5} xs={12}>
             <CountryCard
-                colour="info"
+                colour={highlightColour}
                 name={props.country.name} capital={props.country.capital}
                 region={props.country.region} subregion={props.country.subregion}
                 flagImg={props.country.flagImg}
