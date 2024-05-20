@@ -39,12 +39,16 @@ module.exports = async function initialiseCountries() {
                     defaults: insertCountry,
                 });
 
-                // insert this country unless it already exists
+                // insert this flag unless it already exists
                 const [newFlag, createdFlag] = await Models.Flag.findOrCreate({
                     where: { countryCode: country.cca3 },
                     defaults: insertFlag,
-                });       
-                
+                });   
+
+                // insert currencies and languages for this country
+                await checkInsertLanguages(newCountry, country.languages);
+                await checkInsertCurrencies(newCountry, country.currencies);
+
                 if (createdCountry) addedCountries++;
             }
         }
@@ -52,5 +56,40 @@ module.exports = async function initialiseCountries() {
         console.log(`Successfully loaded ${addedCountries} new countries from API`);
     } catch (err) {
         console.log(err);
+    }
+}
+
+async function checkInsertLanguages(country, languages) {
+
+    for (let code in languages) {
+        const newLanguage = {
+            code: code,
+            language: languages[code]
+        }
+
+        const language = await Models.Language.findOrCreate({
+            where: { code: code },
+            defaults: newLanguage,            
+        })
+
+        country.addLanguage(code);
+    }
+}
+
+async function checkInsertCurrencies(country, currencies) {
+
+    for (let code in currencies) {
+        const newCurrency = {
+            code: code,
+            name: currencies[code].name,
+            symbol: currencies[code].symbol,
+        }
+
+        const currency = await Models.Currency.findOrCreate({
+            where: { code: code },
+            defaults: newCurrency,            
+        })
+
+        country.addCurrency(code);
     }
 }

@@ -28,7 +28,14 @@ const getRandomCountries = (req, res) => {
 
 // get a single country from the database identified by its code
 const getCountry = (req, res) => {
-    Models.Country.find({ where: { code: req.params.code }}).then(function (data) {
+    Models.Country.findOne({ 
+        where: { code: req.params.code }, 
+        include: [
+            { model: Models.Flag, attributes: ['svgLink', 'description'] }, 
+            { model: Models.Language, attributes: ['code', 'language'] }, 
+            { model: Models.Currency, attributes: ['code', 'name', 'symbol'] }
+        ]
+    }).then(function (data) {
         res.status(200).json({ result: 'Country data fetched successfully', data: data })
     }).catch(err => {
         res.status(500).json({ result: err.message })
