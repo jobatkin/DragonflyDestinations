@@ -12,7 +12,7 @@ function CountryCard(props: CountryCardProps) {
     return (
         <Card className="CountryCard" sx={{ backgroundColor: `${colour}.main`, color: `${colour}.contrastText`, mx: {xs: '0.5em', lg:'2em'} }}>
             <CardMedia
-                sx={{ height: 140 }}
+                sx={{ height: 150 }}
                 image={props.flagImg}
                 title={props.name}
             />            
