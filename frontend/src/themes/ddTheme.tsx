@@ -1,9 +1,6 @@
 'use client';
+import { gluten, montserrat } from "@/app/fonts";
 import { PaletteColorOptions, PaletteColor, createTheme, alpha } from "@mui/material";
-import { Gluten, Montserrat } from "next/font/google";
-
-const gluten = Gluten({ subsets: ["latin"] }); // headings
-const montserrat = Montserrat({ subsets: ["latin"] }); // body
 
 // augmentation (see https://mui.com/material-ui/customization/palette/#typescript) to add support for custom colours in TypeScript
 declare module '@mui/material/styles' {
@@ -27,7 +24,7 @@ export const ddThemeSettings = {
         primary: {
             main: '#5B9A8B', // teal
             light: '#93b1a6', // light teal
-            contrastText: '#d8d8d8' // light grey
+            contrastText: '#f8f8f8' // almost white
         },
         secondary: {
             main: '#c69749', // gold
@@ -36,13 +33,13 @@ export const ddThemeSettings = {
         },
         info: {
             main: '#252b48', // navy
-            contrastText: '#e8e8e8' // lighter grey
+            contrastText: '#e8e8e8' // light grey
         },
         extra: {
-            main: '#445069', // navy
+            main: '#445069', // light navy
             light: alpha('#445069', 0.5),
             dark: alpha('#445069', 0.9),
-            contrastText: '#e8e8e8' // lighter grey
+            contrastText: '#e8e8e8' // light grey
         },        
         mode: 'dark' as const // dark mode by default
     },
