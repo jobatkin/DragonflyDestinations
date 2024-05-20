@@ -16,14 +16,13 @@ function CountryFilter({label, selectedValue, handleChange, options}: CountryFil
         <FormControl fullWidth sx={{minWidth: '10em'}}>
             <InputLabel id={inputId}>{label}</InputLabel>
             <Select
-                labelId={inputId}
-                id="demo-simple-select"
+                labelId={inputId} id={inputId+'-select'}
                 value={selectedValue}
                 label={label}
                 onChange={handleChange}
             >
                 {options.map(option => (
-                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                    <MenuItem key={option} value={option}>{option.charAt(0).toUpperCase() + option.substring(1).toLowerCase()}</MenuItem>
                 ))}
             </Select>
         </FormControl>        

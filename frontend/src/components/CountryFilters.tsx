@@ -3,6 +3,7 @@
 import { Box, Grid, SelectChangeEvent } from "@mui/material";
 import { CountryWithFlag } from "@/types";
 import CountryFilter from "./CountryFilter";
+import CountrySorting, { SortType, countrySortOptions } from "./CountrySorting";
 
 interface CountryFiltersProps {
     countries: CountryWithFlag[],
@@ -10,9 +11,14 @@ interface CountryFiltersProps {
     handleRegionChange: (event: SelectChangeEvent<string>) => void,
     selectedSubregion: string,
     handleSubregionChange: (event: SelectChangeEvent<string>) => void,
+    sortBy?: SortType,
+    handleSortChange?: (sortBy: string, sortOrder: string) => void,
+    sortAscending: boolean
 }
 
-function CountryFilters({countries, selectedRegion, handleRegionChange, selectedSubregion, handleSubregionChange}: CountryFiltersProps) {
+function CountryFilters({countries, selectedRegion, handleRegionChange, selectedSubregion, handleSubregionChange, sortBy, handleSortChange, sortAscending}: CountryFiltersProps) {
+
+    const sortField = sortBy ? sortBy : 'name';
 
     // create a map of all unique regions with their sub-regions, for filtering
     const regions: Map<string, Set<string>> = new Map();
@@ -29,9 +35,10 @@ function CountryFilters({countries, selectedRegion, handleRegionChange, selected
         <Grid container my={2}>
             <Grid item>
                 <CountryFilter label="Region" selectedValue={selectedRegion} handleChange={handleRegionChange} options={Array.from(regions.keys())}/>
+                <CountryFilter label="Sub-region" selectedValue={selectedSubregion} handleChange={handleSubregionChange} options={subregions}/>
             </Grid>
             <Grid item>
-                <CountryFilter label="Sub-region" selectedValue={selectedSubregion} handleChange={handleSubregionChange} options={subregions}/>
+                <CountrySorting field={sortField} sortAscending={sortAscending} onSortChange={handleSortChange}/>
             </Grid>
         </Grid>
     )
