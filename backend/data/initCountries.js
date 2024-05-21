@@ -61,6 +61,7 @@ module.exports = async function initialiseCountries() {
     }
 }
 
+// inserts the languages for this country across our many-to-many tables
 async function checkInsertLanguages(country, languages) {
 
     for (let code in languages) {
@@ -78,6 +79,7 @@ async function checkInsertLanguages(country, languages) {
     }
 }
 
+// inserts the currencies for this country across our many-to-many tables
 async function checkInsertCurrencies(country, currencies) {
 
     for (let code in currencies) {
@@ -96,17 +98,16 @@ async function checkInsertCurrencies(country, currencies) {
     }
 }
 
+// Uses the GeoApify API to lookup the timezone and offset for the co-ordinates of this country's capital city
 async function insertCapitalTimezone(country, coords) {
     if (coords && coords.length == 2) {
         const tz_lookup = `${process.env.GEOAPIFY_URL}reverse?apiKey=${process.env.GEOAPIFY_KEY}&lat=${coords[0]}&lon=${coords[1]}`;
-        console.log(tz_lookup);
-
         const response = await axios.get(tz_lookup);
-        console.log(response.features);
+        const feature = response.data.features[0];
 
         country.set({
-            capital_tz: response.features.properties.timezone.name, 
-            capital_tz_offset: response.features.properties.timezone.capital_tz_offset
+            capital_tz: feature?.properties.timezone.name, 
+            capital_tz_offset: feature?.properties.timezone.offset_STD
         });
         await country.save();
     }

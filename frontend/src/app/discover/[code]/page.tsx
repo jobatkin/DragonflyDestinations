@@ -8,7 +8,9 @@ import CityWeather from "@/components/CityWeather";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
-  const res = await fetch(process.env.SERVER + "/api/countries/" + code);
+  const res = await fetch(process.env.SERVER + "/api/countries/" + code,
+    { next: { revalidate: 1800 } } // country data expires every 30 mins during testing
+  );
 
   if (!res.ok) {
       // Recommendation: handle errors
