@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import CityLocalTime from "./CityLocalTime";
 
 interface WeatherType {
     id: number,
@@ -24,7 +25,10 @@ export interface WeatherData {
 }
 
 async function getCityWeather(city: string) {
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?APPID=0c2e3284fcc8a15f0f039eba6a9703c1&q=${city}&units=metric`);
+    const res = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?APPID=${process.env.OPEN_WEATHER_KEY}&q=${city}&units=metric`,
+        { next: { revalidate: 600 } } // weather data (including local time) expires every 10 mins
+    );
 
     if (!res.ok) {
         // Recommendation: handle errors
@@ -36,33 +40,13 @@ async function getCityWeather(city: string) {
     return weather as WeatherData;
 }
 
-async function CityWeather({city, country}: {city: string, country: string}) {
+async function CityWeather({city, timezone}: {city: string, timezone: string}) {
     const weather = await getCityWeather(city);
-    const localTime = new Date(weather.dt*1000 + (weather.timezone*1000));
-    const formattedHr = localTime.getHours().toLocaleString(undefined, { minimumIntegerDigits: 2 });
-    const formattedMin = localTime.getMinutes().toLocaleString(undefined, { minimumIntegerDigits: 2 });
-    const tzHours = weather.timezone/3600;
-    const tzOffset = (tzHours >= 0 ? '+' : '') + tzHours.toLocaleString(undefined, { minimumIntegerDigits: 2 });
-    const options = {
-        weekday: 'long' as const,
-        year: 'numeric' as const,
-        month: 'long' as const,
-        day: 'numeric' as const,
-        timeZone: city + '/' + country
-      };
-      const dateTimeFormat = new Intl.DateTimeFormat('en-US', options);
-      
-      const parts = dateTimeFormat.formatToParts(localTime);
-      console.log(parts)
 
     return (
         <Box>
             <Typography component="h3">Weather for {city}</Typography>
-            Local time: {formattedHr}:{formattedMin} UTC{weather.timezone/3600} 
-            {new Intl.DateTimeFormat('en-GB', {
-    dateStyle: 'full',
-    timeStyle: 'long',
-  }).format(localTime)}
+            <CityLocalTime timezone={timezone} timestamp={weather.dt} tz_offset_hours={weather.timezone} />
 
         </Box>
     )

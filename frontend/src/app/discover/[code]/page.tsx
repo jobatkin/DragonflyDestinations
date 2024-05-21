@@ -36,7 +36,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                 </Grid>
                 <Grid item xs={12} md={7}>
                     <CountryDetailedInfo {...country} />
-                    <CityWeather city={country.capital} country={country.name}/>
+                    <CityWeather city={country.capital} timezone={country.capital_tz} />
                 </Grid>
             </Grid>
         </Container>

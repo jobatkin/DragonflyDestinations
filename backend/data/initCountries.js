@@ -45,13 +45,12 @@ module.exports = async function initialiseCountries() {
                     defaults: insertFlag,
                 });   
 
-                // insert currencies and languages for this country
-                await checkInsertLanguages(newCountry, country.languages);
-                await checkInsertCurrencies(newCountry, country.currencies);
-
                 if (createdCountry) {
                     addedCountries++;
-                    insertCapitalTimezone(newCountry, country.capitalInfo?.latlng);
+                    // insert currencies and languages and timezone details for this country
+                    await checkInsertLanguages(newCountry, country.languages);
+                    await checkInsertCurrencies(newCountry, country.currencies);                    
+                    await insertCapitalTimezone(newCountry, country.capitalInfo?.latlng);
                 }
             }
         }
@@ -98,10 +97,17 @@ async function checkInsertCurrencies(country, currencies) {
 }
 
 async function insertCapitalTimezone(country, coords) {
-    const response = await axios.get(`${process.env.GEOAPIFY_URL}reverse?apiKey=${process.env.GEOAPIFY_KEY}$lat=${coords[0]}&lon=${coords[1]}`);
-    country.set({
-        capital_tz: response.features.properties.timezone.name, 
-        capital_tz_offset: response.features.properties.timezone.capital_tz_offset
-    });
-    country.save();
+    if (coords && coords.length == 2) {
+        const tz_lookup = `${process.env.GEOAPIFY_URL}reverse?apiKey=${process.env.GEOAPIFY_KEY}&lat=${coords[0]}&lon=${coords[1]}`;
+        console.log(tz_lookup);
+
+        const response = await axios.get(tz_lookup);
+        console.log(response.features);
+
+        country.set({
+            capital_tz: response.features.properties.timezone.name, 
+            capital_tz_offset: response.features.properties.timezone.capital_tz_offset
+        });
+        await country.save();
+    }
 }

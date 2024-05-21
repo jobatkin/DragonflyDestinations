@@ -38,6 +38,8 @@ export interface CountryDetails extends CountryWithFlag {
     landlocked: boolean, 
     unMember: boolean,
     capital: string,
+    capital_tz: string,
+    capital_tz_offset: string,
     languages: Language[],
     currencies: Currency[]
 }

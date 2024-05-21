@@ -13,7 +13,7 @@ function GoogleMap({countryName, width, height}: GoogleMapProps) {
     return (
         <Card>
             <CardMedia component="iframe"
-                src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCFyEFxpfqi_g1EKIdgepAXn4itWa3DWi4&maptype=satellite&q=${countryName}`} 
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_KEY}&maptype=satellite&q=${countryName}`} 
                 width={iframeWidth} height={iframeHeight} 
                 sx={{ border: 0, minWidth: 300, minHeight: {xs: 300, lg:600} }} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></CardMedia>
         </Card>
