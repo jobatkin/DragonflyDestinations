@@ -1,6 +1,6 @@
 import styles from "../page.module.css";
 
-export default function Connect() {
+export default function ConnectPage() {
   return (
     <main className={styles.main}>
       <div className={styles.description}>

@@ -33,7 +33,7 @@ async function getRandomCountries(limit: number) {
 }
 
 // display homepage content
-export default async function Home() {
+export default async function HomePage() {
 
   const sections = [
       {

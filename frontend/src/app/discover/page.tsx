@@ -18,7 +18,7 @@ async function getAllCountries() {
   return countries.map(country => ({...country, flagImg: country.flag.svgLink}));
 }
 
-export default async function Discover() {
+export default async function DiscoverPage() {
 
   const allCountries = await getAllCountries();
 

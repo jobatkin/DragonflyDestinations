@@ -1,5 +1,6 @@
-import { CardContent, Card, CardMedia, Typography, Grid } from "@mui/material";
+import { CardContent, Card, CardMedia, Typography, Grid, CardActionArea } from "@mui/material";
 import { Country } from "@/types";
+import Link from "next/link";
 
 export interface CountryCardProps extends Country {
     flagImg: string,
@@ -15,11 +16,13 @@ function CountryCard(props: CountryCardProps) {
 
     return (
         <Card className="CountryCard" sx={{ backgroundColor: `${colour}.main`, color: `${colour}.contrastText`, mx: cardMargins }}>
-            <CardMedia
-                sx={{ height: 150 }}
-                image={props.flagImg}
-                title={props.name}
-            />            
+            <CardActionArea href={`/discover/${props.code}`}>
+                <CardMedia
+                    sx={{ height: 160 }}
+                    image={props.flagImg}
+                    title={props.name}
+                />            
+            </CardActionArea>
             <CardContent>
                 <Typography gutterBottom variant="h3">
                     {props.name}

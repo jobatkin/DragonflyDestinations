@@ -31,7 +31,7 @@ const getCountry = (req, res) => {
     Models.Country.findOne({ 
         where: { code: req.params.code }, 
         include: [
-            { model: Models.Flag, attributes: ['svgLink', 'description'] }, 
+            { model: Models.Flag, attributes: ['id', 'svgLink', 'pngLink', 'description'] }, 
             { model: Models.Language, attributes: ['code', 'language'] }, 
             { model: Models.Currency, attributes: ['code', 'name', 'symbol'] }
         ]

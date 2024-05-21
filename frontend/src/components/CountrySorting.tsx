@@ -10,6 +10,7 @@ interface CountrySortingProps {
     onSortChange?: (sortBy: string, sortOrder: string) => void,
 }
 
+// Sort countries on supported fields in either ascending or descending order
 function CountrySorting({field, sortAscending, onSortChange}: CountrySortingProps) {
     const inputId = 'country-sort-options';
     const sortOrder = sortAscending ? 'ASC' : 'DESC';
