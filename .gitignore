@@ -1,3 +1,4 @@
 node_modules
 ddlogo.ai
-.env*
+.env
+.env.*
