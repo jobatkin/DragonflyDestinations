@@ -44,7 +44,13 @@ Country.init({
         }, 
         subregion: {
             type: DataTypes.STRING(100)
-        }                                                  
+        },
+        capital_tz: {
+            type: DataTypes.STRING(100)
+        },
+        capital_tz_offset: {
+            type: DataTypes.STRING(100)
+        }                                               
     },
     {
         sequelize: sequelizeInstance, modelName: 'countries', // use lowercase plural format
