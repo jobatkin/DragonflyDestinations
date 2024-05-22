@@ -1,6 +1,8 @@
 import {CountryDetails} from "@/types";
 import {Box, Typography} from "@mui/material";
 import {gluten, montserrat} from "@/app/fonts";
+import CountryLanguages from "./CountryLanguages";
+import CountryCurrencies from "./CountryCurrencies";
 
 function CountryDetailedInfo(country: CountryDetails) {
     return (
@@ -23,6 +25,8 @@ function CountryDetailedInfo(country: CountryDetails) {
             >
                 Officially known as: {country.officialName}
             </Typography>
+            <CountryLanguages languages={country.languages} />
+            <CountryCurrencies currencies={country.currencies} />
         </Box>
     );
 }

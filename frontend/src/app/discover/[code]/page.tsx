@@ -33,14 +33,14 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
       <div className={styles.description}>
         <Container maxWidth="xl">
             <Grid container justifyContent="space-between" columnSpacing={6}>
-                <Grid item xs={12} md={5}>
+                <Grid item xs={12} md={6} lg={5}>
                     <GoogleMap countryName={country.name} />
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={6} lg={4}>
                     <CountryDetailedInfo {...country} />
                     <CapitalCity city={country.capital} timezone={country.capital_tz} />
                 </Grid>
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={6} lg={3}>
                     <FlagDetails {...country.flag} name={country.name}/>
                 </Grid>
             </Grid>
