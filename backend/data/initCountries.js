@@ -98,7 +98,7 @@ async function checkInsertCurrencies(country, currencies) {
     }
 }
 
-// Uses the GeoApify API to lookup the timezone and offset for the co-ordinates of this country's capital city
+// Uses the GeoApify API to lookup the timezone for the co-ordinates of this country's capital city
 async function insertCapitalTimezone(country, coords) {
     if (coords && coords.length == 2) {
         const tz_lookup = `${process.env.GEOAPIFY_URL}reverse?apiKey=${process.env.GEOAPIFY_KEY}&lat=${coords[0]}&lon=${coords[1]}`;
@@ -106,8 +106,7 @@ async function insertCapitalTimezone(country, coords) {
         const feature = response.data.features[0];
 
         country.set({
-            capital_tz: feature?.properties.timezone.name, 
-            capital_tz_offset: feature?.properties.timezone.offset_STD
+            capital_tz: feature?.properties.timezone.name
         });
         await country.save();
     }

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import CityLocalTime from "./CityLocalTime";
+import LocalTemperatures from "./LocalTemperatures";
 
 interface WeatherType {
     id: number,
@@ -27,7 +27,7 @@ export interface WeatherData {
 async function getCityWeather(city: string) {
     const res = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?APPID=${process.env.OPEN_WEATHER_KEY}&q=${city}&units=metric`,
-        { next: { revalidate: 600 } } // weather data (including local time) expires every 10 mins
+        { next: { revalidate: 3600 } } // weather data expires every 60 mins
     );
 
     if (!res.ok) {
@@ -40,14 +40,20 @@ async function getCityWeather(city: string) {
     return weather as WeatherData;
 }
 
-async function CityWeather({city, timezone}: {city: string, timezone: string}) {
+async function CityWeather({city}: {city: string}) {
     const weather = await getCityWeather(city);
+    console.log(weather);
+    const forecast = weather.weather[0];
+    const temps = weather.main;
 
     return (
         <Box>
-            <Typography component="h3">Weather for {city}</Typography>
-            <CityLocalTime timezone={timezone} timestamp={weather.dt} tz_offset_hours={weather.timezone} />
+            <div><img src={`http://openweathermap.org/img/w/${forecast.icon}.png`} style={{verticalAlign: 'middle'}} alt={forecast.main}/> {forecast.main}</div>
+            <p>{forecast.description} ({weather.clouds.all}% clouds, {weather.wind.speed}km/h winds)</p>
 
+            <LocalTemperatures main={temps.temp} min={temps.temp_min} max={temps.temp_max} />
+
+            <div>Humidity: {temps.humidity}%</div>
         </Box>
     )
 }

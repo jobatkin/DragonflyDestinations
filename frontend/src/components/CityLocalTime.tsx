@@ -1,13 +1,7 @@
 import { Typography } from "@mui/material";
 
-export interface CityLocalTimeProps {
-    timezone: string,
-    timestamp: number,
-    tz_offset_hours: number
-}
-
-function CityLocalTime({timezone, timestamp, tz_offset_hours}: CityLocalTimeProps) {
-    const localTime = new Date(timestamp*1000 + (tz_offset_hours*1000));
+function CityLocalTime({timezone}: {timezone: string}) {
+    const localTime = new Date();
 
     const options = {
         weekday: 'long' as const,
@@ -26,7 +20,7 @@ function CityLocalTime({timezone, timestamp, tz_offset_hours}: CityLocalTimeProp
     // generate all the parts of the date/time and store in one object
     const parts = dateTimeFormat.formatToParts(localTime).reduce((partObj:any, part) => { partObj[part.type] = part.value; return partObj; }, {});
     const ampm = parts.hour >= 12 ? 'pm' : 'am';
-    
+
     return (
         <Typography>Local time: {" "}
             {parts.weekday}, {parts.month} {parts.day} at {parts.hour % 12 || 12}:{parts.minute} {ampm} ({parts.timeZoneName})

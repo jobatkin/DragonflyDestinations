@@ -45,29 +45,29 @@ export const ddThemeSettings = {
     },
     typography: {
         fontFamily: montserrat.style.fontFamily,
-        fontSize: 16,
+        htmlFontSize: 16,
         h1: {
-            fontSize: 34,
+            fontSize: 36,
             fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         },
         h2: {
-            fontSize: 30,
+            fontSize: 32,
             fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         },
         h3: {
-            fontSize: 26,
+            fontSize: 28,
             fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         },
         h4: {
-            fontSize: 22,
+            fontSize: 24,
             fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         },
         h5: {
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: 500,
             fontFamily: gluten.style.fontFamily,
         }                                   
@@ -77,21 +77,13 @@ export const ddThemeSettings = {
     },
     components: {
         MuiCssBaseline: {
-            styleOverrides: `
-              a {
-                color: #5B9A8B;
-              }
-            `,
+            styleOverrides: `a { color: #5B9A8B; }`,
         },        
         MuiButton: {
-            defaultProps: {
-                variant: 'contained'
-            } as const,
+            defaultProps: { variant: 'contained' } as const,
         },
         MuiTextField: {
-            defaultProps: {
-                variant: 'filled'
-            } as const
+            defaultProps: { variant: 'filled' } as const
         }
     }    
 };

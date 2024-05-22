@@ -39,7 +39,6 @@ export interface CountryDetails extends CountryWithFlag {
     unMember: boolean,
     capital: string,
     capital_tz: string,
-    capital_tz_offset: string,
     languages: Language[],
     currencies: Currency[]
 }

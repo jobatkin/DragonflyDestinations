@@ -5,7 +5,7 @@ import {gluten, montserrat} from "@/app/fonts";
 function CountryDetailedInfo(country: CountryDetails) {
     return (
         <Box>
-            <h2 className={gluten.className}>{country.name}</h2>
+            <Typography component="h2" variant="h2">{country.name}</Typography>
             <Typography
                 bgcolor={"rgba(255,255,255,0.1)"}
                 color="info.contrastText"

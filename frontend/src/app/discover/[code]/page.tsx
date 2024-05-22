@@ -5,6 +5,7 @@ import GoogleMap from "@/components/GoogleMap";
 import FlagDetails from "@/components/FlagDetails";
 import CountryDetailedInfo from "@/components/CountryDetailedInfo";
 import CityWeather from "@/components/CityWeather";
+import CapitalCity from "@/components/CapitalCity";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
@@ -31,14 +32,16 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
     <main className={styles.main}>
       <div className={styles.description}>
         <Container maxWidth="xl">
-            <Grid container justifyContent="space-between" columnSpacing={10}>
+            <Grid container justifyContent="space-between" columnSpacing={6}>
                 <Grid item xs={12} md={5}>
                     <GoogleMap countryName={country.name} />
-                    <FlagDetails {...country.flag} name={country.name}/>
                 </Grid>
-                <Grid item xs={12} md={7}>
+                <Grid item xs={12} md={4}>
                     <CountryDetailedInfo {...country} />
-                    <CityWeather city={country.capital} timezone={country.capital_tz} />
+                    <CapitalCity city={country.capital} timezone={country.capital_tz} />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                    <FlagDetails {...country.flag} name={country.name}/>
                 </Grid>
             </Grid>
         </Container>
