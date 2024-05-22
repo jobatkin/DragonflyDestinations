@@ -2,9 +2,11 @@
 const Models = require("../models");
 const { Sequelize } = require('../dbConnect');
 
+const defaultFields = [ 'code', 'name', 'capital', 'region', 'subregion', 'population', 'area' ];
+
 // Get all countries from the database. Supports a 'limit' query parameter to get only the top x countries
 const getCountries = (req, res) => {
-    const options = { include: Models.Flag }; // random order, include flag info
+    const options = { include: Models.Flag, attributes: defaultFields }; // random order, include flag info
     if (req.query.limit) options.limit = parseInt(req.query.limit);
 
     Models.Country.findAll(options).then(function (data) {
@@ -16,7 +18,7 @@ const getCountries = (req, res) => {
 
 // Get randomly ordered countries from the database. Supports a 'limit' query parameter to get only x random countries
 const getRandomCountries = (req, res) => {
-    const options = { order: Sequelize.random(), include: Models.Flag }; // random order, include flag info
+    const options = { order: Sequelize.random(), include: Models.Flag, attributes: defaultFields }; // random order, include flag info
     if (req.query.limit) options.limit = parseInt(req.query.limit);
 
     Models.Country.findAll(options).then(function (data) {

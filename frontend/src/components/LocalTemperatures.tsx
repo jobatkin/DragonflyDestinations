@@ -1,6 +1,6 @@
 'use client'
 
-import { FormControlLabel, FormGroup, Grid, Switch } from "@mui/material";
+import { FormControlLabel, Grid, Switch } from "@mui/material";
 import { useState } from "react";
 
 interface LocalTemperaturesProps {
@@ -24,12 +24,10 @@ function LocalTemperatures({main, min, max, units}: LocalTemperaturesProps) {
                 <div>Max temp: {useCelcius ? max : convertToFarenheit(max)}&deg;{displayUnits}</div>
             </Grid>
             <Grid item xs={4}>
-                <FormGroup>
-                    <FormControlLabel 
-                        sx={{justifyContent: 'flex-end'}}
-                        control={<Switch defaultChecked onChange={() => setUseCelcius(!useCelcius)}/>} 
-                        label="Celcius" />        
-                </FormGroup>        
+                <FormControlLabel 
+                    sx={{justifyContent: 'flex-end'}}
+                    control={<Switch defaultChecked onChange={() => setUseCelcius(!useCelcius)}/>} 
+                    label="Celcius" />        
             </Grid>
         </Grid>
     )

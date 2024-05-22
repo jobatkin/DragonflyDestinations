@@ -7,6 +7,7 @@ import CountryDetailedInfo from "@/components/CountryDetailedInfo";
 import CityWeather from "@/components/CityWeather";
 import CapitalCity from "@/components/CapitalCity";
 import BorderingCountries from "@/components/BorderingCountries";
+import CountryDistance from "@/components/CountryDistance";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
@@ -24,9 +25,23 @@ async function getCountryDetails(code: string) {
   return json.data as CountryDetails;
 }
 
+async function getLocalCoords() {
+
+    const res = await fetch(`${process.env.GEOAPIFY_URL}ipinfo?apiKey=${process.env.GEOAPIFY_KEY}`);
+
+    if (!res.ok) {
+        // Recommendation: handle errors
+        // This will activate the closest `error.js` Error Boundary
+        throw new Error("Failed to determine user location");
+    }
+    const json = await res.json();
+    return {lat: json.location.latitude, lon: json.location.longitude, homeCountry: json.country.name};
+}
+
 export default async function CountryDetailsPage({ params }: { params: { code: string } }) {
 
   const country = await getCountryDetails(params.code);
+  const localCoords = await getLocalCoords();
   const borderingCountries = country.borders?.map(bc => ({...bc, flagImg: bc.flag.svgLink})) 
   console.log(country);
 
@@ -36,7 +51,8 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
         <Container maxWidth="xl">
             <Grid container justifyContent="space-between" columnSpacing={6}>
                 <Grid item xs={12} md={6} lg={5}>
-                    <GoogleMap countryName={country.name} />
+                    <GoogleMap countryName={country.name} lat={country.latitude} lng={country.longitude} mapLink={country.googleMap}/>
+                    <CountryDistance {...localCoords} destCountry={country.name} destLat={country.latitude} destLon={country.longitude}/>
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
                     <CountryDetailedInfo {...country} />
