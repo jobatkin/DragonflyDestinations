@@ -3,6 +3,7 @@ const { JSDOM } = require('jsdom');
 const Models = require('../models');
 const countryCodes = require("./countryCodes");
 const restCountries = require("./restCountries");
+const capital_timezones = require("./capital_timezones");
 
 module.exports = async function initialiseCountries() {
     try {
@@ -128,12 +129,14 @@ async function insertBorders(countryBorders) {
 // Uses the GeoApify API to lookup the timezone for the co-ordinates of this country's capital city
 async function insertCapitalTimezone(country, coords) {
     if (coords && coords.length == 2) {
-        const tz_lookup = `${process.env.GEOAPIFY_URL}geocode/reverse?apiKey=${process.env.GEOAPIFY_KEY}&lat=${coords[0]}&lon=${coords[1]}`;
-        const response = await axios.get(tz_lookup);
-        const feature = response.data.features[0];
+        //const tz_lookup = `${process.env.GEOAPIFY_URL}geocode/reverse?apiKey=${process.env.GEOAPIFY_KEY}&lat=${coords[0]}&lon=${coords[1]}`;
+        //const response = await axios.get(tz_lookup);
+        //const feature = response.data.features[0];
+        const capital_timezone = capital_timezones[country.code];
 
         country.set({
-            capital_tz: feature?.properties.timezone.name
+            //capital_tz: feature?.properties.timezone.name
+            capital_tz: capital_timezone.capital_tz
         });
         
         await country.save();
