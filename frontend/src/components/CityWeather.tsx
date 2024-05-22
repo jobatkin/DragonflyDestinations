@@ -49,7 +49,7 @@ async function CityWeather({city}: {city: string}) {
     return (
         <Box>
             <div><img src={`http://openweathermap.org/img/w/${forecast.icon}.png`} style={{verticalAlign: 'middle'}} alt={forecast.main}/> {forecast.main}</div>
-            <p>{forecast.description} ({weather.clouds.all}% clouds, {weather.wind.speed}km/h winds)</p>
+            <p>{forecast.description} ({weather.clouds.all}% clouds, {weather.wind.speed} km/h winds)</p>
 
             <LocalTemperatures main={temps.temp} min={temps.temp_min} max={temps.temp_max} />
 

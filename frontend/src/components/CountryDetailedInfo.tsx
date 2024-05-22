@@ -3,6 +3,7 @@ import {Box, Typography} from "@mui/material";
 import {gluten, montserrat} from "@/app/fonts";
 import CountryLanguages from "./CountryLanguages";
 import CountryCurrencies from "./CountryCurrencies";
+import Link from "next/link";
 
 function CountryDetailedInfo(country: CountryDetails) {
     return (

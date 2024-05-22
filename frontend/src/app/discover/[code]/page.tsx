@@ -1,11 +1,12 @@
 import styles from "../../page.module.css";
 import { CountryDetails } from "@/types";
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Typography, boxClasses } from "@mui/material";
 import GoogleMap from "@/components/GoogleMap";
 import FlagDetails from "@/components/FlagDetails";
 import CountryDetailedInfo from "@/components/CountryDetailedInfo";
 import CityWeather from "@/components/CityWeather";
 import CapitalCity from "@/components/CapitalCity";
+import BorderingCountries from "@/components/BorderingCountries";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
@@ -26,6 +27,7 @@ async function getCountryDetails(code: string) {
 export default async function CountryDetailsPage({ params }: { params: { code: string } }) {
 
   const country = await getCountryDetails(params.code);
+  const borderingCountries = country.borders?.map(bc => ({...bc, flagImg: bc.flag.svgLink})) 
   console.log(country);
 
   return (
@@ -42,6 +44,11 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                 </Grid>
                 <Grid item xs={12} md={6} lg={3}>
                     <FlagDetails {...country.flag} name={country.name}/>
+                    <Typography variant="h4" component="h4">Bordering Countries</Typography>
+                    {borderingCountries && borderingCountries.length > 0 ? 
+                      <BorderingCountries borders={borderingCountries} /> :
+                      <p>{country.name} has no bordering countries.</p>
+                    }
                 </Grid>
             </Grid>
         </Container>

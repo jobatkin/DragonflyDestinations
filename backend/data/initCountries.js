@@ -6,6 +6,7 @@ module.exports = async function initialiseCountries() {
         const response = await axios.get("https://restcountries.com/v3.1/all");
         const countries = response.data;
         let addedCountries = 0;
+        const countryBorders = new Map();
 
         for (let country of countries) {
 
@@ -25,6 +26,7 @@ module.exports = async function initialiseCountries() {
                     area: country.area, 
                     region: country.region, 
                     subregion: country.subregion,  
+                    borders: country.borders
                 }
                 const insertFlag = {
                     countryCode: country.cca3,
@@ -45,15 +47,20 @@ module.exports = async function initialiseCountries() {
                     defaults: insertFlag,
                 });   
 
+                countryBorders.set(newCountry, country.borders);
+
                 if (createdCountry) {
                     addedCountries++;
                     // insert currencies and languages and timezone details for this country
                     await checkInsertLanguages(newCountry, country.languages);
-                    await checkInsertCurrencies(newCountry, country.currencies);                    
+                    await checkInsertCurrencies(newCountry, country.currencies);  
                     await insertCapitalTimezone(newCountry, country.capitalInfo?.latlng);
                 }
             }
         }
+
+        // once all countries are created, add in the bordering relationships
+        await insertBorders(countryBorders);               
 
         console.log(`Successfully loaded ${addedCountries} new countries from API`);
     } catch (err) {
@@ -75,7 +82,7 @@ async function checkInsertLanguages(country, languages) {
             defaults: newLanguage,            
         })
 
-        country.addLanguage(code);
+        await country.addLanguage(code);
     }
 }
 
@@ -94,7 +101,17 @@ async function checkInsertCurrencies(country, currencies) {
             defaults: newCurrency,            
         })
 
-        country.addCurrency(code);
+        await country.addCurrency(code);
+    }
+}
+
+async function insertBorders(countryBorders) {
+    for (let [borderCountry, borders] of countryBorders) {
+        if (borders) {
+            for (let borderingCountry of borders) {
+                await borderCountry.addBorders(borderingCountry);
+            }
+        }
     }
 }
 
@@ -108,6 +125,7 @@ async function insertCapitalTimezone(country, coords) {
         country.set({
             capital_tz: feature?.properties.timezone.name
         });
+        
         await country.save();
     }
 }

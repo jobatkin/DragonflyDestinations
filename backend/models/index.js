@@ -27,6 +27,8 @@ Language.belongsToMany(Country, { through: 'country_languages' });
 Country.belongsToMany(Currency, { through: 'country_currencies' });
 Currency.belongsToMany(Country, { through: 'country_currencies' });
 
+Country.belongsToMany(Country, { as: 'borders', through: 'country_borders' });
+
 // needed after belongs to many associations above
 sequelizeInstance.sync();
 

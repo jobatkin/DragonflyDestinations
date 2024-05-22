@@ -1,6 +1,5 @@
 import { CardContent, Card, CardMedia, Typography, Grid, CardActionArea } from "@mui/material";
 import { Country } from "@/types";
-import Link from "next/link";
 
 export interface CountryCardProps extends Country {
     flagImg: string,
