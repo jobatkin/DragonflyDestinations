@@ -1,11 +1,12 @@
 import { Currency } from "@/types";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import CurrencyLookup from "./CurrencyLookup";
 
 // display all currencies for this country in a table
 function CountryCurrencies({currencies}: {currencies: Currency[]}) {
 
     if (!currencies || currencies.length == 0) return null;
-    
+
     return (
         <TableContainer component={Paper} sx={{mb: 2}}>
             <Table aria-label="languages">
@@ -25,6 +26,11 @@ function CountryCurrencies({currencies}: {currencies: Currency[]}) {
                             <TableCell>{currency.symbol}</TableCell>
                         </TableRow>
                     ))}
+                    <TableRow>
+                        <TableCell colSpan={3}>
+                            <CurrencyLookup currencies={currencies.map(currency => currency.code)} amount={10} />
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </TableContainer>
