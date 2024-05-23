@@ -19,14 +19,14 @@ function LocalTemperatures({main, min, max, units}: LocalTemperaturesProps) {
     return (
         <Grid container>
             <Grid item xs={8}>
-                <div>Current temp: {useCelcius ? main : convertToFarenheit(main)}&deg;{displayUnits}</div>
-                <div>Min temp: {useCelcius ? min : convertToFarenheit(min)}&deg;{displayUnits}</div>
-                <div>Max temp: {useCelcius ? max : convertToFarenheit(max)}&deg;{displayUnits}</div>
+                <div><strong>Current temp:</strong> {useCelcius ? main : convertToFarenheit(main)}&deg;{displayUnits}</div>
+                <div><strong>Min temp:</strong> {useCelcius ? min : convertToFarenheit(min)}&deg;{displayUnits}</div>
+                <div><strong>Max temp:</strong> {useCelcius ? max : convertToFarenheit(max)}&deg;{displayUnits}</div>
             </Grid>
             <Grid item xs={4}>
                 <FormControlLabel 
                     sx={{justifyContent: 'flex-end'}}
-                    control={<Switch defaultChecked onChange={() => setUseCelcius(!useCelcius)}/>} 
+                    control={<Switch defaultChecked color="info" onChange={() => setUseCelcius(!useCelcius)}/>} 
                     label="Celcius" />        
             </Grid>
         </Grid>

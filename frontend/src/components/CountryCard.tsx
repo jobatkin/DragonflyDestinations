@@ -34,7 +34,7 @@ function CountryCard(props: CountryCardProps) {
                         <Typography variant="body2">Population: {props.population.toLocaleString()}</Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography variant="body2">Area: {props.area.toLocaleString()}km<sup>2</sup></Typography>
+                        <Typography variant="body2">Area: {props.area.toLocaleString()} km<sup>2</sup></Typography>
                     </Grid>                    
                 </Grid>          
             </CardContent>

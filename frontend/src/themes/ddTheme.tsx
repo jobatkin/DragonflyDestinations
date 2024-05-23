@@ -29,7 +29,7 @@ export const ddThemeSettings = {
         secondary: {
             main: '#c69749', // gold
             dark: '#735F32', // dark gold
-            contrastText: '#333333' // dark grey
+            contrastText: '#222222' // dark grey
         },
         info: {
             main: '#252b48', // navy

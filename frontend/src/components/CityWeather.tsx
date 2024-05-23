@@ -47,13 +47,18 @@ async function CityWeather({city}: {city: string}) {
     const temps = weather.main;
 
     return (
-        <Box>
-            <div><img src={`http://openweathermap.org/img/w/${forecast.icon}.png`} style={{verticalAlign: 'middle'}} alt={forecast.main}/> {forecast.main}</div>
-            <p>{forecast.description} ({weather.clouds.all}% clouds, {weather.wind.speed} km/h winds)</p>
+        <Box sx={{mb:1}}>
+            <Typography variant="h6" component="h6" color="info">
+                <img src={`http://openweathermap.org/img/w/${forecast.icon}.png`} style={{verticalAlign: 'middle'}} alt={forecast.main}/>{" "}
+                {forecast.main}
+            </Typography>
+            <Typography color="info" sx={{
+                pb:1, borderBottom: '1px solid rgba(20,20,50,0.3)', mb: 1
+            }}>{forecast.description} ({weather.clouds.all}% clouds, {weather.wind.speed} km/h winds)</Typography>
 
             <LocalTemperatures main={temps.temp} min={temps.temp_min} max={temps.temp_max} />
 
-            <div>Humidity: {temps.humidity}%</div>
+            <div><strong>Humidity:</strong> {temps.humidity}%</div>
         </Box>
     )
 }

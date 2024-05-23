@@ -1,9 +1,13 @@
 import {Language} from "@/types";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 
 // display all languages for this country in a table
-function CountryLanguages({languages}: {languages: Language[]}) {
+function CountryLanguages({languages, other_languages}: {languages: Language[], other_languages?: string}) {
+
+    if (!languages || languages.length == 0) return null;
+
     return (
+        <Box sx={{mb: 2}}>
         <TableContainer component={Paper}>
             <Table aria-label="languages">
                 <TableHead>
@@ -14,8 +18,7 @@ function CountryLanguages({languages}: {languages: Language[]}) {
                 </TableHead>
                 <TableBody>
                     {languages.map((language) => (
-                        <TableRow key={language.code}
-                            sx={{"&:last-child td, &:last-child th": {border: 0}}}>
+                        <TableRow key={language.code} sx={{"&:last-child td, &:last-child th": {border: 0}}}>
                             <TableCell component="th" scope="row">{language.code}</TableCell>
                             <TableCell>{language.language}</TableCell>
                         </TableRow>
@@ -23,6 +26,8 @@ function CountryLanguages({languages}: {languages: Language[]}) {
                 </TableBody>
             </Table>
         </TableContainer>
+        <Typography sx={{p:1}} variant="body2">{other_languages}</Typography>
+        </Box>
     );
 }
 

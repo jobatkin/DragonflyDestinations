@@ -4,10 +4,15 @@ import { Container, Grid, Typography, boxClasses } from "@mui/material";
 import GoogleMap from "@/components/GoogleMap";
 import FlagDetails from "@/components/FlagDetails";
 import CountryDetailedInfo from "@/components/CountryDetailedInfo";
-import CityWeather from "@/components/CityWeather";
 import CapitalCity from "@/components/CapitalCity";
 import BorderingCountries from "@/components/BorderingCountries";
 import CountryDistance from "@/components/CountryDistance";
+import { montserrat } from "@/app/fonts";
+import ReadMore from "@/components/ReadMore";
+import CountryLanguages from "@/components/CountryLanguages";
+import CountryCurrencies from "@/components/CountryCurrencies";
+import GeographicInfo from "@/components/GeographicInfo";
+import UNCountry from "@/components/UNCountry";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
@@ -49,13 +54,34 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
     <main className={styles.main}>
       <div className={styles.description}>
         <Container maxWidth="xl">
-            <Grid container justifyContent="space-between" columnSpacing={6}>
+            <Grid container justifyContent="space-between" columnSpacing={{xs: 2, md: 6 }}>
+
+                <Grid item xs={12} sx={{mb: 2}}>
+                  <Typography component="h2" variant="h2">{country.name} <Typography component="span" variant="h2" color="secondary">({country.region})</Typography></Typography>
+                  <Typography
+                      bgcolor={"rgba(255,255,255,0.1)"} color="info.contrastText" component="span"
+                      sx={{display: "inline-block", padding: "5px", borderRadius: "4px", marginRight: '10px'}}
+                  >
+                      {country.code}
+                  </Typography>
+                  <Typography
+                      className={montserrat.className} color="info.contrastText" component="span" variant="h5"
+                      sx={{fontFamily: "inherit"}}
+                  >
+                      Officially known as: {country.officialName}
+                  </Typography>    
+                  <ReadMore text={country.geography} />              
+                </Grid>
+
                 <Grid item xs={12} md={6} lg={5}>
                     <GoogleMap countryName={country.name} lat={country.latitude} lng={country.longitude} mapLink={country.googleMap}/>
                     <CountryDistance {...localCoords} destCountry={country.name} destLat={country.latitude} destLon={country.longitude}/>
+                    <GeographicInfo terrain={country.terrain} naturalResources={country.natural_resources} industries={country.industries}/>
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
                     <CountryDetailedInfo {...country} />
+                    <CountryLanguages languages={country.languages} other_languages={country.other_languages}/>
+                    <CountryCurrencies currencies={country.currencies} />                    
                     <CapitalCity city={country.capital} timezone={country.capital_tz} />
                 </Grid>
                 <Grid item xs={12} md={6} lg={3}>
@@ -65,6 +91,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                       <BorderingCountries borders={borderingCountries} /> :
                       <p>{country.name} has no bordering countries.</p>
                     }
+                    <UNCountry unMember={country.unMember} countryName={country.name}/>
                 </Grid>
             </Grid>
         </Container>

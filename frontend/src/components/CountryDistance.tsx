@@ -1,6 +1,6 @@
 'use client';
 
-import { FormControlLabel, Grid, Switch, Typography } from "@mui/material";
+import { Card, CardContent, FormControlLabel, Grid, Switch, Typography } from "@mui/material";
 import { useState } from "react";
 import DistanceHelper from "@/utils/DistanceHelper";
 
@@ -23,16 +23,18 @@ function CountryDistance({lat, lon, homeCountry, destLat, destLon, destCountry, 
     const distanceFormat = new Intl.NumberFormat('en-US', { style: 'unit', unit: useMetric ? 'kilometer' : 'mile' });
 
     return (
-        <div>
-            <Typography variant="h3" component="h3">Your Location</Typography>
+        <Card sx={{mb: 2}}><CardContent>
             <Grid container justifyContent="space-between">
+
                 <Grid item xs={6}>
+                    <Typography variant="h3" component="h3">Your Location</Typography>
                     {lat !== null && lon !== null ? (
                         <p>Latitude: {lat} <br/>Longitude: {lon} <br/>Home country: {homeCountry}</p>
                     ) : (
                         <p>Unable to determine user location</p>
                     )}
                 </Grid>
+
                 <Grid xs={6} sx={{textAlign: 'right'}}>
                     <FormControlLabel
                         sx={{justifyContent: 'flex-end'}}
@@ -41,8 +43,9 @@ function CountryDistance({lat, lon, homeCountry, destLat, destLon, destCountry, 
                     <br/>Distance to {destCountry}:
                     <br/>{distanceFormat.format(displayDistance)}
                 </Grid>
+
             </Grid>
-        </div>
+        </CardContent></Card>
     )
 }
 

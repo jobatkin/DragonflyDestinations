@@ -1,12 +1,13 @@
 import { Grid } from "@mui/material"
-import CountryCard, { CountryCardProps } from "./CountryCard"
+import { CountryCardProps } from "./CountryCard"
+import SmallCountryCard from "./SmallCountryCard"
 
 function BorderingCountries({borders}: {borders: CountryCardProps[]}) {
     return (
-        <Grid container flexDirection="column">
+        <Grid container flexDirection="row" flexWrap="wrap" rowSpacing={2}>
             { borders.map(country => (
-                <Grid item xs={12}>
-                    <CountryCard {...country}/>
+                <Grid item xs={6}>
+                    <SmallCountryCard {...country} colour="extra"/>
                 </Grid>
             )) }
         </Grid>

@@ -3,8 +3,11 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 
 // display all currencies for this country in a table
 function CountryCurrencies({currencies}: {currencies: Currency[]}) {
+
+    if (!currencies || currencies.length == 0) return null;
+    
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{mb: 2}}>
             <Table aria-label="languages">
                 <TableHead>
                     <TableRow>

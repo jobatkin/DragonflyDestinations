@@ -132,11 +132,11 @@ async function insertCapitalTimezone(country, coords) {
         //const tz_lookup = `${process.env.GEOAPIFY_URL}geocode/reverse?apiKey=${process.env.GEOAPIFY_KEY}&lat=${coords[0]}&lon=${coords[1]}`;
         //const response = await axios.get(tz_lookup);
         //const feature = response.data.features[0];
-        const capital_timezone = capital_timezones[country.code];
+        const capital = capital_timezones[country.code];
 
         country.set({
             //capital_tz: feature?.properties.timezone.name
-            capital_tz: capital_timezone.capital_tz
+            capital_tz: capital.capital_tz
         });
         
         await country.save();
@@ -154,10 +154,21 @@ async function insertExtraInfo(country) {
         if (newPopulation) newPopulation = parseInt(newPopulation.replaceAll(',', ''));
         console.log(`Updating old population of ${country.population} to new population of ${newPopulation} for ${country.name}`)
 
+        let geographyNote = extractFirstParagraph(response.data.Geography["Geography - note"]?.text);
+        if (geographyNote && geographyNote.length > 0) {
+            geographyNote = geographyNote && geographyNote.length > 0 ? geographyNote.replace(/(<([^>]+)>)/ig, '') : geographyNote;
+            geographyNote = geographyNote.replace('note 1: ', '');
+        }
+
+        let popDistribution = extractFirstParagraph(response.data["People and Society"]["Population distribution"]?.text);
+        if (popDistribution && popDistribution.length > 0) {
+            popDistribution = popDistribution.replace(' as shown in this population distribution map', '');
+        }       
+
         country.set({
             background: extractFirstParagraph(response.data.Introduction?.Background?.text),
             geography: extractFirstParagraph(response.data.Geography?.Location?.text),
-            geography_note: extractFirstParagraph(response.data.Geography["Geography - note"]?.text),
+            geography_note: geographyNote,
             comparative_area: extractFirstParagraph(response.data.Geography["Area - comparative"]?.text),
             climate: extractFirstParagraph(response.data.Geography?.Climate?.text),
             terrain: extractFirstParagraph(response.data.Geography?.Terrain?.text),
@@ -165,7 +176,7 @@ async function insertExtraInfo(country) {
             other_languages: extractFirstParagraph(response.data["People and Society"].Languages?.Languages?.text),
             religions: extractFirstParagraph(response.data["People and Society"].Religions?.text),
             population: newPopulation,
-            pop_distribution: extractFirstParagraph(response.data["People and Society"]["Population distribution"]?.text),
+            pop_distribution: popDistribution,
             industries: extractFirstParagraph(response.data.Economy?.Industries?.text),
         });
 

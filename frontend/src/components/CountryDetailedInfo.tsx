@@ -1,34 +1,19 @@
 import {CountryDetails} from "@/types";
-import {Box, Typography} from "@mui/material";
-import {gluten, montserrat} from "@/app/fonts";
-import CountryLanguages from "./CountryLanguages";
-import CountryCurrencies from "./CountryCurrencies";
-import Link from "next/link";
+import TextHelper from "@/utils/TextHelper";
+import {Box, Card, CardContent, Typography} from "@mui/material";
 
 function CountryDetailedInfo(country: CountryDetails) {
     return (
-        <Box>
-            <Typography component="h2" variant="h2">{country.name}</Typography>
-            <Typography
-                bgcolor={"rgba(255,255,255,0.1)"}
-                color="info.contrastText"
-                component="span"
-                sx={{display: "inline-block", padding: "5px", borderRadius: "4px", marginRight: '10px'}}
-            >
-                {country.code}
-            </Typography>
-            <Typography
-                className={montserrat.className}
-                color="info.contrastText"
-                component="span"
-                variant="h5"
-                sx={{fontFamily: "inherit"}}
-            >
-                Officially known as: {country.officialName}
-            </Typography>
-            <CountryLanguages languages={country.languages} />
-            <CountryCurrencies currencies={country.currencies} />
-        </Box>
+        <Card sx={{ backgroundColor: `info.main`, color: `info.contrastText`, mb: 2 }}>
+            <CardContent sx={{'&:last-child': { pb: 1 }}}>
+                <Typography variant="h4">Population: {country.population.toLocaleString()}</Typography>
+                <Typography sx={{mb: 1, borderBottom: '1px solid rgba(200,200,200,0.3)', pb: 1}}>{TextHelper.makeSentence(country.pop_distribution)}</Typography>
+
+                <Typography variant="h4">Area: {country.area.toLocaleString()} km<sup>2</sup></Typography>
+                <Typography variant="body2" color="secondary" sx={{fontStyle: 'italic'}}>{country.comparative_area}</Typography>
+                <Typography gutterBottom>{TextHelper.makeSentence(country.geography_note)}</Typography>
+            </CardContent>
+        </Card>
     );
 }
 export default CountryDetailedInfo;
