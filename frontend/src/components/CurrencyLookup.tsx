@@ -10,11 +10,17 @@ function CurrencyLookup({currencies, amount = 10}: {currencies: string[], amount
     const [fromCurrency, setFromCurrency] = useState(currencies[0]);
     const [toCurrency, setToCurrency] = useState(baseCurrencies[0]);
     const [conversion, setConversion] = useState(amount);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const getConversion = async () => {
-            const response = await axios.get(`https://api.frankfurter.app/latest?amount=${amount}&from=${fromCurrency}&to=${toCurrency}`);
-            setConversion(response.data.rates[toCurrency])
+            try {
+                const response = await axios.get(`https://api.frankfurter.app/latest?amount=${amount}&from=${fromCurrency}&to=${toCurrency}`);
+                setConversion(response.data.rates[toCurrency]);
+            }
+            catch (err) {
+                setError(`Cannot convert from ${fromCurrency} to ${toCurrency}: ${(err as Error).message}`)
+            }
         }
         getConversion();
     }, [toCurrency, fromCurrency]);
@@ -29,9 +35,12 @@ function CurrencyLookup({currencies, amount = 10}: {currencies: string[], amount
             {options.map(option => <MenuItem value={option} key={option}>{option}</MenuItem>)}
         </Select>)
 
+    if (error) return <Box>{error}</Box>
+
     return (
         <Box>
-            <strong>{amount}</strong> {currencySelect('from', fromCurrency, currencies)} is worth <strong>{conversion}</strong> {currencySelect('to', toCurrency, baseCurrencies)}
+            <strong>{amount}</strong> {currencySelect('from', fromCurrency, currencies)} is currently worth{" "}
+            <strong>{conversion}</strong> {currencySelect('to', toCurrency, baseCurrencies)}
         </Box>
     )
 }
