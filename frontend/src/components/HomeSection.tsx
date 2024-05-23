@@ -25,6 +25,7 @@ function HomeSection(props: HomeSectionProps) {
     const countryColumn = 
         <Grid item md={5} xs={12}>
             <CountryCard
+                code={props.country.code}
                 colour={highlightColour}
                 name={props.country.name} capital={props.country.capital}
                 region={props.country.region} subregion={props.country.subregion}

@@ -6,6 +6,7 @@ import CountryFilters from "./CountryFilters";
 import CountryCard from "./CountryCard";
 import { Grid } from "@mui/material";
 import { countrySortOptions, SortType } from "./CountrySorting";
+import { useSearchParams } from "next/navigation";
 
 export interface FilterableCountries {
     countries: CountryWithFlag[]
@@ -13,7 +14,9 @@ export interface FilterableCountries {
 
 function FilterableCountries({countries}: FilterableCountries) {
 
-    const [region, setRegion] = useState('');
+    const searchParams = useSearchParams();
+
+    const [region, setRegion] = useState(searchParams.get('region') || '');
     const [subregion, setSubregion] = useState('');
     const [sortBy, setSortBy] = useState<SortType>('name');
     const [sortAscending, setSortAscending] = useState(true);

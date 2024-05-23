@@ -1,6 +1,6 @@
 import styles from "../../page.module.css";
 import { CountryDetails } from "@/types";
-import { Container, Grid, Typography, boxClasses } from "@mui/material";
+import { Button, Container, Grid, Typography, boxClasses } from "@mui/material";
 import GoogleMap from "@/components/GoogleMap";
 import FlagDetails from "@/components/FlagDetails";
 import CountryDetailedInfo from "@/components/CountryDetailedInfo";
@@ -57,7 +57,9 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
             <Grid container justifyContent="space-between" columnSpacing={{xs: 2, md: 6 }}>
 
                 <Grid item xs={12} sx={{mb: 2}}>
-                  <Typography component="h2" variant="h2">{country.name} <Typography component="span" variant="h2" color="secondary">({country.region})</Typography></Typography>
+                  <Typography component="h2" variant="h2">{country.name}{" "}
+                    <Button href={`/discover/?region=${country.region}`} color="secondary" size="large" sx={{fontWeight: 'bold'}}>{country.region}</Button>
+                  </Typography>
                   <Typography
                       bgcolor={"rgba(255,255,255,0.1)"} color="info.contrastText" component="span"
                       sx={{display: "inline-block", padding: "5px", borderRadius: "4px", marginRight: '10px'}}
@@ -82,7 +84,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                     <CountryDetailedInfo {...country} />
                     <CountryLanguages languages={country.languages} other_languages={country.other_languages}/>
                     <CountryCurrencies currencies={country.currencies} />                    
-                    <CapitalCity city={country.capital} timezone={country.capital_tz} />
+                    <CapitalCity city={country.capital} timezone={country.capital_tz} coords={[country.latitude, country.longitude]}/>
                 </Grid>
                 <Grid item xs={12} md={6} lg={3}>
                     <FlagDetails {...country.flag} name={country.name}/>

@@ -3,7 +3,7 @@ import { CountryWithFlag } from "@/types";
 import FilterableCountries from "@/components/FilterableCountries";
 import { gluten } from "../fonts";
 
-// get the given number of random countries from backend API
+// get all countries from the backend API
 async function getAllCountries() {
   const res = await fetch(process.env.SERVER + "/api/countries/");
 

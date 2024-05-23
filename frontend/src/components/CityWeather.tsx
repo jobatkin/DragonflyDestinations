@@ -24,24 +24,32 @@ export interface WeatherData {
     cod: number    
 }
 
-async function getCityWeather(city: string) {
-    const res = await fetch(
+async function getCityWeather(city: string, coords: number[]) {
+    let res = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?APPID=${process.env.OPEN_WEATHER_KEY}&q=${city}&units=metric`,
         { next: { revalidate: 3600 } } // weather data expires every 60 mins
     );
 
     if (!res.ok) {
-        // Recommendation: handle errors
-        // This will activate the closest `error.js` Error Boundary
-       throw new Error("Failed to fetch countries");
+        // if city not found, find weather for country coords
+        res = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?APPID=${process.env.OPEN_WEATHER_KEY}&lat=${coords[0]}&lon=${coords[1]}&units=metric`,
+            { next: { revalidate: 3600 } } // weather data expires every 60 mins
+        );
+
+        if (!res.ok) {
+            // Recommendation: handle errors
+            // This will activate the closest `error.js` Error Boundary
+            throw new Error(`Failed to fetch weather for ${city} or ${coords[0]}, ${coords[1]}`);
+        }
     }
 
     const weather = await res.json();
     return weather as WeatherData;
 }
 
-async function CityWeather({city}: {city: string}) {
-    const weather = await getCityWeather(city);
+async function CityWeather({city, coords}: {city: string, coords: number[]}) {
+    const weather = await getCityWeather(city, coords);
     console.log(weather);
     const forecast = weather.weather[0];
     const temps = weather.main;

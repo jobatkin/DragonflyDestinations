@@ -150,8 +150,9 @@ async function insertExtraInfo(country) {
         console.log(gecCode)
         const response = await axios.get(`https://raw.githubusercontent.com/factbook/factbook.json/master/${gecCode.region}/${gecCode.gec}.json`);
 
-        let newPopulation = response.data["People and Society"].Population?.total?.text;
-        if (newPopulation) newPopulation = parseInt(newPopulation.replaceAll(',', ''));
+        let newPopText = response.data["People and Society"].Population?.total?.text;
+        let newPopulation = newPopText ? parseInt(newPopText.replaceAll(',', '')) : undefined;
+        if (!Number.isInteger(newPopulation)) newPopulation = country.population;
         console.log(`Updating old population of ${country.population} to new population of ${newPopulation} for ${country.name}`)
 
         let geographyNote = extractFirstParagraph(response.data.Geography["Geography - note"]?.text);

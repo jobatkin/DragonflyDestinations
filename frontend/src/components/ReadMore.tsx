@@ -9,7 +9,7 @@ function ReadMore({text = '', maxLength = 180}: {text?: string, maxLength?: numb
     let displayText = text;
     let action = null;
 
-    if (displayText.length > maxLength) {
+    if (displayText && displayText.length > maxLength) {
         displayText = showAll ? displayText : displayText.substring(0, maxLength);
         action = showAll ? 
             <a href="#" onClick={ (e) => {e.preventDefault(); setShowAll(false)} }>Less</a> : 

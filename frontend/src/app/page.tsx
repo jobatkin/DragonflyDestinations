@@ -5,7 +5,7 @@ import { CountryWithFlag } from "@/types";
 
 // get the given number of random countries from backend API
 async function getRandomCountries(limit: number) {
-    const res = await fetch(process.env.SERVER + "/api/countries/random/?limit=" + limit);
+    const res = await fetch(process.env.SERVER + "/api/countries/random/?limit=" + limit, { next: { revalidate: 24*3600 } });
 
     if (!res.ok) {
         // Recommendation: handle errors

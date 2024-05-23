@@ -49,10 +49,10 @@ Country.init({
             type: DataTypes.STRING(100)
         },
         geography: { type: DataTypes.STRING(1000) },
-        geography_note: { type: DataTypes.STRING(4000) },
-        background: { type: DataTypes.STRING(4000) },
+        geography_note: { type: DataTypes.TEXT },
+        background: { type: DataTypes.TEXT },
         comparative_area: { type: DataTypes.STRING(500) },
-        climate: { type: DataTypes.STRING(500) },
+        climate: { type: DataTypes.STRING(1000) },
         terrain: { type: DataTypes.STRING(500) },
         natural_resources: { type: DataTypes.STRING(500) },
         other_languages: { type: DataTypes.STRING(1000) },
