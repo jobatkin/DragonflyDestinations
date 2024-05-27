@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import NavBar from "@/components/NavBar";
 import { CssBaseline } from "@mui/material";
 import DDThemeProvider from "@/themes/DDThemeProvider";
+import { UserProvider } from "@/context/UserContext";
 
 export const metadata: Metadata = {
   title: "Dragonfly Destinations",
@@ -15,11 +16,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         <AppRouterCacheProvider>
-          <DDThemeProvider>
-            <CssBaseline />
-            <NavBar />
-            {children}
-          </DDThemeProvider>
+          <UserProvider>
+            <DDThemeProvider>
+              <CssBaseline />
+              <NavBar />
+              {children}
+            </DDThemeProvider>
+          </UserProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

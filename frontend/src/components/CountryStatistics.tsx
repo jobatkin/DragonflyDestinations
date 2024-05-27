@@ -1,8 +1,8 @@
 import {CountryDetails} from "@/types";
 import TextHelper from "@/utils/TextHelper";
-import {Box, Card, CardContent, Typography} from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 
-function CountryDetailedInfo(country: CountryDetails) {
+function CountryStatistics(country: CountryDetails) {
     return (
         <Card sx={{ backgroundColor: `info.main`, color: `info.contrastText`, mb: 2 }}>
             <CardContent sx={{'&:last-child': { pb: 1 }}}>
@@ -16,4 +16,4 @@ function CountryDetailedInfo(country: CountryDetails) {
         </Card>
     );
 }
-export default CountryDetailedInfo;
+export default CountryStatistics;

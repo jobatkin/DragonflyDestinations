@@ -58,14 +58,15 @@ const registerUser = async (req, res) => {
             return; // when sending responses and finishing early, manually return or end the function to stop further processing
         }
 
-        // Encrypt user password
         let encryptedPassword = await bcrypt.hash(password, 10);
+        const photo = req.file ? '/images/' + req.file.filename : null;
 
         // Create user in our database
         const userMetadata = await Models.User.create({
             userName,
             email: email.toLowerCase(), // sanitize: convert email to lowercase
             password: encryptedPassword,
+            profilePhoto: photo
         });
         const user = userMetadata.get({plain: true}) // get just the user fields, no extra sequelize metadata
 

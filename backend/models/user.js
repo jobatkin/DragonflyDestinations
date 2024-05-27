@@ -20,6 +20,9 @@ User.init({
         },
         password: {
             type: DataTypes.STRING, allowNull: false, required: true
+        },
+        highScore: {
+            type: DataTypes.INTEGER, allowNull: false, defaultValue: 0
         }
     },
     {

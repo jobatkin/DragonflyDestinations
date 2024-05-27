@@ -3,7 +3,7 @@ import { CountryDetails } from "@/types";
 import { Button, Container, Grid, Typography, boxClasses } from "@mui/material";
 import GoogleMap from "@/components/GoogleMap";
 import FlagDetails from "@/components/FlagDetails";
-import CountryDetailedInfo from "@/components/CountryDetailedInfo";
+import CountryStatistics from "@/components/CountryStatistics";
 import CapitalCity from "@/components/CapitalCity";
 import BorderingCountries from "@/components/BorderingCountries";
 import CountryDistance from "@/components/CountryDistance";
@@ -13,6 +13,7 @@ import CountryLanguages from "@/components/CountryLanguages";
 import CountryCurrencies from "@/components/CountryCurrencies";
 import GeographicInfo from "@/components/GeographicInfo";
 import UNCountry from "@/components/UNCountry";
+import TextHelper from "@/utils/TextHelper";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
@@ -72,7 +73,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                   >
                       Officially known as: {country.officialName}
                   </Typography>    
-                  <ReadMore text={country.geography} />              
+                  <ReadMore text={TextHelper.makeSentence(country.geography)} /> <ReadMore text={TextHelper.makeSentence(country.background)} />                  
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={5}>
@@ -81,7 +82,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                     <GeographicInfo terrain={country.terrain} naturalResources={country.natural_resources} industries={country.industries}/>
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
-                    <CountryDetailedInfo {...country} />
+                    <CountryStatistics {...country} />
                     <CountryLanguages languages={country.languages} other_languages={country.other_languages}/>
                     <CountryCurrencies currencies={country.currencies} />                    
                     <CapitalCity city={country.capital} timezone={country.capital_tz} coords={[country.latitude, country.longitude]}/>

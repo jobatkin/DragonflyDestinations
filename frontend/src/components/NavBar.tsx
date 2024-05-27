@@ -14,13 +14,25 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Link from "next/link";
 import DDLogo from "./DDLogo";
+import { User, useUserContext } from "@/context/UserContext";
+import AuthenticationDialog from "./AuthenticationDialog";
 
 const pages = [{label: "Discover", link: "/discover"}, {label: "Surprise", link: "/surprise"}, {label: "Connect", link: "/connect"}, {label: "Challenge", link: "/challenge"}];
-const settings = [{label: "Profile", link: "/profile"}, {label: "Dashboard", link: "/dashboard"}, {label: "Logout", link: "/logout"}];
+const settings = [{label: "Profile", link: "/profile", onClick: undefined}, {label: "Dashboard", link: "/dashboard", onClick: undefined}];
 
 function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+    const [authModal, setAuthModal] = React.useState({open: false, showLogin: true});
+
+    const {currentUser, handleUpdateUser, isLoggedIn} = useUserContext();
+    const loggedInSettings = [...settings, {label: 'Logout', link: undefined, onClick: () => handleUpdateUser({} as User)}];
+    const loggedOutSettings = ['Login', 'Register'];
+
+    const handleShowAuthModal = (page: string) => {
+        setAuthModal({open: !authModal.open, showLogin: page == 'Login'});
+    }
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -32,10 +44,19 @@ function NavBar() {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const userProfileLinks = isLoggedIn ? loggedInSettings.map((setting) => (
+        <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
+            <Typography component={Link} href={setting.link || '#'} onClick={setting.onClick} textAlign="center">{setting.label}</Typography>
+        </MenuItem>
+    ) ) : loggedOutSettings.map(setting => (
+        <MenuItem key={setting} onClick={handleCloseUserMenu}>
+            <Typography component={Link} href="#" onClick={() => handleShowAuthModal(setting)} textAlign="center">{setting}</Typography>
+        </MenuItem>
+    ))    
 
     return (
         <AppBar position="static">
@@ -97,7 +118,8 @@ function NavBar() {
                     <Box sx={{flexGrow: 0}}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                                {isLoggedIn ? <Avatar alt={currentUser.userName} src={currentUser.profilePhoto} /> : 
+                                    <Avatar alt="No User" src="/nouser.png" /> }
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -110,16 +132,14 @@ function NavBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting.link} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting.label}</Typography>
-                                </MenuItem>
-                            ))}
+                            {userProfileLinks}
                         </Menu>
                     </Box>
                 </Toolbar>
             </Container>
+            <AuthenticationDialog isOpen={authModal.open} isLogin={authModal.showLogin} handleClose={() => setAuthModal({open: false, showLogin: false})}/>
         </AppBar>
     );
 }
+
 export default NavBar;

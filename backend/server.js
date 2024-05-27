@@ -11,6 +11,10 @@ const initialiseCountries = require('./data/initCountries')
 // parse requests of content-type - application / json;
 app.use(express.json());
 
+app.use((error, req, res, next) => {
+  console.log('This is the rejected field ->', error.field);
+});
+
 let countryRoutes = require('./routes/countryRoutes')
 app.use('/api/countries', countryRoutes)
 
@@ -24,5 +28,5 @@ const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}.`);
-  await initialiseCountries();
+  // await initialiseCountries();
 });

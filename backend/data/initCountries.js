@@ -33,8 +33,7 @@ module.exports = async function initialiseCountries() {
                     capital: capital,  
                     area: country.area, 
                     region: country.region, 
-                    subregion: country.subregion,  
-                    borders: country.borders
+                    subregion: country.subregion
                 }
                 const insertFlag = {
                     countryCode: country.cca3,

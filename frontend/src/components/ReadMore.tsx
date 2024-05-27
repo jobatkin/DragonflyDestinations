@@ -3,7 +3,7 @@
 import { Typography } from "@mui/material";
 import { useState } from "react"
 
-function ReadMore({text = '', maxLength = 180}: {text?: string, maxLength?: number}) {
+function ReadMore({text = '', maxLength = 150}: {text?: string, maxLength?: number}) {
     const [showAll, setShowAll] = useState(false);
 
     let displayText = text;
