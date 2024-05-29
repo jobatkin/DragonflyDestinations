@@ -1,6 +1,6 @@
 'use client';
 import { gluten, montserrat } from "@/app/fonts";
-import { PaletteColorOptions, PaletteColor, createTheme, alpha } from "@mui/material";
+import { PaletteColorOptions, PaletteColor, createTheme, alpha, ButtonProps, Theme } from "@mui/material";
 
 // augmentation (see https://mui.com/material-ui/customization/palette/#typescript) to add support for custom colours in TypeScript
 declare module '@mui/material/styles' {
@@ -81,6 +81,15 @@ export const ddThemeSettings = {
         },        
         MuiButton: {
             defaultProps: { variant: 'contained' } as const,
+            styleOverrides: {
+                root: ({ ownerState, theme }: { ownerState: ButtonProps, theme: Theme }) => ({
+                    // disabled buttons don't change colour. see https://mui.com/blog/callback-support-in-style-overrides/
+                    '&.MuiButton-contained.Mui-disabled': {
+                        backgroundColor: ownerState.color && ownerState.color !== 'inherit' ? theme.palette[ownerState.color].main : '',
+                        color: ownerState.color && ownerState.color !== 'inherit' ? theme.palette[ownerState.color].contrastText : '',
+                    }
+                }),
+            }
         },
         MuiTextField: {
             defaultProps: { variant: 'filled' } as const

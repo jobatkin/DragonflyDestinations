@@ -1,27 +1,30 @@
 'use client';
 
-import { forceCountryRefresh } from "@/app/surprise/actions";
-import { Button } from "@mui/material";
+import { forceRefresh } from "@/app/actions";
+import { Button, ButtonProps } from "@mui/material";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 interface RefreshButtonProps {
     buttonText: string, 
     refreshingText?: string, 
-    buttonSize?: "medium" | "small" | "large"
+    buttonSize?: ButtonProps["size"],
+    color?: ButtonProps["color"]
 }
 
-// forces a server refresh using a server action
-export default function RefreshButton({buttonText, refreshingText = 'Refreshing...', buttonSize = "medium"}: RefreshButtonProps) {
+// forces a server refresh of the current page using a server action
+export default function RefreshButton({buttonText, refreshingText = 'Refreshing...', buttonSize = "medium", color = "primary"}: RefreshButtonProps) {
     const [isRefreshing, setIsRefreshing] = useState(false);
-  
+    const pathname = usePathname()
+
     const handleRefresh = async () => {
         setIsRefreshing(true);
-        await forceCountryRefresh();
+        await forceRefresh(pathname); // refresh the current path
         window.location.reload();
     };
   
     return (
-        <Button onClick={handleRefresh} disabled={isRefreshing} size={buttonSize}>
+        <Button onClick={handleRefresh} disabled={isRefreshing} color={color} size={buttonSize}>
             {isRefreshing ? refreshingText : buttonText}
         </Button>
     );

@@ -23,7 +23,10 @@ User.init({
         },
         highScore: {
             type: DataTypes.INTEGER, allowNull: false, defaultValue: 0
-        }
+        },
+        currentScore: {
+            type: DataTypes.INTEGER, allowNull: false, defaultValue: 0
+        }        
     },
     {
         sequelize: sequelizeInstance, modelName: 'users', // use lowercase plural format

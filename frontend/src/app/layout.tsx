@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+// const NavBar = dynamic( () => import('@/components/NavBar'), { ssr: false } );
 import NavBar from "@/components/NavBar";
 import { CssBaseline } from "@mui/material";
 import DDThemeProvider from "@/themes/DDThemeProvider";
 import { UserProvider } from "@/context/UserContext";
+import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
   title: "Dragonfly Destinations",

@@ -7,7 +7,7 @@ export interface SmallCountryCardProps {
     colour?: string,
 }
 
-// Display a single Country Card, including flag, name, region/subregion, population and area
+// Display a single Small Country Card, including flag and name
 function SmallCountryCard(props: SmallCountryCardProps) {
     const colour = props.colour ? props.colour : 'primary'; // base colour defaults to primary if not specified
 

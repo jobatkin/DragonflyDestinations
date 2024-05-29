@@ -8,6 +8,15 @@ export interface Country {
     area: number, 
 }
 
+export interface CountryAnswer {
+    code: string,
+    name: string,
+    capital: string,
+    region: string,
+    flag: string,
+    correct: boolean
+}
+
 export interface Flag {
     id: number,
     svgLink: string,
@@ -54,3 +63,5 @@ export interface CountryDetails extends CountryWithFlag {
     languages: Language[],
     currencies: Currency[]
 }
+
+export const questionTypes = ['flag', 'capital', 'region'] as const;

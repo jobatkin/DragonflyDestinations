@@ -7,6 +7,7 @@ const Country = require('./country')
 const Flag = require('./flag') 
 const Language = require('./language') 
 const Currency = require('./currency') 
+const Scores = require('./scores.js')
 
 async function init() {
     // sync all models - creates tables
@@ -15,6 +16,7 @@ async function init() {
     await Flag.sync(); 
     await Language.sync(); 
     await Currency.sync(); 
+    await Scores.sync();
 };
 init();
 
@@ -29,6 +31,9 @@ Currency.belongsToMany(Country, { through: 'country_currencies' });
 
 Country.belongsToMany(Country, { as: 'borders', through: 'country_borders' });
 
+User.hasMany(Scores, { foreignKey: { allowNull: false }});
+Scores.belongsTo(User, { foreignKey: { allowNull: false }});
+
 // needed after belongs to many associations above
 sequelizeInstance.sync();
 
@@ -37,5 +42,6 @@ module.exports = {
     Country,
     Flag,
     Language,
-    Currency
+    Currency,
+    Scores
 };

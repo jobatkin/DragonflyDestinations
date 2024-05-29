@@ -2,6 +2,7 @@
 const Models = require("../models");
 const bcrypt = require('bcryptjs') // first run 'npm install bcryptjs'
 const { createToken } = require('../middleware/auth');
+const { Op } = require('sequelize');
 
 // creates a JWT token and encrypts the password
 // https://www.section.io/engineering-education/how-to-build-authentication-api-with-jwt-token-in-nodejs/
@@ -84,6 +85,63 @@ const registerUser = async (req, res) => {
     }
 }
 
+const getUserScores = async (req, res) => {
+    const userId = req.params.uid;
+
+    // get all answers recorded for this user
+    try {
+        const answersRight = await Models.Scores.count({
+            where: {
+                userId: userId,
+                result: { [Op.gt]: 0 } // correct answers score greater than zero
+            },
+            attributes: ['question_type'],
+            group: 'question_type' // group by the question type
+        });
+        const answersTotal = await Models.Scores.count({
+            where: { userId: userId },
+            attributes: ['question_type'],
+            group: 'question_type' // group by the question type
+        });   
+        
+        // combine correct and total answers into a single array
+        const answers = answersTotal.map((answer, i) => ({question_type: answer.question_type, correct: answersRight[i].count, total: answer.count}));
+        res.status(200).json({ result: 'User scores fetched successfully', data: answers })
+        
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({ result: err.message })
+    }
+}
+
+const saveUserAnswer = async (req, res) => {
+    const { question_type, result } = req.body;
+    const userId = req.params.uid;
+
+    try {
+        const user = await Models.User.findByPk(userId);
+        if (!user) {
+            res.status(404).json({ result: "User not found, cannot record score" })
+        }
+        console.log(user)
+
+        // record their score using special mixin method - https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
+        const scores = await user.createScore({question_type, result});
+        let updatedUser;
+        if (result) {
+            updatedUser = await user.update({currentScore: user.currentScore+1, highScore: user.currentScore+1 > user.highScore ? user.currentScore+1 : user.highScore})
+        } else {
+            updatedUser = await user.update({currentScore: 0})
+        }
+
+        res.status(200).json({ result: 'User scores updated successfully', data: updatedUser })
+
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({ result: err.message })
+    }
+}
+
 const updateUser = (req, res) => {
     Models.User.update(req.body, { where: { id: req.params.id }, returning: true })
         // destructure returned data to get the updated user details
@@ -94,6 +152,7 @@ const updateUser = (req, res) => {
                 res.status(200).json({ result: 'User updated successfully', data: updatedUser }) :
                 res.status(404).json({ result: `User ${req.params.id} not found` })
         }).catch(err => {
+            console.log(err)
             res.status(500).json({ result: err.message })
         })
 }
@@ -107,28 +166,11 @@ const deleteUser = (req, res) => {
             res.status(200).json({ result: 'User deleted successfully' }) :
             res.status(404).json({ result: `User ${req.params.id} not found` })
     }).catch(err => {
+        console.log(err)
         res.status(500).json({ result: err.message })
     })
 }
 
-// upload an image from a front-end form onto the back end server: https://www.positronx.io/react-file-upload-tutorial-with-node-express-and-multer/
-const addProfileImage = (req, res) => {
-
-    console.log(req.file) // saved filename is in req.file.filename
-    const userUpdates = { profilePhoto: '/images/' + req.file.filename };
-    console.log(userUpdates);
-
-    // save path to uploaded file in DB for this user
-    Models.User.update(
-        userUpdates, 
-        { where: { id: req.params.userId } }
-    ).then(response => 
-        res.status(200).json({ result: 'Image uploaded to profile successfully', data: userUpdates }) // send updated info back in response
-    ).catch(err => 
-        res.status(500).json({ result: err.message })
-    )
-}
-
 module.exports = {
-    loginUser, registerUser, updateUser, deleteUser, addProfileImage
+    loginUser, registerUser, updateUser, deleteUser, getUserScores, saveUserAnswer
 }
