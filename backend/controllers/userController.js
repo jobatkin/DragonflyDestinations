@@ -85,6 +85,7 @@ const registerUser = async (req, res) => {
     }
 }
 
+// gets a count of the number of total and correct answers this user has given, broken down by question type
 const getUserScores = async (req, res) => {
     const userId = req.params.uid;
 
@@ -114,6 +115,7 @@ const getUserScores = async (req, res) => {
     }
 }
 
+// records an answer for this user and returns the updated user including their latest current and high scores
 const saveUserAnswer = async (req, res) => {
     const { question_type, result } = req.body;
     const userId = req.params.uid;
@@ -127,12 +129,13 @@ const saveUserAnswer = async (req, res) => {
 
         // record their score using special mixin method - https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
         const scores = await user.createScore({question_type, result});
-        let updatedUser;
+        console.log(scores)
+
+        let scoreUpdates = { currentScore: 0 };
         if (result) {
-            updatedUser = await user.update({currentScore: user.currentScore+1, highScore: user.currentScore+1 > user.highScore ? user.currentScore+1 : user.highScore})
-        } else {
-            updatedUser = await user.update({currentScore: 0})
+            scoreUpdates = { currentScore: user.currentScore+1, highScore: user.currentScore+1 > user.highScore ? user.currentScore+1 : user.highScore }
         }
+        const updatedUser = await user.update(scoreUpdates);
 
         res.status(200).json({ result: 'User scores updated successfully', data: updatedUser })
 

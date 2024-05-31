@@ -4,6 +4,8 @@ const Models = require('../models');
 const countryCodes = require("./countryCodes");
 const restCountries = require("./restCountries");
 const capital_timezones = require("./capital_timezones");
+const nongecCountries = require("./nongecCountries");
+const flagDescriptions = require("./flagDescriptions");
 
 module.exports = async function initialiseCountries() {
     try {
@@ -17,8 +19,8 @@ module.exports = async function initialiseCountries() {
 
             // make sure this is a valid country first
             if (country.population > 0) {
+                // if this country has no capital, just use the country name as it's likely very small
                 const capital = (country.capital && Array.isArray(country.capital)) ? country.capital[0] : country.name.common;
-                console.log(capital);
 
                 const insertCountry = {
                     code: country.cca3,
@@ -36,23 +38,27 @@ module.exports = async function initialiseCountries() {
                     subregion: country.subregion
                 }
                 const insertFlag = {
-                    countryCode: country.cca3,
                     svgLink: country.flags.svg,            
                     pngLink: country.flags.png,
-                    description: country.flags.alt
+                    description: country.flags.alt || flagDescriptions[country.cca3]
                 }
 
-                // insert this country unless it already exists
-                const [newCountry, createdCountry] = await Models.Country.findOrCreate({
-                    where: { code: country.cca3 },
-                    defaults: insertCountry,
+                // insert this country unless it already exists, in which case update it
+                const [newCountry, createdCountry] = await Models.Country.upsert({
+                    ...insertCountry,
+                    code: country.cca3
+                }, { returning: true });
+
+                // Find or create the flag
+                const [flagInstance, createdFlag] = await Models.Flag.findOrCreate({
+                    where: { countryCode: country.cca3 },
+                    defaults: insertFlag
                 });
 
-                // insert this flag unless it already exists
-                const [newFlag, createdFlag] = await Models.Flag.findOrCreate({
-                    where: { countryCode: country.cca3 },
-                    defaults: insertFlag,
-                });   
+                // If the flag already existed, update its details
+                if (!createdFlag) {
+                    await flagInstance.update(insertFlag);
+                }
 
                 // keep track of which countries border this one
                 countryBorders.set(newCountry, country.borders);
@@ -60,7 +66,7 @@ module.exports = async function initialiseCountries() {
 
                 if (createdCountry) {
                     addedCountries++;
-                    // insert currencies and languages and timezone details for this country
+                    // insert currencies and languages and timezone details for this new country
                     await checkInsertLanguages(newCountry, country.languages);
                     await checkInsertCurrencies(newCountry, country.currencies);  
                     await insertCapitalTimezone(newCountry, country.capitalInfo?.latlng);
@@ -146,7 +152,6 @@ async function insertExtraInfo(country) {
 
     const gecCode = countryCodes[country.code];
     if (gecCode) {
-        console.log(gecCode)
         const response = await axios.get(`https://raw.githubusercontent.com/factbook/factbook.json/master/${gecCode.region}/${gecCode.gec}.json`);
 
         let newPopText = response.data["People and Society"].Population?.total?.text;
@@ -180,6 +185,11 @@ async function insertExtraInfo(country) {
             industries: extractFirstParagraph(response.data.Economy?.Industries?.text),
         });
 
+        await country.save();
+    } else {
+        const details = nongecCountries[country.code];
+
+        country.set(details);
         await country.save();
     }
 }

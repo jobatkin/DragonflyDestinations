@@ -39,8 +39,6 @@ export default async function ChallengePage() {
   const randomQuestionIndex = Math.floor(Math.random() * questionTypes.length);
   const randomQuestionType = questionTypes[randomQuestionIndex] as typeof questionTypes[number];
 
-  console.log(regions)
-
   return (
     <main className={styles.main}>
       <div className={styles.description}>

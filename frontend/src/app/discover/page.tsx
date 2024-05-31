@@ -5,7 +5,7 @@ import { gluten } from "../fonts";
 
 // get all countries from the backend API
 async function getAllCountries() {
-  const res = await fetch(process.env.SERVER + "/api/countries/");
+  const res = await fetch(process.env.SERVER + "/api/countries/", { next: { revalidate: 24*3600 } });
 
   if (!res.ok) {
       // Recommendation: handle errors

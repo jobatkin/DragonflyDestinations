@@ -34,7 +34,7 @@ Country.belongsToMany(Country, { as: 'borders', through: 'country_borders' });
 User.hasMany(Scores, { foreignKey: { allowNull: false }});
 Scores.belongsTo(User, { foreignKey: { allowNull: false }});
 
-// needed after belongs to many associations above
+// needed after associations above
 sequelizeInstance.sync();
 
 module.exports = {

@@ -71,7 +71,7 @@ const getQuestion = async (req, res) => {
         console.log(answers);
 
         res.status(200).json({
-            result: "Random flag answers generated",
+            result: "Random answers successfully generated",
             goalCountry: countries[correct].name,
             data: answers,
         });
@@ -81,6 +81,7 @@ const getQuestion = async (req, res) => {
     }
 }
 
+// get a list of all unique regions
 const getRegions = (req, res) => {
     const options = { attributes: [Sequelize.fn('DISTINCT', Sequelize.col('region')), 'region'], raw: true }; 
 

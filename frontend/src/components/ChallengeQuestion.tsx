@@ -46,7 +46,7 @@ function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionPr
         } else {
             // otherwise, update the user in the cookie with new scores
             if (correct) {
-                updatedUser.currentScore = updatedUser.currentScore ? updatedUser.currentScore + 1: 0;
+                updatedUser.currentScore = updatedUser.currentScore ? updatedUser.currentScore + 1: 1;
                 updatedUser.highScore = updatedUser.currentScore > updatedUser.highScore ? updatedUser.currentScore : updatedUser.highScore;
             }
             else {
@@ -101,7 +101,7 @@ function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionPr
             {hasAnswered && 
                 <Grid item xs={12} sx={{textAlign: 'center'}}>
                     <Typography variant="h4" color="secondary" gutterBottom>{userMessage}</Typography>
-                    <Button color="extra" href={`/discover/${correctAnswer?.code}`}>Learn more about {goalCountry}</Button> {' '}
+                    <Button color="extra" href={`/discover/${correctAnswer?.code}`}>Discover more about {goalCountry}</Button> {' '}
                     <RefreshButton buttonText="Next Question" color="info"/>
                 </Grid>
             }

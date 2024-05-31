@@ -32,8 +32,9 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
 
     // need to load user data from cookie via useEffect to prevent hydration issues
     useEffect(() => {
-        const userData = getCookie('user'); 
-        const cookieUser: User = userData ? JSON.parse(userData) : {} as User; // turns the user cookie object into a User
+        const userData = getCookie('user'); // official user account in database
+        const guestUserData = getCookie('guestUser'); // non-logged in user, stores scores temporarily
+        const cookieUser: User = userData ? JSON.parse(userData) : (guestUserData ? JSON.parse(guestUserData) : {} as User); // turns the user cookie object into a User
         setCurrentUser(cookieUser)
     },[])    
 
@@ -41,6 +42,8 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     const handleUpdateUser = (user: User) => {
         if (user.token) {
             setCookie('user', JSON.stringify(user), { path: '/', maxAge: 60 * 60 * 24 * 7}) // cookie will expire in a week
+        } else if (user.currentScore != undefined) {
+            setCookie('guestUser', JSON.stringify(user), { path: '/', maxAge: 60 * 60 * 24 * 7}) // cookie will expire in a week
         } else {
             deleteCookie('user')
         }        
