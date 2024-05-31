@@ -1,6 +1,6 @@
 'use client'
 
-import { User, useUserContext } from "@/context/UserContext";
+import { GuestUser, User, useUserContext } from "@/context/UserContext";
 import { CountryAnswer, questionTypes } from "@/types";
 import { Button, Grid, Typography } from "@mui/material"
 import CheckIcon from '@mui/icons-material/Check';
@@ -35,15 +35,17 @@ function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionPr
 
         // were they correct?
         const correct = Boolean(answers[selected].correct);
-        let updatedUser = currentUser ? {...currentUser} : {} as User;
 
         // save result in db for user if logged in
-        if (currentUser && isLoggedIn) {
+        if (currentUser && isLoggedIn && 'id' in currentUser) {
             const userResponse = { question_type: questionType, result: correct };
             const response = await axios.post(`/api/users/${currentUser.id}/answer`, userResponse);
-            const userUpdates = response.data.data as User;
-            updatedUser = {...updatedUser, ...userUpdates};
+            const updatedUser = response.data.data as User;
+            
+            handleUpdateUser(updatedUser);
         } else {
+            let updatedUser:GuestUser = {highScore: 0, currentScore: 0, ...currentUser};
+
             // otherwise, update the user in the cookie with new scores
             if (correct) {
                 updatedUser.currentScore = updatedUser.currentScore ? updatedUser.currentScore + 1: 1;
@@ -52,8 +54,9 @@ function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionPr
             else {
                 updatedUser.currentScore = 0;
             }
+
+            handleUpdateUser(updatedUser);
         }
-        handleUpdateUser(updatedUser);
 
         setUserMessage(MessageHelper.getQuizMessage(correct));
     }

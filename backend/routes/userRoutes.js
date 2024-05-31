@@ -20,6 +20,10 @@ router.get('/:uid/scores', (req, res) => {
     Controllers.userController.getUserScores(req, res)
 })
 
+router.get('/leaderboard', (req, res) => {
+    Controllers.userController.getLeaderboard(req, res)
+})
+
 router.post('/:uid/answer', (req, res) => {
     Controllers.userController.saveUserAnswer(req, res)
 })

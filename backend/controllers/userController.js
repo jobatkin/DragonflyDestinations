@@ -43,7 +43,7 @@ const registerUser = async (req, res) => {
 
     try {
         // Get user input by destructuring request body
-        const { userName, email, password } = req.body;
+        const { userName, email, password, currentScore = 0, highScore = 0 } = req.body;
 
         // Validate user input
         if (!(email && password && userName)) {
@@ -67,7 +67,9 @@ const registerUser = async (req, res) => {
             userName,
             email: email.toLowerCase(), // sanitize: convert email to lowercase
             password: encryptedPassword,
-            profilePhoto: photo
+            profilePhoto: photo,
+            currentScore: currentScore,
+            highScore: highScore
         });
         const user = userMetadata.get({plain: true}) // get just the user fields, no extra sequelize metadata
 
@@ -145,6 +147,21 @@ const saveUserAnswer = async (req, res) => {
     }
 }
 
+// gets the details for the users with the top 5 high scores in the challenge
+const getLeaderboard = async (req, res) => {
+    const options = { order: [[ 'highScore', 'DESC' ]] };
+    options.limit = (req.query.limit) ? parseInt(req.query.limit) : 5;
+
+    try {
+        const leaders = await Models.User.findAll(options);
+        res.status(200).json({ result: 'Top scores fetched successfully', data: leaders })
+
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({ result: err.message })
+    }
+}
+
 const updateUser = (req, res) => {
     Models.User.update(req.body, { where: { id: req.params.id }, returning: true })
         // destructure returned data to get the updated user details
@@ -175,5 +192,5 @@ const deleteUser = (req, res) => {
 }
 
 module.exports = {
-    loginUser, registerUser, updateUser, deleteUser, getUserScores, saveUserAnswer
+    loginUser, registerUser, updateUser, deleteUser, getUserScores, saveUserAnswer, getLeaderboard
 }

@@ -19,7 +19,7 @@ export default function RegisterForm({handleClose}: {handleClose?: () => void}) 
 
     const [imagePreview, setImagePreview] = React.useState('')
     const [submitResult, setSubmitResult] = React.useState({message: '', isError: false});
-    const {handleUpdateUser} = useUserContext();
+    const {currentUser, handleUpdateUser} = useUserContext();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.files)
@@ -39,6 +39,12 @@ export default function RegisterForm({handleClose}: {handleClose?: () => void}) 
             password: data.get("password"),
             file: data.get("file"),
         });
+
+        // if this user has some quiz scores, save them to their profile when they register
+        if (currentUser && 'currentScore' in currentUser) {
+            data.set('currentScore', String(currentUser.currentScore));
+            data.set('highScore', String(currentUser.highScore));
+        }
 
         try {
             const response = await axios.post("/api/users/register", data);
@@ -67,7 +73,7 @@ export default function RegisterForm({handleClose}: {handleClose?: () => void}) 
             <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
                 {imagePreview ? <Avatar alt="New User" src={imagePreview} /> : <LockOutlinedIcon />}
             </Avatar>
-            <Typography component="h2" variant="h5">
+            <Typography component="h5" variant="h5">
                 Register
             </Typography>
 

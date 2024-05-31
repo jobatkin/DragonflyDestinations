@@ -3,21 +3,24 @@
 import React, { useState, useContext, useEffect } from "react";
 import { getCookie, setCookie, deleteCookie } from 'cookies-next';
 
-export interface User {
-    id: Number
+export interface GuestUser {
+    highScore: number
+    currentScore: number    
+}
+
+export interface User extends GuestUser {
+    id: number
     token?: string
     userName: string
     profilePhoto?: string 
     email: string
     password: string // encrypted
-    highScore: number
-    currentScore: number
 }
 
 // special type of object being provided by this context
 interface UserContextProps {
-    currentUser: User | null
-    handleUpdateUser: (user: User) => void
+    currentUser: User | GuestUser | null
+    handleUpdateUser: (user: GuestUser | User) => void
     isLoggedIn: boolean
 }
 
@@ -27,8 +30,8 @@ const UserContext = React.createContext<UserContextProps>( {} as UserContextProp
 export const UserProvider = (props: { children: React.ReactNode }) => {
 
     // store the current user in state at the top level
-    const [currentUser, setCurrentUser] = useState<User | null>(null); // default user object
-    const isLoggedIn = Boolean(currentUser && currentUser.token);
+    const [currentUser, setCurrentUser] = useState<User | GuestUser | null>(null); // default user object
+    const isLoggedIn = Boolean(currentUser && 'token' in currentUser);
 
     // need to load user data from cookie via useEffect to prevent hydration issues
     useEffect(() => {
@@ -39,8 +42,8 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     },[])    
 
     // sets user object in state, shared via context
-    const handleUpdateUser = (user: User) => {
-        if (user.token) {
+    const handleUpdateUser = (user: User | GuestUser) => {
+        if ('token' in user) {
             setCookie('user', JSON.stringify(user), { path: '/', maxAge: 60 * 60 * 24 * 7}) // cookie will expire in a week
         } else if (user.currentScore != undefined) {
             setCookie('guestUser', JSON.stringify(user), { path: '/', maxAge: 60 * 60 * 24 * 7}) // cookie will expire in a week

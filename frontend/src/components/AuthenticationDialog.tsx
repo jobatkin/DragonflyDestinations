@@ -12,9 +12,7 @@ function AuthenticationDialog({isOpen, isLogin, handleClose}: {isOpen: boolean, 
             onClose={handleClose}
             aria-labelledby={dialogTitle + '-dialog'}
         >
-        <DialogTitle id={dialogTitle + '-dialog'} sx={{textAlign: 'center'}}>
-          <Typography component="h3" variant="h3">{dialogTitle}</Typography>
-        </DialogTitle>
+        <DialogTitle id={dialogTitle + '-dialog'} sx={{textAlign: 'center'}} component="h3" variant="h3">{dialogTitle}</DialogTitle>
         <DialogContent>
           { isLogin ? <LoginForm handleClose={handleClose} /> : <RegisterForm handleClose={handleClose} /> }
         </DialogContent>
