@@ -7,6 +7,7 @@ const Country = require('./country')
 const Flag = require('./flag') 
 const Language = require('./language') 
 const Currency = require('./currency') 
+const TourismInfo = require('./tourism_info.js')
 const Scores = require('./scores.js')
 
 async function init() {
@@ -16,6 +17,7 @@ async function init() {
     await Flag.sync(); 
     await Language.sync(); 
     await Currency.sync(); 
+    await TourismInfo.sync(); 
     await Scores.sync();
 };
 init();
@@ -31,6 +33,9 @@ Currency.belongsToMany(Country, { through: 'country_currencies' });
 
 Country.belongsToMany(Country, { as: 'borders', through: 'country_borders' });
 
+TourismInfo.belongsTo(Country, { foreignKey: { name: 'countryCode', allowNull: false } })
+Country.hasOne(TourismInfo);
+
 User.hasMany(Scores, { foreignKey: { allowNull: false }});
 Scores.belongsTo(User, { foreignKey: { allowNull: false }});
 
@@ -43,5 +48,6 @@ module.exports = {
     Flag,
     Language,
     Currency,
+    TourismInfo,
     Scores
 };

@@ -9,6 +9,7 @@ Country.init({
         code: {
             type: DataTypes.STRING(5), allowNull: false, primaryKey: true
         },
+        iso_code: { type: DataTypes.STRING(2), allowNull: false, required: true },
         name: {
             type: DataTypes.STRING, allowNull: false, required: true
         },
@@ -58,7 +59,7 @@ Country.init({
         other_languages: { type: DataTypes.STRING(1000) },
         religions: { type: DataTypes.STRING(1000) },
         pop_distribution: { type: DataTypes.STRING(1000) },
-        industries: { type: DataTypes.STRING(1000) },
+        industries: { type: DataTypes.STRING(1000) }
     },
     {
         sequelize: sequelizeInstance, modelName: 'countries', // use lowercase plural format

@@ -1,4 +1,5 @@
 const axios = require("axios");
+const fs = require("fs");
 const { JSDOM } = require('jsdom');
 const Models = require('../models');
 const countryCodes = require("./countryCodes");
@@ -6,12 +7,14 @@ const restCountries = require("./restCountries");
 const capital_timezones = require("./capital_timezones");
 const nongecCountries = require("./nongecCountries");
 const flagDescriptions = require("./flagDescriptions");
+const tourism = require("./tourism");
 
 module.exports = async function initialiseCountries() {
     try {
         //const response = await axios.get("https://restcountries.com/v3.1/all");
         //const countries = response.data;
         const countries = restCountries;
+        const travelSafetyRatings = await getTravelSafetyRatings();
         let addedCountries = 0;
         const countryBorders = new Map();
 
@@ -24,6 +27,7 @@ module.exports = async function initialiseCountries() {
 
                 const insertCountry = {
                     code: country.cca3,
+                    iso_code: country.cca2,
                     name: country.name.common,
                     officialName: country.name.official,            
                     latitude: country.latlng[0],
@@ -60,6 +64,9 @@ module.exports = async function initialiseCountries() {
                     await flagInstance.update(insertFlag);
                 }
 
+                // insert the tourism info for this country
+                await checkInsertTourismInfo(newCountry, travelSafetyRatings[country.cca2]);
+
                 // keep track of which countries border this one
                 countryBorders.set(newCountry, country.borders);
                 await insertExtraInfo(newCountry);
@@ -81,6 +88,53 @@ module.exports = async function initialiseCountries() {
     } catch (err) {
         console.log(err);
     }
+}
+
+// get the latest safety ratings for all available countries
+async function getTravelSafetyRatings() {
+    let data = {};
+    let localData;
+    let needsAPIRefresh = true;
+
+    try {
+        // Read the local file
+        localData = JSON.parse(fs.readFileSync(__dirname + '/travel-safety-ratings.json', 'utf8'));
+
+        // Get the modification time of the file
+        const stats = fs.statSync(__dirname + '/travel-safety-ratings.json');
+        const mtime = new Date(stats.mtime);
+        const currentTime = new Date();       
+        
+        // If the file modification time is more than 2 days old, fetch the latest data
+        needsAPIRefresh = (currentTime - mtime) / (1000 * 60 * 60 * 24) > 2 || !localData;
+    } catch (err) {
+        // Handle file read error (file might not exist)
+        console.error('Error reading local travel safety data file:', err.message);
+        localData = {};
+        needsAPIRefresh = true;
+    }
+
+    if (needsAPIRefresh) {
+        try {
+            // Fetch data from API
+            const response = await axios.get('https://www.travel-advisory.info/api');
+            data = response.data.data;
+
+            // Store data in local file
+            fs.writeFileSync(__dirname + '/travel-safety-ratings.json', JSON.stringify(data, null, 2));
+            console.log('Travel safety data updated successfully.');
+        } catch (error) {
+            // Handle API fetch error
+            console.error('Error fetching data from API:', error);
+            data = localData;
+        }
+    } else {
+        // Use local data if it's less than 2 days old
+        data = localData;
+        console.log('Using cached travel safety data.');
+    }
+
+    return data;
 }
 
 // inserts the languages for this country across our many-to-many tables
@@ -145,6 +199,25 @@ async function insertCapitalTimezone(country, coords) {
         });
         
         await country.save();
+    }
+}
+
+async function checkInsertTourismInfo(country, safetyRating) {
+    const tourismInfo = tourism[country.code];
+    if (tourismInfo) {
+        tourismInfo.safety_rating = safetyRating?.advisory?.score;
+        tourismInfo.bestMonthsArray = parseMonthRange(tourismInfo.bestMonths);
+
+        // Find or create the tourism info
+        const [tourismInstance, createdTourism] = await Models.TourismInfo.findOrCreate({
+            where: { countryCode: country.code },
+            defaults: tourismInfo
+        });
+
+        // If the flag already existed, update its details
+        if (!createdTourism) {
+            await tourismInstance.update(tourismInfo);
+        }
     }
 }
 
@@ -215,4 +288,32 @@ function extractFirstParagraph(htmlString, maxChars = 4000) {
     return firstParagraph;
   }
   
-  
+  // take a month range like "November to February" or "March to May, September to November" and return an array of all included months
+  function parseMonthRange(monthRange) {
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    const ranges = monthRange.split(", ");
+    let includedMonths = [];
+
+    ranges.forEach(range => {
+        const [startMonth, endMonth] = range.split(" to ");
+        const startIndex = months.indexOf(startMonth);
+        const endIndex = months.indexOf(endMonth);
+
+        if (startIndex === -1 || endIndex === -1) {
+            return [];
+        }
+
+        if (startIndex <= endIndex) {
+            includedMonths = includedMonths.concat(months.slice(startIndex, endIndex + 1));
+        } else {
+            includedMonths = includedMonths.concat(months.slice(startIndex));
+            includedMonths = includedMonths.concat(months.slice(0, endIndex + 1));
+        }
+    });
+
+    return includedMonths;
+}
