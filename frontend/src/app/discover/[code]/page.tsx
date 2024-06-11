@@ -21,6 +21,7 @@ import TourismReasons from "@/components/TourismReasons";
 import TourismWarnings from "@/components/TourismWarnings";
 import TourismCuisine from "@/components/TourismCuisine";
 import TourismActivities from "@/components/TourismActivities";
+import TourismPhotos from "@/components/TourismPhotos";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
@@ -196,7 +197,13 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                       </Grid>    
                       <Grid item xs={6} md={4} lg={3}>
                         <TourismActivities activities={tourismInfo.topThingsToDo} />
-                      </Grid>                                                     
+                      </Grid>   
+
+                      {tourismInfo.googlePhotos && 
+                        <Grid item xs={12}>
+                          <TourismPhotos photos={tourismInfo.googlePhotos} country={country.name} />
+                        </Grid>   
+                      }                                               
                   </Grid>
               </Container>
           </div>

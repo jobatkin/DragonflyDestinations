@@ -72,6 +72,7 @@ export interface TourismInfo {
     bestMonths: string,
     bestMonthsArray: string[],
     topThingsToDo: string[],
+    googlePhotos?: string[],
     safety_rating: number
 }
 
