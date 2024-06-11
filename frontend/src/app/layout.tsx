@@ -7,6 +7,7 @@ import { CssBaseline } from "@mui/material";
 import DDThemeProvider from "@/themes/DDThemeProvider";
 import { UserProvider } from "@/context/UserContext";
 import dynamic from "next/dynamic";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export const metadata: Metadata = {
   title: "Dragonfly Destinations",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <CssBaseline />
               <NavBar />
               {children}
+              <ScrollToTop />
             </DDThemeProvider>
           </UserProvider>
         </AppRouterCacheProvider>

@@ -22,4 +22,8 @@ router.get('/:code', (req, res) => {
     Controllers.countryController.getCountry(req, res)
 })
 
+router.get('/:code/tourism', (req, res) => {
+    Controllers.countryController.getCountryTourism(req, res)
+})
+
 module.exports = router;

@@ -48,6 +48,17 @@ const getCountry = (req, res) => {
     })
 }
 
+// get tourism info for the given country
+const getCountryTourism = (req, res) => {
+    Models.TourismInfo.findOne({ 
+        where: { countryCode: req.params.code }, 
+    }).then(function (data) {
+        res.status(200).json({ result: 'Country tourism data fetched successfully', data: data })
+    }).catch(err => {
+        res.status(500).json({ result: err.message })
+    })
+}
+
 // generates 4 random countries and randomly chooses one as the 'right' answer - from this can ask about flag, capital, or region
 const getQuestion = async (req, res) => {
     const options = {
@@ -94,5 +105,5 @@ const getRegions = (req, res) => {
 }
 
 module.exports = {
-    getCountries, getRandomCountries, getCountry, getQuestion, getRegions
+    getCountries, getRandomCountries, getCountry, getQuestion, getRegions, getCountryTourism
 }

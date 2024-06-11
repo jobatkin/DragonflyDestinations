@@ -214,7 +214,7 @@ async function checkInsertTourismInfo(country, safetyRating) {
             defaults: tourismInfo
         });
 
-        // If the flag already existed, update its details
+        // If the tourism info already existed, update its details
         if (!createdTourism) {
             await tourismInstance.update(tourismInfo);
         }
@@ -234,8 +234,8 @@ async function insertExtraInfo(country) {
 
         let geographyNote = extractFirstParagraph(response.data.Geography["Geography - note"]?.text);
         if (geographyNote && geographyNote.length > 0) {
-            geographyNote = geographyNote && geographyNote.length > 0 ? geographyNote.replace(/(<([^>]+)>)/ig, '') : geographyNote;
-            geographyNote = geographyNote.replace('note 1: ', '');
+            geographyNote = geographyNote.replace(/(<([^>]+)>)/ig, ''); // strip html tags
+            geographyNote = geographyNote.replace('note 1: ', ''); // remove any 'note 1' phrases
         }
 
         let popDistribution = extractFirstParagraph(response.data["People and Society"]["Population distribution"]?.text);

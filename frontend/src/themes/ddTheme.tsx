@@ -38,7 +38,7 @@ export const ddThemeSettings = {
         extra: {
             main: '#445069', // light navy
             light: alpha('#445069', 0.5),
-            dark: alpha('#445069', 0.9),
+            dark: alpha('#34425B', 0.9),
             contrastText: '#e8e8e8' // light grey
         },        
         mode: 'dark' as const // dark mode by default

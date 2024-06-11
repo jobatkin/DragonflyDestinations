@@ -2538,7 +2538,7 @@ module.exports = {
             "Popular dishes include jerk chicken and ackee with saltfish.",
             "Fresh fruit juices and rum are widely enjoyed.",
         ],
-        bestMonths: "November to mid-December, mid-January to April",
+        bestMonths: "November to December, January to April",
         topThingsToDo: [
             "Visit Dunn's River Falls",
             "Explore the Bob Marley Museum",
@@ -4853,7 +4853,7 @@ module.exports = {
             "Popular dishes include Grilled Fish and Octopus Curry.",
             "Freshly caught seafood and local rum are widely enjoyed.",
         ],
-        bestMonths: "April, May, October, November",
+        bestMonths: "April to May, October to November",
         topThingsToDo: [
             "Relax on Anse Source d'Argent beach",
             "Explore the Vallée de Mai Nature Reserve",

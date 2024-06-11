@@ -64,4 +64,15 @@ export interface CountryDetails extends CountryWithFlag {
     currencies: Currency[]
 }
 
+export interface TourismInfo {
+    countryCode: string,
+    reasons: string[],
+    warnings: string[],
+    cuisine: string[],
+    bestMonths: string,
+    bestMonthsArray: string[],
+    topThingsToDo: string[],
+    safety_rating: number
+}
+
 export const questionTypes = ['flag', 'capital', 'region'] as const;
