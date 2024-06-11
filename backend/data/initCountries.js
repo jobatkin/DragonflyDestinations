@@ -7,7 +7,7 @@ const restCountries = require("./restCountries");
 const capital_timezones = require("./capital_timezones");
 const nongecCountries = require("./nongecCountries");
 const flagDescriptions = require("./flagDescriptions");
-const tourism = require("./tourism");
+const { fetchCountryPhotos } = require("./lookupCountryImages");
 
 module.exports = async function initialiseCountries() {
     try {
@@ -17,6 +17,7 @@ module.exports = async function initialiseCountries() {
         const travelSafetyRatings = await getTravelSafetyRatings();
         let addedCountries = 0;
         const countryBorders = new Map();
+        const tourism = JSON.parse(fs.readFileSync(__dirname + '/tourism.json', 'utf8'));
 
         for (let country of countries) {
 
@@ -65,7 +66,7 @@ module.exports = async function initialiseCountries() {
                 }
 
                 // insert the tourism info for this country
-                await checkInsertTourismInfo(newCountry, travelSafetyRatings[country.cca2]);
+                await checkInsertTourismInfo(newCountry, travelSafetyRatings[country.cca2], tourism);
 
                 // keep track of which countries border this one
                 countryBorders.set(newCountry, country.borders);
@@ -202,11 +203,19 @@ async function insertCapitalTimezone(country, coords) {
     }
 }
 
-async function checkInsertTourismInfo(country, safetyRating) {
+async function checkInsertTourismInfo(country, safetyRating, tourism) {
     const tourismInfo = tourism[country.code];
     if (tourismInfo) {
         tourismInfo.safety_rating = safetyRating?.advisory?.score;
         tourismInfo.bestMonthsArray = parseMonthRange(tourismInfo.bestMonths);
+        
+        if (!tourismInfo.googlePhotos) {
+            const countryPhotos = await fetchCountryPhotos(country.name);
+            tourismInfo.googlePhotos = countryPhotos;
+
+            tourism[country.code] = tourismInfo;
+            fs.writeFileSync(__dirname + '/tourism.json', JSON.stringify(tourism, null, 2));
+        }
 
         // Find or create the tourism info
         const [tourismInstance, createdTourism] = await Models.TourismInfo.findOrCreate({

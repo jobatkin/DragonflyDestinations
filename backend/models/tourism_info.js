@@ -12,6 +12,7 @@ TourismInfo.init({
         bestMonths: { type: DataTypes.STRING(100), allowNull: false },
         bestMonthsArray: { type: DataTypes.JSON, allowNull: false },
         topThingsToDo: { type: DataTypes.JSON, allowNull: false },
+        googlePhotos: { type: DataTypes.JSON, allowNull: true },
         safety_rating: { type: DataTypes.FLOAT }
     },
     {
