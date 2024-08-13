@@ -13,10 +13,9 @@ import RefreshButton from "./RefreshButton";
 interface ChallengeQuestionProps {
     answers: CountryAnswer[], 
     questionType: typeof questionTypes[number]
-    regions: string[]
 }
 
-function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionProps) {
+function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
 
     const [chosenAnswer, setChosenAnswer] = useState(-1);
     const [userMessage, setUserMessage] = useState('');
@@ -24,7 +23,6 @@ function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionPr
     const hasAnswered = chosenAnswer >= 0;
 
     const correctAnswer = answers.find(answer => answer.correct) as CountryAnswer;
-    const regionOptions = regions.filter(region => region != correctAnswer.region);
     const goalCountry = correctAnswer?.name;
 
     const { currentUser, isLoggedIn, handleUpdateUser } = useUserContext();
@@ -57,7 +55,6 @@ function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionPr
 
             handleUpdateUser(updatedUser);
         }
-
         setUserMessage(MessageHelper.getQuizMessage(correct));
     }
 
@@ -67,13 +64,8 @@ function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionPr
             return <img src={answer.flag} style={{maxWidth: '100%', padding: '2em'}}/>;
         
         // region questions need the 'wrong' answers to come from the full list of regions, not the other countries as several could be from the same region
-        } else if (questionType == 'region' && !answer.correct) {
-            const randomRegionIndex = Math.floor(Math.random() * regionOptions.length)
-            const randomRegion = regionOptions[randomRegionIndex];
-
-            // remove the region we chose from the total list so it doesn't show more than once
-            regionOptions.splice(randomRegionIndex, 1);
-            return randomRegion
+        } else if (questionType == 'region') {
+            return answer.displayWrongRegion;
         }
         return answer[questionType];
     }
@@ -105,7 +97,7 @@ function ChallengeQuestion({answers, questionType, regions}: ChallengeQuestionPr
                 <Grid item xs={12} sx={{textAlign: 'center'}}>
                     <Typography variant="h4" color="secondary" gutterBottom>{userMessage}</Typography>
                     <Button color="extra" href={`/discover/${correctAnswer?.code}`}>Discover more about {goalCountry}</Button> {' '}
-                    <RefreshButton buttonText="Next Question" color="info"/>
+                    <RefreshButton buttonText="Next Question" onRefresh={() => setChosenAnswer(-1)} color="info"/>
                 </Grid>
             }
         </Grid>

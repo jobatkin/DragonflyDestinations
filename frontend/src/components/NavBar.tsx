@@ -118,7 +118,7 @@ function NavBar() {
                     <Box sx={{flexGrow: 0}}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                {(isLoggedIn && currentUser && 'token' in currentUser) ? <Avatar alt={currentUser.userName} src={currentUser.profilePhoto} /> : 
+                                {(isLoggedIn && currentUser && 'userName' in currentUser) ? <Avatar alt={currentUser.userName} src={currentUser.profilePhoto} /> : 
                                     <Avatar alt="No User" src="/nouser.png" /> }
                             </IconButton>
                         </Tooltip>

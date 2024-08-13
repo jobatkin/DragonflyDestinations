@@ -14,7 +14,8 @@ export interface CountryAnswer {
     capital: string,
     region: string,
     flag: string,
-    correct: boolean
+    correct: boolean,
+    displayWrongRegion: string
 }
 
 export interface Flag {

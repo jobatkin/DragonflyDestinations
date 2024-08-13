@@ -7,20 +7,22 @@ import { useState } from "react";
 
 interface RefreshButtonProps {
     buttonText: string, 
+    onRefresh?: () => void,
     refreshingText?: string, 
     buttonSize?: ButtonProps["size"],
     color?: ButtonProps["color"]
 }
 
 // forces a server refresh of the current page using a server action
-export default function RefreshButton({buttonText, refreshingText = 'Refreshing...', buttonSize = "medium", color = "primary"}: RefreshButtonProps) {
+export default function RefreshButton({buttonText, onRefresh, refreshingText = 'Refreshing...', buttonSize = "medium", color = "primary"}: RefreshButtonProps) {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const pathname = usePathname()
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
         await forceRefresh(pathname); // refresh the current path
-        window.location.reload();
+        if (onRefresh) onRefresh();
+        //window.location.reload();
     };
   
     return (

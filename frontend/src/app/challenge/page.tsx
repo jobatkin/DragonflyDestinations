@@ -21,9 +21,9 @@ async function getQuestionAnswers() {
     return json.data as CountryAnswer[];
 }
 
-// get top scoring users from the backend API
+// get top scoring users from the backend API, refreshed every 60 seconds
 async function getLeaderboard() {
-    const res = await fetch(process.env.SERVER + "/api/users/leaderboard");
+    const res = await fetch(process.env.SERVER + "/api/users/leaderboard", { next: { tags: ['scores'] } });
 
     if (!res.ok) {
         // Recommendation: handle errors
@@ -49,6 +49,23 @@ async function getAllRegions() {
   return json.data as string[];
 }
 
+const addWrongRegions = (answers: CountryAnswer[], regions: string[]) => {
+    // if this is the right answer, the display region is unchanged
+    // if not, the display region needs to be unique across all possible answers, so we keep track and maybe swap some out
+    const displayedRegions: string[] = [answers.find(answer => answer.correct)?.region || ""];
+    return answers.map(answer => {
+        answer.displayWrongRegion = answer.correct
+            ? answer.region 
+            : displayedRegions.includes(answer.region) 
+                    ? regions.find(region => !displayedRegions.includes(region)) || "" // unique region or empty string
+                    : answer.region
+
+        displayedRegions.push(answer.displayWrongRegion); 
+
+        return answer;
+    })
+}
+
 export default async function ChallengePage() {
     const answers = await getQuestionAnswers();
     const regions = await getAllRegions();
@@ -56,6 +73,8 @@ export default async function ChallengePage() {
 
     const randomQuestionIndex = Math.floor(Math.random() * questionTypes.length);
     const randomQuestionType = questionTypes[randomQuestionIndex] as (typeof questionTypes)[number];
+
+    const fullAnswers = addWrongRegions(answers, regions);
 
     return (
         <main className={styles.main}>
@@ -65,8 +84,7 @@ export default async function ChallengePage() {
                         <Grid item xs={12} md={9}>
                             <h2 className={gluten.className}>Challenge</h2>
                             <ChallengeQuestion
-                                answers={answers}
-                                regions={regions}
+                                answers={fullAnswers}
                                 questionType={randomQuestionType}
                             />
                         </Grid>

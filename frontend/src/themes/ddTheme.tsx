@@ -6,16 +6,26 @@ import { PaletteColorOptions, PaletteColor, createTheme, alpha, ButtonProps, The
 declare module '@mui/material/styles' {
     interface Palette {
       extra: PaletteColor;
+      silver: PaletteColor;
     }
   
     interface PaletteOptions {
       extra?: PaletteColorOptions;
+      silver?: PaletteColorOptions;
     }
 }
 
 declare module '@mui/material/Button' {
     interface ButtonPropsColorOverrides {
         extra: true;
+        silver: true;
+    }
+}
+
+declare module '@mui/material/SvgIcon' {
+    interface SvgIconPropsColorOverrides {
+        extra: true;
+        silver: true;
     }
 }
 
@@ -40,7 +50,11 @@ export const ddThemeSettings = {
             light: alpha('#445069', 0.5),
             dark: alpha('#34425B', 0.9),
             contrastText: '#e8e8e8' // light grey
-        },        
+        },     
+        silver: {
+            main: '#d2d9db', // silver
+            contrastText: '#222222' // dark grey
+        },           
         mode: 'dark' as const // dark mode by default
     },
     typography: {
