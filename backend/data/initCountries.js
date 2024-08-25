@@ -3,7 +3,6 @@ const fs = require("fs");
 const { JSDOM } = require('jsdom');
 const Models = require('../models');
 const countryCodes = require("./countryCodes");
-const restCountries = require("./restCountries");
 const capital_timezones = require("./capital_timezones");
 const nongecCountries = require("./nongecCountries");
 const flagDescriptions = require("./flagDescriptions");
@@ -11,10 +10,8 @@ const { fetchCountryPhotos } = require("./lookupCountryImages");
 
 module.exports = async function initialiseCountries() {
     try {
-        //const response = await axios.get("https://restcountries.com/v3.1/all");
-        //const countries = response.data;
-        const countries = restCountries;
-        const travelSafetyRatings = await getTravelSafetyRatings();
+        const countries = await maybeLoadData('rest-countries.json', 'https://restcountries.com/v3.1/all');
+        const travelSafetyRatings = await maybeLoadData('travel-safety-ratings.json', 'https://www.travel-advisory.info/api', 'data');
         let addedCountries = 0;
         const countryBorders = new Map();
         const tourism = JSON.parse(fs.readFileSync(__dirname + '/tourism.json', 'utf8'));
@@ -91,26 +88,26 @@ module.exports = async function initialiseCountries() {
     }
 }
 
-// get the latest safety ratings for all available countries
-async function getTravelSafetyRatings() {
+async function maybeLoadData(file, url, dataProp = null, maxAgeDays = 7) {
     let data = {};
     let localData;
     let needsAPIRefresh = true;
+    let filePath = __dirname + '/' + file;
 
     try {
         // Read the local file
-        localData = JSON.parse(fs.readFileSync(__dirname + '/travel-safety-ratings.json', 'utf8'));
+        localData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
         // Get the modification time of the file
-        const stats = fs.statSync(__dirname + '/travel-safety-ratings.json');
+        const stats = fs.statSync(filePath);
         const mtime = new Date(stats.mtime);
         const currentTime = new Date();       
         
-        // If the file modification time is more than 2 days old, fetch the latest data
-        needsAPIRefresh = (currentTime - mtime) / (1000 * 60 * 60 * 24) > 2 || !localData;
+        // If the file modification time is more than maxAgeDays days old, fetch the latest data
+        needsAPIRefresh = (currentTime - mtime) / (1000 * 60 * 60 * 24) > maxAgeDays || !localData;
     } catch (err) {
         // Handle file read error (file might not exist)
-        console.error('Error reading local travel safety data file:', err.message);
+        console.error(`Error reading local data file ${file}:`, err.message);
         localData = {};
         needsAPIRefresh = true;
     }
@@ -118,21 +115,21 @@ async function getTravelSafetyRatings() {
     if (needsAPIRefresh) {
         try {
             // Fetch data from API
-            const response = await axios.get('https://www.travel-advisory.info/api');
-            data = response.data.data;
+            const response = await axios.get(url);
+            data = dataProp ? response.data[dataProp] : response.data;
 
             // Store data in local file
-            fs.writeFileSync(__dirname + '/travel-safety-ratings.json', JSON.stringify(data, null, 2));
-            console.log('Travel safety data updated successfully.');
+            fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+            console.log(`New data from ${url} updated successfully.`);
         } catch (error) {
             // Handle API fetch error
-            console.error('Error fetching data from API:', error);
+            console.error(`Error fetching data from API ${url}:`, error);
             data = localData;
         }
     } else {
-        // Use local data if it's less than 2 days old
+        // Use local data if it's less than maxAgeDays old
         data = localData;
-        console.log('Using cached travel safety data.');
+        console.log(`Using cached data from ${file}.`);
     }
 
     return data;

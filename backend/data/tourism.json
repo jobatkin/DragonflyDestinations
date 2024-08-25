@@ -755,7 +755,7 @@
       "Explore the city of Ouidah",
       "Relax on the beaches of Grand-Popo"
     ],
-    "safety_rating": 3.3,
+    "safety_rating": 3.2,
     "bestMonthsArray": [
       "November",
       "December",
@@ -866,7 +866,7 @@
       "Explore the historical city of Dhaka",
       "Relax on the beaches of Cox's Bazar"
     ],
-    "safety_rating": 3.4,
+    "safety_rating": 4.1,
     "bestMonthsArray": [
       "November",
       "December",
@@ -4508,7 +4508,10 @@
       "September",
       "October"
     ],
-    "googlePhotos": null
+    "googlePhotos": [
+      "https://lh3.googleusercontent.com/places/ANXAkqH9xofkmVuGOUz5eQMNLPxmNfifk_8MiQg0owCiXIFpbecOdPM1FxemWPjZ-oYiD5-60ypMJrykndLpKL_88xT279_DBUsflWI=s4800-w500",
+      "https://lh3.googleusercontent.com/places/ANXAkqGujkmMM8AmV3LnDK2SvEJa2SZKu4tJaq_ciBpB8ziLtylGTbPHYD8kQ7tii6pU3D3UqN-DkC-7DnzawUcnOMSurIzuNxyu0g=s4800-w500"
+    ]
   },
   "KNA": {
     "reasons": [

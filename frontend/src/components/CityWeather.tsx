@@ -24,33 +24,38 @@ export interface WeatherData {
     cod: number    
 }
 
-async function getCityWeather(city: string, coords: number[]) {
-    let res = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?APPID=${process.env.OPEN_WEATHER_KEY}&q=${city}&units=metric`,
-        { next: { revalidate: 3600 } } // weather data expires every 60 mins
-    );
+async function getWeather(params: string) {
 
-    if (!res.ok) {
-        // if city not found, find weather for country coords
-        res = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?APPID=${process.env.OPEN_WEATHER_KEY}&lat=${coords[0]}&lon=${coords[1]}&units=metric`,
-            { next: { revalidate: 3600 } } // weather data expires every 60 mins
-        );
-
-        if (!res.ok) {
-            // Recommendation: handle errors
-            // This will activate the closest `error.js` Error Boundary
-            throw new Error(`Failed to fetch weather for ${city} or ${coords[0]}, ${coords[1]}`);
-        }
+    let weather = {} as WeatherData;
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?appid=${process.env.OPEN_WEATHER_KEY}${params}&units=metric`;
+    try {
+         // weather data expires every 60 mins
+        let res = await fetch( weatherUrl, { next: { revalidate: 3600 } });
+        if (res.ok) weather = await res.json();
     }
+    catch (err) {
+        console.log(weatherUrl)
+        console.log(err)
+    }    
+    return weather;
+}
 
-    const weather = await res.json();
-    return weather as WeatherData;
+async function getCityWeather(city: string, coords: number[]) {
+    
+    let weather = await getWeather(`q=${city}`);
+    
+    // if city not found, find weather for country coords
+    if (!weather.weather) weather = await getWeather(`&lat=${coords[0]}&lon=${coords[1]}`);
+
+    return weather;
 }
 
 async function CityWeather({city, coords}: {city: string, coords: number[]}) {
     const weather = await getCityWeather(city, coords);
     console.log(weather);
+
+    if (!weather.weather) return <Typography fontStyle="italic">Weather data unavailable.</Typography>;
+
     const forecast = weather.weather[0];
     const temps = weather.main;
 

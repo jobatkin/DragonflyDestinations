@@ -12,7 +12,7 @@ router.post('/register', uploadFile, (req, res) => {
     Controllers.userController.registerUser(req, res)
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', uploadFile, (req, res) => {
     Controllers.userController.updateUser(req, res)
 })
 

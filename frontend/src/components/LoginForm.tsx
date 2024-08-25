@@ -54,7 +54,7 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            {currentUser.profilePhoto ? <img src={"/"+currentUser.profilePhoto} width="40" alt={currentUser.userName}/> : <LockOutlinedIcon />}
+            <LockOutlinedIcon />
           </Avatar>
 
           { (!isLoggedIn) &&
@@ -87,7 +87,7 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
                   <Link href="/forgotpw" variant="body2">Forgot password?</Link>
                 </Grid>
                 <Grid item xs={6}>
-                  <Link href="/register" variant="body2">Don't have an account? Sign Up</Link>
+                  <Link href="/connect" variant="body2">Don't have an account? Sign Up</Link>
                 </Grid>
               </Grid>
             </Box>

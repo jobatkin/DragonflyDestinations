@@ -147,10 +147,10 @@ const saveUserAnswer = async (req, res) => {
     }
 }
 
-// gets the details for the users with the top 5 high scores in the challenge
+// gets the details for the users with the top 10 high scores in the challenge
 const getLeaderboard = async (req, res) => {
     const options = { order: [[ 'highScore', 'DESC' ]] };
-    options.limit = (req.query.limit) ? parseInt(req.query.limit) : 5;
+    options.limit = (req.query.limit) ? parseInt(req.query.limit) : 10;
 
     try {
         const leaders = await Models.User.findAll(options);
@@ -162,19 +162,25 @@ const getLeaderboard = async (req, res) => {
     }
 }
 
-const updateUser = (req, res) => {
-    Models.User.update(req.body, { where: { id: req.params.id }, returning: true })
-        // destructure returned data to get the updated user details
-        .then(([rowsUpdated, [updatedUser]]) => {
+// update details for the given user and return the new user details
+const updateUser = async (req, res) => {
+    const userProfile = {...req.body};
+    if (req.file) userProfile.profilePhoto = '/images/' + req.file.filename;
 
-            // differentiate response if we DID find/update a user or not
-            rowsUpdated > 0 ? 
-                res.status(200).json({ result: 'User updated successfully', data: updatedUser }) :
-                res.status(404).json({ result: `User ${req.params.id} not found` })
-        }).catch(err => {
-            console.log(err)
-            res.status(500).json({ result: err.message })
-        })
+    try {
+        const [rowsUpdated] = await Models.User.update(userProfile, { where: { id: req.params.id } });
+        if (rowsUpdated > 0) {
+            const updatedUser = await Models.User.findByPk(req.params.id)
+            res.status(200).json({ result: 'User updated successfully', data: updatedUser });
+        }
+        else {
+            res.status(404).json({ result: `User ${req.params.id} not found` });
+        }
+    }
+    catch(err) {
+        console.log(err);
+        res.status(500).json({ result: err.message });
+    }
 }
 
 const deleteUser = (req, res) => {
