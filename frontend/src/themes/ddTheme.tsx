@@ -107,7 +107,27 @@ export const ddThemeSettings = {
         },
         MuiTextField: {
             defaultProps: { variant: 'filled' } as const
-        }
+        },
+        MuiAlert: {
+            styleOverrides: {
+              filledSuccess: {
+                backgroundColor: '#5B9A8B', // teal green
+                color: 'white'
+              },
+              filledError: {
+                backgroundColor: '#735F32', // dark gold
+                color: 'white'
+              },
+              filledWarning: {
+                backgroundColor: '#c69749', // gold
+                color: 'black'
+              },
+              filledInfo: {
+                backgroundColor: '#252b48', // navy
+                color: 'white'
+              }
+            }
+        },        
     }    
 };
 
