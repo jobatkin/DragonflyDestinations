@@ -26,15 +26,24 @@ export default function ProfileForm() {
 
     const handleUpdateProfile = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log(data)
+        const formData = new FormData(event.currentTarget as HTMLFormElement);
 
+        // filter out any empty string fields, we don't want to update those
+        const filteredFormData = Array.from(formData)
+          .reduce((acc, [fieldName, fieldValue]) => {
+            if ((typeof fieldValue === 'string' && fieldValue.trim().length > 0) || typeof fieldValue !== 'string') {
+              acc.append(fieldName, fieldValue);
+            }
+            return acc;
+          }, new FormData());
+        
         if (currentUser && 'id' in currentUser) {
             try {
-                const response = await axios.put("/api/users/" + currentUser.id, data);
+                const response = await axios.put("/api/users/" + currentUser.id, filteredFormData);
                 console.log(response)
                 setSubmitResult( {message: response.data.result, isError: false} );
-                handleUpdateUser(response.data.data);
+                // new user details merged with existing ones including token to stay logged in
+                handleUpdateUser({...currentUser, ...response.data.data});
 
             } catch (err) {
                 console.log(err);

@@ -19,7 +19,6 @@ let countryRoutes = require('./routes/countryRoutes')
 app.use('/api/countries', countryRoutes)
 
 let userRoutes = require('./routes/userRoutes');
-const { fetchCountryPhotos } = require("./data/lookupCountryImages");
 app.use('/api/users', userRoutes)
 
 app.use("/images", express.static("public/images")); // required for image mappings
@@ -29,6 +28,5 @@ const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}.`);
-  await initialiseCountries();
-  //await fetchCountryPhotos('Botswana');
+  //await initialiseCountries();
 });

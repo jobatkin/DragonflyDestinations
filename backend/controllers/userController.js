@@ -165,7 +165,14 @@ const getLeaderboard = async (req, res) => {
 // update details for the given user and return the new user details
 const updateUser = async (req, res) => {
     const userProfile = {...req.body};
+    // don't update any fields to an empty value
+    for (let [userProp, userValue] in userProfile) if (userValue.trim().length == 0) delete userProfile[userProp];
+
+    // if there was an uploaded file, save it as the new profile photo
     if (req.file) userProfile.profilePhoto = '/images/' + req.file.filename;
+
+    // if they have set a new password, encrypt it
+    if (userProfile.password) userProfile.password = await bcrypt.hash(userProfile.password, 10);
 
     try {
         const [rowsUpdated] = await Models.User.update(userProfile, { where: { id: req.params.id } });
