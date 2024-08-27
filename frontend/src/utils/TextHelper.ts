@@ -17,6 +17,10 @@ class TextHelper {
         }
         else return '';
     }
+
+    static ucFirst(text?: string) {
+        return text && text.length > 1 ? text[0].toUpperCase() + text.substring(1).toLowerCase() : text;
+    }
 }
 
 export default TextHelper
