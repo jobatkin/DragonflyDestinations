@@ -2,6 +2,7 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+import { UserFavourites } from "@/types";
 
 export interface GuestUser {
     highScore: number
@@ -15,6 +16,7 @@ export interface User extends GuestUser {
     profilePhoto?: string 
     email: string
     password: string // encrypted
+    favourites: UserFavourites[]
 }
 
 // special type of object being provided by this context

@@ -57,7 +57,7 @@ export default async function HomePage() {
             <>
                 <p>Can't decide where to travel, or not even sure what the possibilities are?</p>
                 <p>Let our comprehensive list surprise you with a randomly chosen country. Learn all about
-                  where it is and what's it's like, then add it to your list if you like what you see!
+                  where it is and what it's like, then add it to your list if you like what you see!
                 </p>
             </>
         ),

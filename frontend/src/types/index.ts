@@ -78,3 +78,18 @@ export interface TourismInfo {
 }
 
 export const questionTypes = ['flag', 'capital', 'region'] as const;
+
+export interface UserScores {
+    question_type: typeof questionTypes[number]
+    correct: number
+    total: number
+}
+
+export interface UserFavourites {
+    id: number
+    type: string
+    userId: number
+    countryCode: string
+    countryName: string
+    countryFlag: string
+}

@@ -3,6 +3,7 @@ const Models = require("../models");
 const bcrypt = require('bcryptjs') // first run 'npm install bcryptjs'
 const { createToken } = require('../middleware/auth');
 const { Op } = require('sequelize');
+const { includeFavouriteCountries } = require("./favouritesController");
 
 // creates a JWT token and encrypts the password
 // https://www.section.io/engineering-education/how-to-build-authentication-api-with-jwt-token-in-nodejs/
@@ -17,7 +18,11 @@ const loginUser = async (req, res) => {
             return; // when sending responses and finishing early, manually return or end the function to stop further processing
         }
         // Validate if user exists in our database
-        const user = await Models.User.findOne({ raw: true, where: { email: email }});
+        const userInstance = await Models.User.findOne({ 
+            where: { email: email }, 
+            include: [{ model: Models.Favourite, attributes: ['id', 'type', 'countryCode'], include: includeFavouriteCountries }]
+        });
+        const user = userInstance ? userInstance.get({ plain: true }) : null;
 
         // if they do exist, make sure their password matches - need to check encrypted version of password
         if (user && (await bcrypt.compare(password, user.password))) {
@@ -25,6 +30,17 @@ const loginUser = async (req, res) => {
             const token = createToken(user.id, email);
             // save user token
             user.token = token;
+
+            console.log(user)
+
+            // flatten favourites for ease of use in front end
+            user.favourites = user.favourites.map(favourite => ({
+                id: favourite.id, 
+                type: favourite.type, 
+                countryCode: favourite.countryCode, 
+                countryName: favourite.country.name, 
+                countryFlag: favourite.country.flag.pngLink
+            }));
 
             console.log(user)
 
@@ -71,13 +87,15 @@ const registerUser = async (req, res) => {
             currentScore: currentScore,
             highScore: highScore
         });
-        const user = userMetadata.get({plain: true}) // get just the user fields, no extra sequelize metadata
+        const user = userMetadata.get({plain: true}); // get just the user fields, no extra sequelize metadata
+        user.favourites = []; // new users don't have favourites yet
 
         // Create token
         const token = createToken(user.id, email);
 
         // save user token to send back to front-end
         user.token = token;
+        console.log(user);
 
         // return new user
         res.status(201).json({ result: "User successfully registered", data: user });
@@ -177,7 +195,7 @@ const updateUser = async (req, res) => {
     try {
         const [rowsUpdated] = await Models.User.update(userProfile, { where: { id: req.params.id } });
         if (rowsUpdated > 0) {
-            const updatedUser = await Models.User.findByPk(req.params.id)
+            const updatedUser = await Models.User.findByPk(req.params.id, {include: Models.Favourite});
             res.status(200).json({ result: 'User updated successfully', data: updatedUser });
         }
         else {

@@ -1,5 +1,6 @@
 import { CardContent, Card, CardMedia, Typography, Grid, CardActionArea } from "@mui/material";
 import { Country } from "@/types";
+import CountryActions from "./CountryActions";
 
 export interface CountryCardProps extends Country {
     flagImg: string,
@@ -20,7 +21,8 @@ function CountryCard(props: CountryCardProps) {
                     sx={{ height: 160 }}
                     image={props.flagImg}
                     title={props.name}
-                />            
+                />      
+                <CountryActions code={props.code} />
             </CardActionArea>
             <CardContent>
                 <Typography gutterBottom variant="h3">
