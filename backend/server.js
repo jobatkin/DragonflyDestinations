@@ -21,6 +21,9 @@ app.use('/api/countries', countryRoutes)
 let userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes)
 
+let favouriteRoutes = require('./routes/favouriteRoutes');
+app.use('/api/favourites', favouriteRoutes)
+
 app.use("/images", express.static("public/images")); // required for image mappings
 
 // set port, listen for requests
