@@ -21,21 +21,6 @@ async function getUserScores(userid: number) {
     return scores;
 }
 
-// get the favourite countries for the current user
-async function getUserFavourites(userid: number) {
-    const res = await fetch(`${process.env.SERVER}/api/favourites/${userid}`);
-
-    if (!res.ok) {
-        // Recommendation: handle errors
-        // This will activate the closest `error.js` Error Boundary
-        throw new Error("Failed to fetch favourites for user " + userid);
-    }
-
-    const json = await res.json();
-    const favourites = json.data as UserFavourites[];
-    return favourites;
-}
-
 export default async function DashboardPage() {
 
     // extract the user from the cookie
@@ -45,7 +30,6 @@ export default async function DashboardPage() {
     if (!currentUserId) return <p>Please <Link href="/login" variant="body2">login</Link> to view your dashboard.</p>;
 
     const scores = await getUserScores(currentUserId);
-    const favourites = await getUserFavourites(currentUserId);
 
     return (
         <main className={styles.main}>
@@ -60,7 +44,7 @@ export default async function DashboardPage() {
 
                 <Divider sx={{my: 2}}/>
                 <h3 className={gluten.className}>My Countries</h3>     
-                <FavouriteCountries favourites={favourites}/>           
+                <FavouriteCountries />           
             </div>
         </main>
     );

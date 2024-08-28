@@ -28,6 +28,7 @@ function ScrollToSection({
             startIcon={startIcon}
             endIcon={down ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
             color={color}
+            sx={{my: 1}}
         >
             {buttonText}
         </Button>
