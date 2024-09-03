@@ -5,45 +5,71 @@ const { Sequelize } = require('../dbConnect');
 const defaultFields = [ 'code', 'name', 'capital', 'region', 'subregion', 'population', 'area' ];
 const questionFields = [ 'code', 'name', 'capital', 'region' ];
 
-// Get all countries from the database. Supports a 'limit' query parameter to get only the top x countries
-const getCountries = (req, res) => {
-    const options = { include: Models.Flag, attributes: defaultFields }; // random order, include flag info
+const getCountryOptions = (req) => {
+    const flagInclude = { model: Models.Flag, attributes: ['id', 'pngLink', 'description'] };
+    const options = { include: [flagInclude], attributes: defaultFields }; // default order, default attributes, include flag info
+
+    // limit to the given amount of countries in the limit parameter
     if (req.query.limit) options.limit = parseInt(req.query.limit);
+
+    // optionally include the number of people who have favourited each country
+    if (req.query.includeFavourites) {
+        options.attributes = [...defaultFields, 
+            [Sequelize.literal(`( SELECT COUNT(*) FROM favourites WHERE favourites.countryCode = countries.code )`), 'favouriteCount']
+        ];
+    }
+
+    return options;
+}
+
+// Get all countries from the database. Supports a 'limit' query parameter to get only the top x countries,
+// supports an 'includeFavourites' query parameter which if true will include a favouriteCount attribute for each country
+const getCountries = (req, res) => {
+    const options = getCountryOptions(req);
 
     Models.Country.findAll(options).then(function (data) {
         res.status(200).json({ result: 'Country data fetched successfully', data: data })
     }).catch(err => {
+        console.log(err);
         res.status(500).json({ result: err.message })
     })
 }
 
-// Get randomly ordered countries from the database. Supports a 'limit' query parameter to get only x random countries
+// Get randomly ordered countries from the database. Supports a 'limit' query parameter to get only x random countries,
+// supports an 'includeFavourites' query parameter which if true will include a favouriteCount attribute for each random country
 const getRandomCountries = (req, res) => {
-    const options = { order: Sequelize.random(), include: Models.Flag, attributes: defaultFields }; // random order, include flag info
-    if (req.query.limit) options.limit = parseInt(req.query.limit);
+    const options = getCountryOptions(req, true);
+    options.order = Sequelize.random(); // random order
 
     Models.Country.findAll(options).then(function (data) {
         res.status(200).json({ result: 'Random country data fetched successfully', data: data })
     }).catch(err => {
+        console.log(err);
         res.status(500).json({ result: err.message })
     })
 }
 
 // get a single country from the database identified by its code, including all currencies, languages and bordering countries
 const getCountry = (req, res) => {
+    const favOptions = req.query.includeFavourites ? { 
+        attributes: { include: [[Sequelize.literal(`( SELECT COUNT(*) FROM favourites WHERE favourites.countryCode = countries.code )`), 'favouriteCount']] }
+    } : {};
+
     Models.Country.findOne({ 
         where: { code: req.params.code }, 
         include: [
             { model: Models.Flag, attributes: ['id', 'svgLink', 'pngLink', 'description'] }, 
             { model: Models.Language, attributes: ['code', 'language'], through: { attributes: [] } }, 
             { model: Models.Currency, attributes: ['code', 'name', 'symbol'], through: { attributes: [] } },
-            { model: Models.Country, as: 'borders', attributes: ['code', 'name', 'capital', 'region', 'subregion', 'population', 'area'],
+            { model: Models.Country, as: 'borders', attributes: defaultFields,
                 include: { model: Models.Flag, attributes: ['svgLink'] }, through: { attributes: [] }
-             }
-        ]
+            }
+        ],
+        ...favOptions
     }).then(function (data) {
         res.status(200).json({ result: 'Country data fetched successfully', data: data })
     }).catch(err => {
+        console.log(err);
         res.status(500).json({ result: err.message })
     })
 }
@@ -55,6 +81,7 @@ const getCountryTourism = (req, res) => {
     }).then(function (data) {
         res.status(200).json({ result: 'Country tourism data fetched successfully', data: data })
     }).catch(err => {
+        console.log(err);
         res.status(500).json({ result: err.message })
     })
 }
@@ -100,6 +127,7 @@ const getRegions = (req, res) => {
         const regions = data.map(record => record.region)
         res.status(200).json({ result: 'Unique region data fetched successfully', data: regions })
     }).catch(err => {
+        console.log(err);
         res.status(500).json({ result: err.message })
     })    
 }
