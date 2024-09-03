@@ -7,12 +7,14 @@ import axios from "axios";
 import FormFeedback from "./FormFeedback";
 import { useState } from "react";
 
-function CountryActions({code}: {code: string}) {
+function CountryActions({code, favCount}: {code: string, favCount?: number}) {
     const {currentUser, handleUpdateUser} = useUserContext();
     const [submitResult, setSubmitResult] = useState( {message: '', isError: false});
+    const [count, setCount] = useState(favCount || 0);
 
+    console.log(currentUser)
     // only allow users to favourite and see others favourites if they're logged in
-    if (!currentUser || !('id' in currentUser)) return null;
+    if (!currentUser || !('token' in currentUser)) return null;
 
     const isFavourite = currentUser.favourites.find(fav => fav.countryCode == code);
 
@@ -24,11 +26,13 @@ function CountryActions({code}: {code: string}) {
             if (isFavourite) {
                 const response = await axios.delete(`/api/favourites/${isFavourite.id}`);
                 updatedFavourites = currentUser.favourites.filter(fav => fav.countryCode != code);
+                setCount(prevCount => prevCount - 1)
                 setSubmitResult({message: response.data.result, isError: false});
             }
             else {
                 const response = await axios.post(`/api/favourites/${currentUser.id}`, {type: 'favourite', countryCode: code});
                 updatedFavourites = [...updatedFavourites, response.data.data];
+                setCount(prevCount => prevCount + 1)
                 setSubmitResult({message: response.data.result, isError: false});
             }
         } catch(err) {
@@ -42,8 +46,10 @@ function CountryActions({code}: {code: string}) {
 
     return (
         <>
-            <Badge badgeContent={4} color="primary">
-                { isFavourite ? <FavoriteIcon color="action" onClick={handleToggleFavourite}/> : <FavoriteBorderIcon color="action" onClick={handleToggleFavourite}/> }
+            <Badge badgeContent={count.toString()} color="primary">
+                { isFavourite ? 
+                    <FavoriteIcon color="action" onClick={handleToggleFavourite} sx={{cursor: 'pointer'}}/> : 
+                    <FavoriteBorderIcon color="action" onClick={handleToggleFavourite} sx={{cursor: 'pointer'}}/> }
             </Badge>
             <FormFeedback message={submitResult.message} isError={submitResult.isError} onClose={() => setSubmitResult({message: '', isError: false})}/>
         </>

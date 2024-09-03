@@ -10,7 +10,7 @@ export interface CountryCardProps extends Country {
 
 // Display a single Country Card, including flag, name, region/subregion, population and area
 function CountryCard(props: CountryCardProps) {
-    const colour = props.colour ? props.colour : 'primary'; // base colour defaults to primary if not specified
+    const colour = props.colour || 'primary'; // base colour defaults to primary if not specified
     const single = props.single === undefined ? true : props.single; // are we showing a single card at a time? true if not specified
     const cardMargins = single ? {xs: '0.5em', lg: '2em'} : { xs: '0.5em' }; // margins around card change if in a grid or single
 
@@ -22,12 +22,16 @@ function CountryCard(props: CountryCardProps) {
                     image={props.flagImg}
                     title={props.name}
                 />      
-                <CountryActions code={props.code} />
             </CardActionArea>
             <CardContent>
-                <Typography gutterBottom variant="h3">
-                    {props.name}
-                </Typography>
+                <Grid container justifyContent="space-between" flexWrap="nowrap">
+                    <Grid item>
+                        <Typography gutterBottom variant="h3">{props.name}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <CountryActions code={props.code} favCount={props.favouriteCount} />
+                    </Grid>
+                </Grid>
                 <Typography gutterBottom variant="h5" color="text.secondary">
                     Where? {props.subregion}, {props.region}
                 </Typography>      

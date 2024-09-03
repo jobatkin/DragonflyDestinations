@@ -23,21 +23,24 @@ import TourismCuisine from "@/components/TourismCuisine";
 import TourismActivities from "@/components/TourismActivities";
 import TourismPhotos from "@/components/TourismPhotos";
 import CountryActions from "@/components/CountryActions";
+import CookieHelper from "@/utils/CookieHelper";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
-  const res = await fetch(process.env.SERVER + "/api/countries/" + code,
-    { next: { revalidate: 1800 } } // country data expires every 30 mins during testing
-  );
+    const includeFavourites = CookieHelper.favouriteParam();
 
-  if (!res.ok) {
-      // Recommendation: handle errors
-      // This will activate the closest `error.js` Error Boundary
-     throw new Error("Failed to fetch country " + code);
-  }
+    const res = await fetch(process.env.SERVER + "/api/countries/" + code + includeFavourites,
+        { next: { revalidate: 1800 } } // country data expires every 30 mins during testing
+    );
 
-  const json = await res.json();
-  return json.data as CountryDetails;
+    if (!res.ok) {
+        // Recommendation: handle errors
+        // This will activate the closest `error.js` Error Boundary
+        throw new Error("Failed to fetch country " + code);
+    }
+
+    const json = await res.json();
+    return json.data as CountryDetails;
 }
 
 // get the tourism info for the country with the given code from the API
@@ -121,7 +124,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                         </Grid>
 
                         <Grid item xs={2} textAlign="right">
-                            <CountryActions code={country.code}/>
+                            <CountryActions code={country.code} favCount={country.favouriteCount}/>
                             <ScrollToSection
                                 startIcon={<InfoIcon />}
                                 color="extra"

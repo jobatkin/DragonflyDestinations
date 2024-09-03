@@ -5,10 +5,13 @@ import styles from "../page.module.css";
 import CountryCard from "@/components/CountryCard";
 import {Box, Container, Grid, Typography} from "@mui/material";
 import RefreshButton from "@/components/RefreshButton";
+import CookieHelper from "@/utils/CookieHelper";
 
 // get the given number of random countries from backend API
 async function getRandomCountries(limit: number) {
-    const res = await fetch(`${process.env.SERVER}/api/countries/random/?limit=${limit}`);
+
+    const includeFavourites = CookieHelper.favouriteParam().replace('?','&');
+    const res = await fetch(`${process.env.SERVER}/api/countries/random/?limit=${limit}${includeFavourites}`);
 
     if (!res.ok) {
         // Recommendation: handle errors

@@ -12,9 +12,9 @@ function FavouriteCountries() {
     console.log(favourites)
     
     return (
-        <Grid container>
+        <Grid container rowSpacing={2}>
             {favourites.map(fav => 
-                <Grid item key={fav.id}>
+                <Grid item key={fav.id} xs={6} sm={4} md={3} lg={2}>
                     <SmallCountryCard code={fav.countryCode} name={fav.countryName} flagImg={fav.countryFlag} />
                 </Grid>
             )}

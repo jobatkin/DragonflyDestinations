@@ -6,6 +6,7 @@ export interface Country {
     subregion: string,
     population: number,
     area: number, 
+    favouriteCount?: number
 }
 
 export interface CountryAnswer {

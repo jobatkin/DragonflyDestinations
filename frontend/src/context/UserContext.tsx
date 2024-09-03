@@ -50,7 +50,8 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
         } else if (user.currentScore != undefined) {
             setCookie('guestUser', JSON.stringify(user), { path: '/', maxAge: 60 * 60 * 24 * 7}) // cookie will expire in a week
         } else {
-            deleteCookie('user')
+            deleteCookie('user');
+            deleteCookie('guestUser');
         }        
         console.log(user)
         setCurrentUser(user);

@@ -6,7 +6,7 @@ const defaultFields = [ 'code', 'name', 'capital', 'region', 'subregion', 'popul
 const questionFields = [ 'code', 'name', 'capital', 'region' ];
 
 const getCountryOptions = (req) => {
-    const flagInclude = { model: Models.Flag, attributes: ['id', 'pngLink', 'description'] };
+    const flagInclude = { model: Models.Flag, attributes: ['id', 'svgLink', 'description'] };
     const options = { include: [flagInclude], attributes: defaultFields }; // default order, default attributes, include flag info
 
     // limit to the given amount of countries in the limit parameter
@@ -38,7 +38,7 @@ const getCountries = (req, res) => {
 // Get randomly ordered countries from the database. Supports a 'limit' query parameter to get only x random countries,
 // supports an 'includeFavourites' query parameter which if true will include a favouriteCount attribute for each random country
 const getRandomCountries = (req, res) => {
-    const options = getCountryOptions(req, true);
+    const options = getCountryOptions(req);
     options.order = Sequelize.random(); // random order
 
     Models.Country.findAll(options).then(function (data) {
