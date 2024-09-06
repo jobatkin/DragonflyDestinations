@@ -20,7 +20,7 @@ const loginUser = async (req, res) => {
         // Validate if user exists in our database
         const userInstance = await Models.User.findOne({ 
             where: { email: email }, 
-            include: [{ model: Models.Favourite, attributes: ['id', 'type', 'countryCode'], include: includeFavouriteCountries }]
+            include: [{ model: Models.List, attributes: ['id', 'name'], include: [{ model: Models.Favourite, include: includeFavouriteCountries }] }]
         });
         const user = userInstance ? userInstance.get({ plain: true }) : null;
 
@@ -34,12 +34,14 @@ const loginUser = async (req, res) => {
             console.log(user)
 
             // flatten favourites for ease of use in front end
-            user.favourites = user.favourites.map(favourite => ({
-                id: favourite.id, 
-                type: favourite.type, 
-                countryCode: favourite.countryCode, 
-                countryName: favourite.country.name, 
-                countryFlag: favourite.country.flag.pngLink
+            user.lists = user.lists.map(list => ({
+                ...list,
+                favourites: list.favourites.map(favourite => ({
+                    id: favourite.id, 
+                    countryCode: favourite.countryCode, 
+                    countryName: favourite.country.name, 
+                    countryFlag: favourite.country.flag.svgLink
+                }))
             }));
 
             console.log(user)

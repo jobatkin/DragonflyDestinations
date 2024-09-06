@@ -6,26 +6,27 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
 import FormFeedback from "./FormFeedback";
 import { useState } from "react";
+import FavouriteHelper from "@/utils/FavouriteHelper";
 
 function CountryActions({code, favCount}: {code: string, favCount?: number}) {
     const {currentUser, handleUpdateUser} = useUserContext();
     const [submitResult, setSubmitResult] = useState( {message: '', isError: false});
     const [count, setCount] = useState(favCount || 0);
 
-    console.log(currentUser)
     // only allow users to favourite and see others favourites if they're logged in
     if (!currentUser || !('token' in currentUser)) return null;
 
-    const isFavourite = currentUser.favourites.find(fav => fav.countryCode == code);
+    //const isFavourite = currentUser.favourites.find(fav => fav.countryCode == code);
+    const [isFavourite, listIndex] = FavouriteHelper.findFavourite(code, currentUser.lists);
 
     const handleToggleFavourite = async () => {
-        let updatedFavourites = [...currentUser.favourites];
+        let updatedFavourites = [...currentUser.lists[listIndex].favourites];
 
         // if this country is already a favourite, remove it, otherwise add it
         try {
             if (isFavourite) {
                 const response = await axios.delete(`/api/favourites/${isFavourite.id}`);
-                updatedFavourites = currentUser.favourites.filter(fav => fav.countryCode != code);
+                updatedFavourites = updatedFavourites.filter(fav => fav.countryCode != code);
                 setCount(prevCount => prevCount - 1)
                 setSubmitResult({message: response.data.result, isError: false});
             }
@@ -40,7 +41,7 @@ function CountryActions({code, favCount}: {code: string, favCount?: number}) {
             setSubmitResult({message: `Could not save favourite: ${(err as Error).message}`, isError: true});
         }
 
-        currentUser.favourites = updatedFavourites;
+        currentUser.lists[listIndex].favourites = updatedFavourites;
         handleUpdateUser(currentUser);
     }
 

@@ -10,6 +10,7 @@ const Currency = require('./currency')
 const TourismInfo = require('./tourism_info.js')
 const Scores = require('./scores.js')
 const Favourite = require('./favourite.js')
+const List = require('./list.js')
 
 async function init() {
     // sync all models - creates tables
@@ -20,6 +21,7 @@ async function init() {
     await Currency.sync(); 
     await TourismInfo.sync(); 
     await Scores.sync();
+    await List.sync();
     await Favourite.sync();
 };
 init();
@@ -41,8 +43,11 @@ Country.hasOne(TourismInfo);
 User.hasMany(Scores, { foreignKey: { allowNull: false }});
 Scores.belongsTo(User, { foreignKey: { allowNull: false }});
 
-User.hasMany(Favourite, { foreignKey: { allowNull: false }});
-Favourite.belongsTo(User, { foreignKey: { allowNull: false }});
+User.hasMany(List, { foreignKey: { allowNull: false }});
+List.belongsTo(User, { foreignKey: { allowNull: false }});
+
+List.hasMany(Favourite, { foreignKey: { allowNull: false }});
+Favourite.belongsTo(List, { foreignKey: { allowNull: false }});
 
 Country.hasMany(Favourite, { foreignKey: { allowNull: false }});
 Favourite.belongsTo(Country, { foreignKey: { allowNull: false } });
@@ -58,5 +63,6 @@ module.exports = {
     Currency,
     TourismInfo,
     Scores,
-    Favourite
+    Favourite,
+    List
 };

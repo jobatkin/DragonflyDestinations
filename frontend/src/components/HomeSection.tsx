@@ -12,8 +12,8 @@ interface HomeSectionProps {
 }
 
 function HomeSection(props: HomeSectionProps) {
-    const flagSide = props.flagSide ? props.flagSide : 'right';
-    const highlightColour = props.highlightColour ? props.highlightColour : 'primary';
+    const flagSide = props.flagSide || 'right';
+    const highlightColour = props.highlightColour || 'primary';
 
     const calloutColumn = 
         <Grid item lg={6} md={7} xs={12}>

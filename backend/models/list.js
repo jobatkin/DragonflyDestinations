@@ -2,18 +2,21 @@ const { DataTypes, Model } = require("sequelize");
 let dbConnect = require("../dbConnect");
 const sequelizeInstance = dbConnect.Sequelize;
 
-class Favourite extends Model { }
+class List extends Model { }
 
 // Sequelize will create this table if it doesn't exist on startup
-Favourite.init({
+List.init({
         id: {
             type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true
+        },
+        name: {
+            type: DataTypes.STRING, allowNull: false, default: 'Places to Visit'
         }
     },
     {
-        sequelize: sequelizeInstance, modelName: 'favourites', // use lowercase plural format
+        sequelize: sequelizeInstance, modelName: 'lists', // use lowercase plural format
         timestamps: true, freezeTableName: true
     }
 )
 
-module.exports = Favourite;
+module.exports = List;

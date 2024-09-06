@@ -1,4 +1,4 @@
-import { UserFavourites, UserScores } from "@/types";
+import { UserScores } from "@/types";
 import { gluten } from "../fonts";
 import styles from "../page.module.css";
 import { Divider, Link, Stack } from "@mui/material";

@@ -17,6 +17,7 @@ const verifyToken = (req, res, next) => {
         req.user = decoded;
         console.log(decoded)
     } catch (err) {
+        console.log(err)
         return res.status(401).send("Invalid Token");
     }
     // successful authorisation, execute next part of the route - ie. the controller function
