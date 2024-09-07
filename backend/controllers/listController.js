@@ -50,8 +50,11 @@ const addList = async (req, res) => {
 
         // create their list using special mixin method - https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
         const listInstance = await user.createList(req.body);
+        const list = listInstance.get({plain:true});
+        list.favourites = [];
+        console.log(list)
 
-        res.status(200).json({ result: `List added successfully`, data: listInstance });
+        res.status(200).json({ result: `List added successfully`, data: list });
     } catch(err) {
         console.log(err)
         res.status(500).json({ result: err.message })

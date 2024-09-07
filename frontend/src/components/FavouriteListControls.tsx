@@ -1,12 +1,12 @@
 'use client'
 import { useUserContext } from "@/context/UserContext";
-import { Box, Button, Link, TextField } from "@mui/material"
+import { Box, Button, Grid, Link, TextField } from "@mui/material"
 import axios from "axios";
 import FormFeedback from "./FormFeedback";
 import { useState } from "react";
 
 // allows a user to update the name of a list of favourites
-function FavouriteListControls({listId, listName}: {listId: number, listName: string}) {
+function FavouriteListControls({listId, listName, isFirst = true}: {listId: number, listName: string, isFirst?: boolean}) {
     const {currentUser, handleUpdateUser} = useUserContext();
     const [submitResult, setSubmitResult] = useState( {message: '', isError: false});
 
@@ -28,12 +28,33 @@ function FavouriteListControls({listId, listName}: {listId: number, listName: st
         }
     }
 
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete(`/api/lists/${listId}`);
+            const updatedLists = currentUser.lists.filter(list => list.id != listId);
+            handleUpdateUser({...currentUser, lists: updatedLists});
+            setSubmitResult({message: response.data.result, isError: false});
+        } catch (err) {
+            console.log(err)
+            setSubmitResult({message: `Could not delete list: ${(err as Error).message}`, isError: true});
+        }
+    }
+
     return (
         <>
-            <Box component="form" onSubmit={handleSubmit} sx={{my: 2}}>
-                <TextField id={`list${listId}-name`} label="List Name" variant="standard" name="name" defaultValue={listName} />
-                <Button variant="outlined" type="submit">Update Name</Button>
-            </Box>
+            <Grid container component="form" onSubmit={handleSubmit} sx={{my: 2}} alignItems="center" gap={1}>
+                <Grid item>
+                    <TextField id={`list${listId}-name`} label="List Name" variant="filled" name="name" defaultValue={listName} />
+                </Grid>
+                <Grid item>
+                    <Button variant="outlined" type="submit">Update</Button>
+                </Grid>
+                {!isFirst && 
+                    <Grid item>
+                        <Button variant="outlined" color="secondary" onClick={handleDelete}>Delete</Button>
+                    </Grid>
+                }
+            </Grid>
             <FormFeedback message={submitResult.message} isError={submitResult.isError} onClose={() => setSubmitResult({message: '', isError: false})}/>
         </>
     )

@@ -1,9 +1,9 @@
-import { UserFavourite, UserList } from "@/types";
+import { UserFavourite, FavouriteList } from "@/types";
 
 class FavouriteHelper {
 
     // if the given country is already a favourite, find which list it's in and return both
-    static findFavourite(code: string, lists: UserList[]): [UserFavourite | undefined, number] {
+    static findFavourite(code: string, lists: FavouriteList[]): [UserFavourite | undefined, number] {
         let favourite;
         let listIndex = 0;
 

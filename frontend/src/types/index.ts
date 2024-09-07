@@ -86,7 +86,7 @@ export interface UserScores {
     total: number
 }
 
-export interface UserList {
+export interface FavouriteList {
     id: number
     name: string
     favourites: UserFavourite[]
@@ -94,9 +94,6 @@ export interface UserList {
 
 export interface UserFavourite {
     id: number
-    listId: number
-    listName: string
-    userId: number
     countryCode: string
     countryName: string
     countryFlag: string

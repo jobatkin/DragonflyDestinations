@@ -1,10 +1,12 @@
 import { UserScores } from "@/types";
 import { gluten } from "../fonts";
 import styles from "../page.module.css";
-import { Divider, Link, Stack } from "@mui/material";
+import { Button, Divider, Grid, Link, Stack } from "@mui/material";
 import { cookies } from "next/headers";
 import ScoreChart from "@/components/ScoreChart";
 import FavouriteCountries from "@/components/FavouriteCountries";
+import axios from "axios";
+import NewListButton from "@/components/NewListButton";
 
 // get the score results for the current user
 async function getUserScores(userid: number) {
@@ -43,7 +45,10 @@ export default async function DashboardPage() {
                 </Stack>
 
                 <Divider sx={{my: 2}}/>
-                <h3 className={gluten.className}>My Countries</h3>     
+                <Grid container justifyContent="space-between">
+                    <Grid item><h3 className={gluten.className}>My Countries</h3></Grid>    
+                    <Grid item><NewListButton /></Grid> 
+                </Grid>
                 <FavouriteCountries />           
             </div>
         </main>
