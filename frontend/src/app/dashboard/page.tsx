@@ -1,7 +1,7 @@
 import { UserScores } from "@/types";
 import { gluten } from "../fonts";
 import styles from "../page.module.css";
-import { Button, Divider, Grid, Link, Stack } from "@mui/material";
+import { Button, Divider, Grid, Link, Stack, Typography } from "@mui/material";
 import { cookies } from "next/headers";
 import ScoreChart from "@/components/ScoreChart";
 import FavouriteCountries from "@/components/FavouriteCountries";
@@ -39,16 +39,20 @@ export default async function DashboardPage() {
                 <h2 className={gluten.className}>Dashboard</h2>
                 <Divider sx={{my: 2}}/>
 
-                <h3 className={gluten.className}>Challenge Progress</h3>
+                <Grid container justifyContent="space-between" sx={{my: 2}}>
+                    <Grid item><Typography variant="h3" component="h3" className={gluten.className}>Challenge Progress</Typography></Grid>    
+                    <Grid item><Button color="extra" href="/challenge">Challenge Me</Button></Grid> 
+                </Grid>
                 <Stack direction={{xs: 'column', sm: 'row'}} gap={5}>
                     {scores.map(score => <ScoreChart key={score.question_type} scoreResult={score}/>)}
                 </Stack>
 
-                <Divider sx={{my: 2}}/>
-                <Grid container justifyContent="space-between">
-                    <Grid item><h3 className={gluten.className}>My Countries</h3></Grid>    
-                    <Grid item><NewListButton /></Grid> 
+                <Divider sx={{my: 6}}/>
+                <Grid container justifyContent="space-between" sx={{my: 2}}>
+                    <Grid item><Typography variant="h3" component="h3" className={gluten.className}>My Countries</Typography></Grid>    
+                    <Grid item><NewListButton />{" "}<Button color="extra" href="/discover">Discover Countries</Button></Grid> 
                 </Grid>
+                <Typography>Any newly favourited countries will show in your first default list below. Add new lists and drag your countries around to organise them as you like!</Typography>
                 <FavouriteCountries />           
             </div>
         </main>
