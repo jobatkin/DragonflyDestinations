@@ -29,6 +29,13 @@ declare module '@mui/material/SvgIcon' {
     }
 }
 
+declare module '@mui/material/Typography' {
+    interface TypographyPropsColorOverrides {
+        extra: true;
+        silver: true;
+    }
+}
+
 export const ddThemeSettings = {
     palette: {
         primary: {
@@ -46,9 +53,9 @@ export const ddThemeSettings = {
             contrastText: '#e8e8e8' // light grey
         },
         extra: {
-            main: '#445069', // light navy
-            light: alpha('#445069', 0.5),
-            dark: alpha('#34425B', 0.9),
+            main: '#424E7F', // light navy
+            light: '#4F5E99',
+            dark: '#353E66',
             contrastText: '#e8e8e8' // light grey
         },     
         silver: {

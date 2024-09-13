@@ -5,7 +5,6 @@ import { Button, Divider, Grid, Link, Stack, Typography } from "@mui/material";
 import { cookies } from "next/headers";
 import ScoreChart from "@/components/ScoreChart";
 import FavouriteCountries from "@/components/FavouriteCountries";
-import axios from "axios";
 import NewListButton from "@/components/NewListButton";
 
 // get the score results for the current user

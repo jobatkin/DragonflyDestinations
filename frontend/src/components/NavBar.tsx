@@ -17,7 +17,7 @@ import DDLogo from "./DDLogo";
 import { User, useUserContext } from "@/context/UserContext";
 import AuthenticationDialog from "./AuthenticationDialog";
 
-const pages = [{label: "Discover", link: "/discover"}, {label: "Surprise", link: "/surprise"}, {label: "Connect", link: "/connect"}, {label: "Challenge", link: "/challenge"}];
+export const pages = [{label: "Discover", link: "/discover"}, {label: "Surprise", link: "/surprise"}, {label: "Connect", link: "/connect"}, {label: "Challenge", link: "/challenge"}];
 const settings = [{label: "Profile", link: "/profile", onClick: undefined}, {label: "Dashboard", link: "/dashboard", onClick: undefined}];
 
 function NavBar() {
@@ -99,7 +99,7 @@ function NavBar() {
                             fontWeight: 700,
                             letterSpacing: ".2rem",
                         }}>
-                        <DDLogo alt="Dragonfly Destinations" wings="#c49a6c88" body="#505E9Baa"/>
+                        <DDLogo alt="Dragonfly Destinations" wings="#c6974988" body="#505E9Baa"/>
                         Dragonfly Destinations
                     </Typography>
 
