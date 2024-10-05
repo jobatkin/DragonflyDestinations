@@ -5,6 +5,7 @@ const { Sequelize } = require('../dbConnect');
 const defaultFields = [ 'code', 'name', 'capital', 'region', 'subregion', 'population', 'area' ];
 const questionFields = [ 'code', 'name', 'capital', 'region' ];
 
+// helper method to generate the sequelize options for selecting countries with the right attributes and table inclusions/joins
 const getCountryOptions = (req) => {
     const flagInclude = { model: Models.Flag, attributes: ['id', 'svgLink', 'description'] };
     const options = { include: [flagInclude], attributes: defaultFields }; // default order, default attributes, include flag info
