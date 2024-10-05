@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20  # Specify the Node.js version you want
+    commands:
+      - echo Installing dependencies...
+      - cd backend    # Navigate to your subfolder
+      - npm install   # Install dependencies
+
+  build:
+    commands:
+      - echo Build completed on `date`  # Placeholder command
+
+artifacts:
+  files:
+    - backend/**/*  # Specify which files to include in the artifacts
+  discard-paths: yes  # Discard the folder structure in the output artifacts
