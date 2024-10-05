@@ -36,7 +36,7 @@ const getFavourites = (req, res) => {
     })
 }
 
-// Add a new favourite for a given user from the database
+// Add a new favourite for a given user from the database. uses default list if not specified
 const addFavourite = async (req, res) => {
     const userId = req.params.uid;
     const listId = req.body.listId;
