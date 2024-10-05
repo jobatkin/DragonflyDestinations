@@ -3,10 +3,10 @@ import { useUserContext } from "@/context/UserContext";
 import { Button } from "@mui/material";
 import axios from "axios";
 
+// Displays an Add New List button if user is logged in - when clicked creates a new favourites list
 function NewListButton() {
     const {currentUser, handleUpdateUser} = useUserContext();
     if (!currentUser || !('id' in currentUser)) return null;
-
 
     const handleAddList = async () => {
         try {

@@ -90,7 +90,7 @@ const registerUser = async (req, res) => {
             highScore: highScore
         });
         const user = userMetadata.get({plain: true}); // get just the user fields, no extra sequelize metadata
-        user.favourites = []; // new users don't have favourites yet
+        user.lists = []; // new users don't have favourites yet
 
         // Create token
         const token = createToken(user.id, email);

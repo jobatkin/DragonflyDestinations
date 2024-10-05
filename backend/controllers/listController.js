@@ -44,7 +44,7 @@ const addList = async (req, res) => {
         const user = await Models.User.findByPk(userId);
 
         if (!user) {
-            res.status(404).json({ result: "User not found, cannot add favourite" }); return;
+            res.status(404).json({ result: "User not found, cannot add list" }); return;
         }
         console.log(user)
 

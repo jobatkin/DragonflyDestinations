@@ -3,6 +3,7 @@
 import { Typography } from "@mui/material";
 import { useState } from "react"
 
+// if text is longer than maxLength, displays ... and Less links to enable hiding/showing large blocks of text
 function ReadMore({text = '', maxLength = 150}: {text?: string, maxLength?: number}) {
     const [showAll, setShowAll] = useState(false);
 

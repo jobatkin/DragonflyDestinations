@@ -11,6 +11,7 @@ interface HomeSectionProps {
     highlightColour?: string
 }
 
+// Displays a section on the home page, with heading/text/button to one side and a random country card on the other
 function HomeSection(props: HomeSectionProps) {
     const flagSide = props.flagSide || 'right';
     const highlightColour = props.highlightColour || 'primary';
