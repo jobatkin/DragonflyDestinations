@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 8000;
 dotenv.config({ path: `./.env.${environment}` }); // support multiple environments, see package.json
 
 require("./dbConnect").connectMysql(); 
-const initialiseCountries = require('./data/initCountries')
 
 // parse requests of content-type - application / json;
 app.use(express.json());
@@ -29,5 +28,4 @@ app.use("/images", express.static("public/images")); // required for image mappi
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}.`);
-  await initialiseCountries();
 });
