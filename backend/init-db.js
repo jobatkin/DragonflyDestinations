@@ -6,4 +6,4 @@ dotenv.config({ path: `./.env.${environment}` }); // support multiple environmen
 require("./dbConnect").connectMysql(); 
 const initialiseCountries = require('./data/initCountries')
 
-await initialiseCountries();
+initialiseCountries();
