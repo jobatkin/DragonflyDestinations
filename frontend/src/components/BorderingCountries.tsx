@@ -6,7 +6,7 @@ function BorderingCountries({borders}: {borders: CountryCardProps[]}) {
     return (
         <Grid container flexDirection="row" flexWrap="wrap" rowSpacing={2}>
             { borders.map(country => (
-                <Grid item xs={6}>
+                <Grid item xs={6} key={country.code}>
                     <SmallCountryCard {...country} colour="extra"/>
                 </Grid>
             )) }

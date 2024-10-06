@@ -9,6 +9,7 @@ import axios from "axios";
 import { useState } from "react";
 import MessageHelper from "@/utils/MessageHelper";
 import RefreshButton from "./RefreshButton";
+import Image from "next/image";
 
 interface ChallengeQuestionProps {
     answers: CountryAnswer[], 
@@ -61,7 +62,7 @@ function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
     const getAnswerOption = (answer: CountryAnswer) => {
         // flag questions need an img tag to display the flag on the button
         if (questionType == 'flag') {
-            return <img src={answer.flag} style={{maxWidth: '100%', padding: '2em'}}/>;
+            return <Image src={answer.flag} alt="Country flag" style={{maxWidth: '100%', padding: '2em'}}/>;
         
         // region questions need the 'wrong' answers to come from the full list of regions, not the other countries as several could be from the same region
         } else if (questionType == 'region') {

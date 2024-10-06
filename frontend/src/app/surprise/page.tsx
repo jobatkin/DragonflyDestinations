@@ -32,7 +32,7 @@ export default async function Surprise() {
             <div className={styles.description}>
                 <Container maxWidth="xl">
                     <Typography variant="h2" component="h2"> Surprise </Typography>
-                    <p> Can't decide where to start your journey of destination discovery? Why not start right here? </p>
+                    <p> Can&apos;t decide where to start your journey of destination discovery? Why not start right here? </p>
 
                     <Grid container columnSpacing={6} rowSpacing={4} sx={{my: 2}}>
                         {surpriseCountries.map((country) => (

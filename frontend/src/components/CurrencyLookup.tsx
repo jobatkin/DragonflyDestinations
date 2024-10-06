@@ -23,7 +23,7 @@ function CurrencyLookup({currencies, amount = 10}: {currencies: string[], amount
             }
         }
         getConversion();
-    }, [toCurrency, fromCurrency]);
+    }, [toCurrency, fromCurrency, amount]);
 
     const handleChangeCurrency = (type: string, newValue: string) => {
         if (type == 'to') setToCurrency(newValue);

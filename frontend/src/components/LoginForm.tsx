@@ -20,7 +20,7 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
   const [password, setPassword] = useState<string>('');
   const [errMsg, setErrMsg] = useState<string>('');
 
-  const { currentUser, handleUpdateUser, isLoggedIn } = useUserContext();
+  const { handleUpdateUser, isLoggedIn } = useUserContext();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -87,7 +87,7 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
                   <Link href="/forgotpw" variant="body2">Forgot password?</Link>
                 </Grid>
                 <Grid item xs={6}>
-                  <Link href="/connect" variant="body2">Don't have an account? Sign Up</Link>
+                  <Link href="/connect" variant="body2">Don&apos;t have an account? Sign Up</Link>
                 </Grid>
               </Grid>
             </Box>

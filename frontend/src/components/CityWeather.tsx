@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import LocalTemperatures from "./LocalTemperatures";
+import Image from "next/image";
 
 interface WeatherType {
     id: number,
@@ -62,7 +63,7 @@ async function CityWeather({city, coords}: {city: string, coords: number[]}) {
     return (
         <Box sx={{mb:1}}>
             <Typography variant="h6" component="h6" color="info">
-                <img src={`http://openweathermap.org/img/w/${forecast.icon}.png`} style={{verticalAlign: 'middle'}} alt={forecast.main}/>{" "}
+                <Image src={`http://openweathermap.org/img/w/${forecast.icon}.png`} style={{verticalAlign: 'middle'}} alt={forecast.main}/>{" "}
                 {forecast.main}
             </Typography>
             <Typography color="info" sx={{

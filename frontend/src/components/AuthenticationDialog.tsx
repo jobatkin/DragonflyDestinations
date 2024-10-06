@@ -1,8 +1,9 @@
 'use client'
-import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material"
+import { Dialog, DialogContent, DialogTitle } from "@mui/material"
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 
+// display the login or register forms in a dialog depending on the isLogin prop
 function AuthenticationDialog({isOpen, isLogin, handleClose}: {isOpen: boolean, isLogin: boolean, handleClose: () => void}) {
     const dialogTitle = isLogin ? 'Login' : 'Register';
 

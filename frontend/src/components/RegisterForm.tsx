@@ -64,7 +64,7 @@ export default function RegisterForm({handleClose}: RegisterFormProps) {
     };
 
     // this is a form to register a new user, not valid if user is logged in
-    if (authUser) return <p>You're already registered and logged in! <Link href="/profile">Update your profile here</Link>.</p>
+    if (authUser) return <p>You&apos;re already registered and logged in! <Link href="/profile">Update your profile here</Link>.</p>
 
     return (
         <Container maxWidth="md">

@@ -187,8 +187,8 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                     <Grid container justifyContent="space-between" columnSpacing={{xs: 2, md: 6}}>
                         <Grid item xs={12}>
                             <Typography variant="h2" component="h2">Visiting {country.name}</Typography>
-                            <Typography variant="body1" gutterBottom>You're in for a treat! {country.name} is a fascinating place to explore, 
-                            especially from <strong>{tourismInfo.bestMonths}</strong>. Here's what you could encounter:</Typography>
+                            <Typography variant="body1" gutterBottom>You&apos;re in for a treat! {country.name} is a fascinating place to explore, 
+                            especially from <strong>{tourismInfo.bestMonths}</strong>. Here&apos;s what you could encounter:</Typography>
                         </Grid>
 
                         <Grid item xs={6} md={4} lg={3}>

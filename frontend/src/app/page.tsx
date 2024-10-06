@@ -55,9 +55,9 @@ export default async function HomePage() {
         highlightColour: 'primary',
         description: (
             <>
-                <p>Can't decide where to travel, or not even sure what the possibilities are?</p>
+                <p>Can&apos;t decide where to travel, or not even sure what the possibilities are?</p>
                 <p>Let our comprehensive list surprise you with a randomly chosen country. Learn all about
-                  where it is and what it's like, then add it to your list if you like what you see!
+                  where it is and what it&apos;s like, then add it to your list if you like what you see!
                 </p>
             </>
         ),
@@ -69,7 +69,7 @@ export default async function HomePage() {
         description: (
             <>
                 <p>Have you travelled to some amazing countries, or maybe want to share experiences from your home country?</p>
-                <p>Read stories and comments from around the world, or ask questions to find out what it's like to live
+                <p>Read stories and comments from around the world, or ask questions to find out what it&apos;s like to live
                   and travel in your favourite destinations.
                 </p>
             </>
