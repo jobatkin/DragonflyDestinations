@@ -2,15 +2,38 @@
 import { Box, Button, Grid, TextField } from "@mui/material"
 import { useState } from "react";
 import FormFeedback from "./FormFeedback";
+import EmailHelper from "@/utils/EmailHelper";
+import axios from "axios";
+import { useUserContext } from "@/context/UserContext";
 
 function ContactForm() {
 
     const [submitResult, setSubmitResult] = useState( {message: '', isError: false});
+    const { currentUser } = useUserContext();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // @todo - build backend support for saving and emailing feedback
-        setSubmitResult( {message: 'Thanks for your message!', isError: false} );
+        const formData = new FormData(event.currentTarget);
+
+        try {
+            const emailResponse = await EmailHelper.sendFormEmail(event.currentTarget);
+
+            const submission = {
+                form: 'contact',
+                name: formData.get('from_name'),
+                email: formData.get('from_email'),
+                message: formData.get('message'),
+                userId: (currentUser && 'id' in currentUser) ? currentUser.id : null
+            }
+            const dbResponse = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/submissions`, submission);
+
+            console.log(emailResponse);
+            console.log(dbResponse);
+            setSubmitResult( {message: 'Thanks for your message!', isError: false} );
+        } catch (err) {
+            console.error(err);
+            setSubmitResult( {message: 'Failed to send email', isError: true} );
+        }        
     }
 
     return (
@@ -20,16 +43,16 @@ function ContactForm() {
             <Grid container columnSpacing={4} rowSpacing={4}>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        autoComplete="name" name="name"
+                        autoComplete="name" name="from_name"
                         required fullWidth autoFocus
-                        id="name" label="Your Name"
+                        id="from_name" label="Your Name"
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        autoComplete="email" name="email"
+                        autoComplete="email" name="from_email"
                         required fullWidth autoFocus type="email"
-                        id="email" label="Your Email"
+                        id="from_email" label="Your Email"
                     />
                 </Grid>     
                 <Grid item xs={12}>

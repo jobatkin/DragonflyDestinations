@@ -26,7 +26,7 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
     event.preventDefault();
 
     try {
-      let response = await axios.post('/api/users/login', { email, password });
+      let response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/login`, { email, password });
       const loggedInUser: User = {...response.data.data};
 
       console.log(loggedInUser)

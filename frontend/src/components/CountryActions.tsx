@@ -25,13 +25,13 @@ function CountryActions({code, favCount}: {code: string, favCount?: number}) {
         // if this country is already a favourite, remove it, otherwise add it
         try {
             if (isFavourite) {
-                const response = await axios.delete(`/api/favourites/${isFavourite.id}`);
+                const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_SERVER}/api/favourites/${isFavourite.id}`);
                 updatedFavourites = updatedFavourites.filter(fav => fav.countryCode != code);
                 setCount(prevCount => prevCount - 1)
                 setSubmitResult({message: response.data.result, isError: false});
             }
             else {
-                const response = await axios.post(`/api/favourites/${currentUser.id}`, {type: 'favourite', countryCode: code});
+                const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/favourites/${currentUser.id}`, {type: 'favourite', countryCode: code});
                 updatedFavourites = [...updatedFavourites, response.data.data];
                 setCount(prevCount => prevCount + 1)
                 setSubmitResult({message: response.data.result, isError: false});

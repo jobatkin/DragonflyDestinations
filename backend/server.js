@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 const dotenv = require("dotenv"); 
@@ -11,18 +12,22 @@ require("./dbConnect").connectMysql();
 
 // parse requests of content-type - application / json;
 app.use(express.json());
+app.use(cors());
 
-let countryRoutes = require('./routes/countryRoutes')
+const countryRoutes = require('./routes/countryRoutes')
 app.use('/api/countries', countryRoutes)
 
-let userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes)
 
-let favouriteRoutes = require('./routes/favouriteRoutes');
+const favouriteRoutes = require('./routes/favouriteRoutes');
 app.use('/api/favourites', favouriteRoutes)
 
-let listRoutes = require('./routes/listRoutes');
+const listRoutes = require('./routes/listRoutes');
 app.use('/api/lists', listRoutes)
+
+const submissionRoutes = require('./routes/submissionRoutes');
+app.use('/api/submissions', submissionRoutes)
 
 app.use("/images", express.static("public/images")); // required for image mappings
 

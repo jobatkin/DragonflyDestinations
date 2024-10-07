@@ -3,4 +3,5 @@ module.exports={
     countryController: require('./countryController'),
     favouritesController: require('./favouritesController'),
     listController: require('./listController'),
+    submissionsController: require('./submissionsController'),
 }

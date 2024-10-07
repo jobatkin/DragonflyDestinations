@@ -38,7 +38,7 @@ function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
         // save result in db for user if logged in
         if (currentUser && isLoggedIn && 'id' in currentUser) {
             const userResponse = { question_type: questionType, result: correct };
-            const response = await axios.post(`/api/users/${currentUser.id}/answer`, userResponse);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/${currentUser.id}/answer`, userResponse);
             const updatedUser = response.data.data as User;
             
             handleUpdateUser(updatedUser);

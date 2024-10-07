@@ -11,7 +11,7 @@ import CookieHelper from "@/utils/CookieHelper";
 async function getRandomCountries(limit: number) {
 
     const includeFavourites = CookieHelper.favouriteParam().replace('?','&');
-    const res = await fetch(`${process.env.SERVER}/api/countries/random/?limit=${limit}${includeFavourites}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/countries/random/?limit=${limit}${includeFavourites}`);
 
     if (!res.ok) {
         // Recommendation: handle errors

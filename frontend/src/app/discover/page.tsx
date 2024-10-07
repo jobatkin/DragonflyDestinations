@@ -8,7 +8,7 @@ import CookieHelper from "@/utils/CookieHelper";
 async function getAllCountries() {
 
     const includeFavourites = CookieHelper.favouriteParam();
-    const res = await fetch(process.env.SERVER + "/api/countries/"+includeFavourites, { next: { revalidate: 24*3600 } });
+    const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/api/countries/"+includeFavourites, { next: { revalidate: 24*3600 } });
 
     if (!res.ok) {
         // Recommendation: handle errors

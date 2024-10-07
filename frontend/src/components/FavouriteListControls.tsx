@@ -17,7 +17,7 @@ function FavouriteListControls({listId, listName, isFirst = true}: {listId: numb
         const formData = new FormData(e.currentTarget as HTMLFormElement);
 
         try {
-            const response = await axios.put(`/api/lists/${listId}`, Object.fromEntries(formData));
+            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_SERVER}/api/lists/${listId}`, Object.fromEntries(formData));
             console.log(response)
 
             // update the new list name in the current user object
@@ -34,7 +34,7 @@ function FavouriteListControls({listId, listName, isFirst = true}: {listId: numb
 
     const handleDelete = async () => {
         try {
-            const response = await axios.delete(`/api/lists/${listId}`);
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_SERVER}/api/lists/${listId}`);
 
             // remove the deleted list from the current user object
             const updatedLists = currentUser.lists.filter(list => list.id != listId);

@@ -29,7 +29,7 @@ import CookieHelper from "@/utils/CookieHelper";
 async function getCountryDetails(code: string) {
     const includeFavourites = CookieHelper.favouriteParam();
 
-    const res = await fetch(process.env.SERVER + "/api/countries/" + code + includeFavourites,
+    const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/api/countries/" + code + includeFavourites,
         { next: { revalidate: 1800 } } // country data expires every 30 mins during testing
     );
 
@@ -45,7 +45,7 @@ async function getCountryDetails(code: string) {
 
 // get the tourism info for the country with the given code from the API
 async function getTourismInfo(code: string) {
-  const res = await fetch(process.env.SERVER + "/api/countries/" + code + '/tourism',
+  const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/api/countries/" + code + '/tourism',
     { next: { revalidate: 1800 } } // country data expires every 30 mins during testing
   );
 

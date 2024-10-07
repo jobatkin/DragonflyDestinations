@@ -2,6 +2,7 @@ import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import styles from "../page.module.css";
 import React from "react";
 import ContactForm from "@/components/ContactForm";
+import DDLogo from "@/components/DDLogo";
 
 const dataSources = [
     {
@@ -85,11 +86,18 @@ export default async function AboutPage() {
                         </Grid>
                     </Box>
 
-                    <Box component="section" sx={{my: 4}}>
-                        <Typography variant="h3" component="h3">Contact</Typography>
-                        <Typography component="p">Have a suggestion, some feedback or want to get in touch?</Typography>
-                        <ContactForm />
-                    </Box>
+                    <Grid container justifyContent="space-between" alignItems="center">
+                        <Grid item xs={12} sm={9}>
+                            <Box component="section" sx={{my: 4}}>
+                                <Typography variant="h3" component="h3">Contact</Typography>
+                                <Typography component="p">Have a suggestion, some feedback or want to get in touch?</Typography>
+                                <ContactForm />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={0} sm={3} sx={{textAlign: 'center'}}>
+                            <DDLogo alt="Dragonfly Destinations" wings="#c6974988" body="#505E9Baa"/>
+                        </Grid>
+                    </Grid>
                 </Container>
             </div>
         </main>

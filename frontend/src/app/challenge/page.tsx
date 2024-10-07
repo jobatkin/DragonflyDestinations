@@ -9,7 +9,7 @@ import Leaderboard from "@/components/Leaderboard";
 
 // get a new question with possible answers from the backend API
 async function getQuestionAnswers() {
-    const res = await fetch(process.env.SERVER + "/api/countries/question");
+    const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/api/countries/question");
 
     if (!res.ok) {
         // Recommendation: handle errors
@@ -23,7 +23,7 @@ async function getQuestionAnswers() {
 
 // get top scoring users from the backend API, refreshed every 60 seconds
 async function getLeaderboard() {
-    const res = await fetch(process.env.SERVER + "/api/users/leaderboard", { next: { tags: ['scores'] } });
+    const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/api/users/leaderboard", { next: { tags: ['scores'] } });
 
     if (!res.ok) {
         // Recommendation: handle errors
@@ -37,7 +37,7 @@ async function getLeaderboard() {
 
 // get all unique regions from the backend api
 async function getAllRegions() {
-  const res = await fetch(process.env.SERVER + "/api/countries/regions");
+  const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/api/countries/regions");
 
   if (!res.ok) {
       // Recommendation: handle errors

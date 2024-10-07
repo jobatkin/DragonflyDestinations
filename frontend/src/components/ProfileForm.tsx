@@ -39,7 +39,7 @@ export default function ProfileForm() {
         
         if (currentUser && 'id' in currentUser) {
             try {
-                const response = await axios.put("/api/users/" + currentUser.id, filteredFormData);
+                const response = await axios.put(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/${currentUser.id}`, filteredFormData);
                 console.log(response)
                 setSubmitResult( {message: response.data.result, isError: false} );
                 // new user details merged with existing ones including token to stay logged in

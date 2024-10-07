@@ -10,7 +10,7 @@ function NewListButton() {
 
     const handleAddList = async () => {
         try {
-            const response = await axios.post(`/api/lists/${currentUser.id}`, {name: 'New List'});
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/lists/${currentUser.id}`, {name: 'New List'});
             const updatedLists = [...currentUser.lists, response.data.data];
             handleUpdateUser({...currentUser, lists: updatedLists});
         } catch (err) {

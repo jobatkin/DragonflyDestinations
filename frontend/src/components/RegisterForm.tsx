@@ -51,7 +51,7 @@ export default function RegisterForm({handleClose}: RegisterFormProps) {
         }
 
         try {
-            const response = await axios.post("/api/users/register", data);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/register`, data);
             console.log(response)
             setSubmitResult( {message: response.data.result, isError: false} );
             handleUpdateUser(response.data.data);

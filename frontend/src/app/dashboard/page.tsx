@@ -9,7 +9,7 @@ import NewListButton from "@/components/NewListButton";
 
 // get the score results for the current user
 async function getUserScores(userid: number) {
-    const res = await fetch(`${process.env.SERVER}/api/users/${userid}/scores`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/${userid}/scores`);
 
     if (!res.ok) {
         // Recommendation: handle errors

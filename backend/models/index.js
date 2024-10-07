@@ -11,6 +11,7 @@ const TourismInfo = require('./tourism_info.js')
 const Scores = require('./scores.js')
 const Favourite = require('./favourite.js')
 const List = require('./list.js')
+const Submission = require('./submission.js')
 
 async function init() {
     // sync all models - creates tables
@@ -23,6 +24,7 @@ async function init() {
     await Scores.sync();
     await List.sync();
     await Favourite.sync();
+    await Submission.sync();
 };
 init();
 
@@ -52,6 +54,9 @@ Favourite.belongsTo(List, { foreignKey: { allowNull: false }});
 Country.hasMany(Favourite, { foreignKey: { allowNull: false }});
 Favourite.belongsTo(Country, { foreignKey: { allowNull: false } });
 
+User.hasMany(Submission);
+Submission.belongsTo(User);
+
 // needed after associations above
 sequelizeInstance.sync();
 
@@ -64,5 +69,6 @@ module.exports = {
     TourismInfo,
     Scores,
     Favourite,
-    List
+    List,
+    Submission
 };
