@@ -9,6 +9,7 @@ function TourismPhotos({photos, country}: {photos: string[], country: string}) {
             <ImageListItem key={photo}>
             <Image
                 src={`${photo}?fit=crop&auto=format`}
+                overrideSrc={`${photo}?fit=crop&auto=format`}
                 alt={`${country} tourist attraction #${i+1}`}
                 loading="lazy"
             />
