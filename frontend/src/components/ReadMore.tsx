@@ -3,8 +3,14 @@
 import { Typography } from "@mui/material";
 import { useState } from "react"
 
+interface ReadMoreProps {
+    text: string, 
+    maxLength?: number,
+
+}
+
 // if text is longer than maxLength, displays ... and Less links to enable hiding/showing large blocks of text
-function ReadMore({text = '', maxLength = 150}: {text?: string, maxLength?: number}) {
+function ReadMore({text, maxLength = 150}: ReadMoreProps) {
     const [showAll, setShowAll] = useState(false);
 
     let displayText = text;
@@ -18,7 +24,7 @@ function ReadMore({text = '', maxLength = 150}: {text?: string, maxLength?: numb
     }
 
     return (
-        <Typography>{displayText}{' '}{action}</Typography>
+        <Typography gutterBottom>{displayText}{' '}{action}</Typography>
     )
 }
 

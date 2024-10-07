@@ -100,9 +100,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                                 </Button>
                             </Typography>
                             <Typography
-                                bgcolor={"rgba(255,255,255,0.1)"}
-                                color="info.contrastText"
-                                component="span"
+                                bgcolor={"rgba(255,255,255,0.1)"} color="info.contrastText" component="span"
                                 sx={{
                                     display: "inline-block",
                                     padding: "5px",
@@ -113,10 +111,8 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                                 {country.code}
                             </Typography>
                             <Typography
-                                className={montserrat.className}
-                                color="info.contrastText"
-                                component="span"
-                                variant="h5"
+                                className={montserrat.className} color="info.contrastText"
+                                component="span" variant="h5"
                                 sx={{fontFamily: "inherit"}}
                             >
                                 Officially known as: {country.officialName}

@@ -63,7 +63,7 @@ async function CityWeather({city, coords}: {city: string, coords: number[]}) {
     return (
         <Box sx={{mb:1}}>
             <Typography variant="h6" component="h6" color="info">
-                <Image src={`http://openweathermap.org/img/w/${forecast.icon}.png`} style={{verticalAlign: 'middle'}} alt={forecast.main}/>{" "}
+                <Image src={`http://openweathermap.org/img/w/${forecast.icon}.png`} width={50} height={50} style={{verticalAlign: 'middle'}} alt={forecast.main}/>{" "}
                 {forecast.main}
             </Typography>
             <Typography color="info" sx={{
