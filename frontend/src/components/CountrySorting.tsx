@@ -1,3 +1,4 @@
+import TextHelper from "@/utils/TextHelper";
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
 // https://steveholgado.com/typescript-types-from-arrays/ < how to define an array once and then use it for typing
@@ -33,7 +34,7 @@ function CountrySorting({field, sortAscending, onSortChange}: CountrySortingProp
                     onChange={handleChangeSort}
                 >
                     {countrySortOptions.map(option => (
-                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                        <MenuItem key={option} value={option}>{option.split(' ').map(word => TextHelper.ucFirst(word)).join(' ')}</MenuItem>
                     ))}
                 </Select>
             </FormControl>          

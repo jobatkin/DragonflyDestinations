@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import LocalTemperatures from "./LocalTemperatures";
 import Image from "next/image";
+import LoggingHelper from "@/utils/LoggingHelper";
 
 interface WeatherType {
     id: number,
@@ -35,8 +36,8 @@ async function getWeather(params: string) {
         if (res.ok) weather = await res.json();
     }
     catch (err) {
-        console.log(weatherUrl)
-        console.log(err)
+        LoggingHelper.log(weatherUrl);
+        LoggingHelper.error(err as Error);
     }    
     return weather;
 }
@@ -53,7 +54,7 @@ async function getCityWeather(city: string, coords: number[]) {
 
 async function CityWeather({city, coords}: {city: string, coords: number[]}) {
     const weather = await getCityWeather(city, coords);
-    console.log(weather);
+    LoggingHelper.log(weather);
 
     if (!weather.weather) return <Typography fontStyle="italic">Weather data unavailable.</Typography>;
 

@@ -18,13 +18,13 @@ function getDragListTarget(info: PanInfo, dropZoneRefs: MutableRefObject<(HTMLDi
     // Adjust coordinates for scroll offset
     const adjustedX = finalX - scrollX;
     const adjustedY = finalY - scrollY;
-    console.log(`drop position with scroll offsets ${adjustedX} ${adjustedY}`)    
+    LoggingHelper.log(`drop position with scroll offsets ${adjustedX} ${adjustedY}`)    
 
     // Check which drop zone the item was dropped in
     dropZoneRefs.current.forEach((ref, index) => {
         if (ref) {
             const rect = ref.getBoundingClientRect();
-            console.log(`drop zone #${index}: l = ${rect.left} r = ${rect.right} t = ${rect.top - verticalOverlap} b = ${rect.bottom + verticalOverlap}`)
+            LoggingHelper.log(`drop zone #${index}: l = ${rect.left} r = ${rect.right} t = ${rect.top - verticalOverlap} b = ${rect.bottom + verticalOverlap}`)
 
             // Adjust the conditions to allow for partial overlaps
             const isWithinX = adjustedX >= rect.left && adjustedX <= rect.right;
@@ -67,7 +67,7 @@ function FavouriteCountries() {
             const updatedFavouriteLists = [...currentUser.lists];
 
             let listIndexTarget = getDragListTarget(info, dropZoneRefs);
-            console.log(`dropping ${draggedItem?.country.countryName} into new list ${listIndexTarget}`)
+            LoggingHelper.log(`dropping ${draggedItem?.country.countryName} into new list ${listIndexTarget}`)
 
             if (listIndexTarget >= 0 && listIndex !== listIndexTarget) {
                 // remove dragged country from old favourite list

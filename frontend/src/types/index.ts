@@ -79,6 +79,7 @@ export interface TourismInfo {
 }
 
 export const questionTypes = ['flag', 'capital', 'region'] as const;
+export const validCurrencies = ['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'EUR', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'] as const;
 
 export interface UserScores {
     question_type: typeof questionTypes[number]

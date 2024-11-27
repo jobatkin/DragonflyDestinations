@@ -1,11 +1,14 @@
-import { User } from "@/context/UserContext"
-import { Card, CardContent, CardHeader, Grid } from "@mui/material"
+import { User, useUserContext } from "@/context/UserContext"
+import { Card, CardActions, CardContent, CardHeader, Grid, Typography } from "@mui/material"
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import HighScore from "./HighScore"
+import Link from "next/link";
 
 // Displays a LeaderBoard card listing the users with the top 10 scores in the Challenge
 function Leaderboard({leaders}: {leaders: User[]}) {
-    
+    const { currentUser } = useUserContext();
+    const connectPrompt = (!currentUser || !('userName' in currentUser)) ?? <Typography><Link href="/connect">Connect</Link> to compete on the leaderboard!</Typography>;
+
     return (
         <Card sx={{my: 2}} color="info">
             <CardHeader title="Leaderboard" avatar={<LeaderboardIcon/>} titleTypographyProps={{variant: "h3"}}>Leaderboard</CardHeader>
@@ -18,6 +21,9 @@ function Leaderboard({leaders}: {leaders: User[]}) {
                     <HighScore key={leader.id} leader={leader} position={i + 1}/>
                 ))}
             </CardContent>
+            <CardActions>
+                {connectPrompt}
+            </CardActions>            
         </Card>
     )
 }

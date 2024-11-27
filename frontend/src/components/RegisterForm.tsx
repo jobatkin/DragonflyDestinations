@@ -12,6 +12,7 @@ import { Container, Input } from "@mui/material";
 import { useUserContext } from "@/context/UserContext";
 import FormFeedback from "./FormFeedback";
 import UserDetailsForm from "./UserDetailsForm";
+import LoggingHelper from "@/utils/LoggingHelper";
 
 interface RegisterFormProps {
     handleClose?: () => void, 
@@ -26,7 +27,7 @@ export default function RegisterForm({handleClose}: RegisterFormProps) {
     const authUser = currentUser && 'id' in currentUser;
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.files)
+        LoggingHelper.log(e.target.files)
 
         if (e.target.files) {
             // URL from uploaded image for previewing
@@ -38,7 +39,7 @@ export default function RegisterForm({handleClose}: RegisterFormProps) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        console.log({
+        LoggingHelper.log({
             email: data.get("email"),
             password: data.get("password"),
             file: data.get("file"),
@@ -52,13 +53,13 @@ export default function RegisterForm({handleClose}: RegisterFormProps) {
 
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/register`, data);
-            console.log(response)
+            LoggingHelper.log(response)
             setSubmitResult( {message: response.data.result, isError: false} );
             handleUpdateUser(response.data.data);
 
             if (handleClose) handleClose();
         } catch (err) {
-            console.log(err);
+            LoggingHelper.error(err as Error);
             if (err instanceof AxiosError) setSubmitResult( {message: err.response?.data.result, isError: true} );
         }
     };

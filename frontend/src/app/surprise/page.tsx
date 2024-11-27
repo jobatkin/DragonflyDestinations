@@ -36,7 +36,7 @@ export default async function Surprise() {
 
                     <Grid container columnSpacing={6} rowSpacing={4} sx={{my: 2}}>
                         {surpriseCountries.map((country) => (
-                            <Grid item xs={6} md={4} key={country.code}>
+                            <Grid item xs={12} sm={6} md={4} key={country.code}>
                                 <CountryCard {...country} colour="info" single={false} />
                             </Grid>
                         ))}

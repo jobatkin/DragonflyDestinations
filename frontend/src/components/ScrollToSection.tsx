@@ -1,4 +1,4 @@
-import {Button, ButtonProps} from "@mui/material";
+import {Button, ButtonProps, Typography} from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import {ReactNode} from "react";
@@ -20,6 +20,7 @@ function ScrollToSection({
     color = "primary",
     destinationId,
 }: ScrollToSectionProps) {
+
     return (
         <Button
             component={Link}
@@ -30,7 +31,7 @@ function ScrollToSection({
             color={color}
             sx={{my: 1}}
         >
-            {buttonText}
+            <Typography sx={{fontSize: {xs: 0, md: '1rem'}}}>{buttonText}</Typography>
         </Button>
     );
 }

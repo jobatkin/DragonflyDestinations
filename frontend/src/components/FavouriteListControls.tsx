@@ -1,6 +1,6 @@
 'use client'
 import { useUserContext } from "@/context/UserContext";
-import { Box, Button, Grid, Link, TextField } from "@mui/material"
+import { Button, Grid, Link, TextField } from "@mui/material"
 import axios from "axios";
 import FormFeedback from "./FormFeedback";
 import { useState } from "react";
@@ -18,7 +18,7 @@ function FavouriteListControls({listId, listName, isFirst = true}: {listId: numb
 
         try {
             const response = await axios.put(`${process.env.NEXT_PUBLIC_API_SERVER}/api/lists/${listId}`, Object.fromEntries(formData));
-            console.log(response)
+            LoggingHelper.log(response)
 
             // update the new list name in the current user object
             const updatedLists = currentUser.lists.map(list => list.id == listId ? {...list, name: response.data.data.name} : list);
@@ -27,7 +27,7 @@ function FavouriteListControls({listId, listName, isFirst = true}: {listId: numb
             // show a message for a successful update
             setSubmitResult({message: response.data.result, isError: false});
         } catch (err) {
-            console.log(err)
+            LoggingHelper.error(err as Error)
             setSubmitResult({message: `Could not save list: ${(err as Error).message}`, isError: true});
         }
     }
@@ -43,7 +43,7 @@ function FavouriteListControls({listId, listName, isFirst = true}: {listId: numb
             // show a message for a successful delete
             setSubmitResult({message: response.data.result, isError: false});
         } catch (err) {
-            console.log(err)
+            LoggingHelper.error(err as Error);
             setSubmitResult({message: `Could not delete list: ${(err as Error).message}`, isError: true});
         }
     }

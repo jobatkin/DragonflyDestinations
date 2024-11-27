@@ -5,6 +5,7 @@ import FormFeedback from "./FormFeedback";
 import EmailHelper from "@/utils/EmailHelper";
 import axios from "axios";
 import { useUserContext } from "@/context/UserContext";
+import LoggingHelper from "@/utils/LoggingHelper";
 
 function ContactForm() {
 
@@ -27,11 +28,11 @@ function ContactForm() {
             }
             const dbResponse = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/submissions`, submission);
 
-            console.log(emailResponse);
-            console.log(dbResponse);
+            LoggingHelper.log(emailResponse);
+            LoggingHelper.log(dbResponse);
             setSubmitResult( {message: 'Thanks for your message!', isError: false} );
         } catch (err) {
-            console.error(err);
+            LoggingHelper.error(err as Error);
             setSubmitResult( {message: 'Failed to send email', isError: true} );
         }        
     }

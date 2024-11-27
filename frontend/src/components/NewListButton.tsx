@@ -1,5 +1,6 @@
 'use client'
 import { useUserContext } from "@/context/UserContext";
+import LoggingHelper from "@/utils/LoggingHelper";
 import { Button } from "@mui/material";
 import axios from "axios";
 
@@ -14,7 +15,7 @@ function NewListButton() {
             const updatedLists = [...currentUser.lists, response.data.data];
             handleUpdateUser({...currentUser, lists: updatedLists});
         } catch (err) {
-            console.log(err)
+            LoggingHelper.error(err as Error);
         }
     }
 

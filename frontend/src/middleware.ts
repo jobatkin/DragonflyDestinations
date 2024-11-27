@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
 
     // redirect to /connect if the user is not logged in or authenticated
     if (isProtectedRoute && !isAuthenticated) {
-        console.log('user not authenticated, redirecting')
+        LoggingHelper.log('user not authenticated, redirecting')
         return NextResponse.redirect(new URL('/connect', req.nextUrl))
     }
   

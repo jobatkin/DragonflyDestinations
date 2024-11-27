@@ -7,6 +7,7 @@ import { useState } from "react";
 import FormFeedback from "./FormFeedback";
 import UserDetailsForm from "./UserDetailsForm";
 import Link from "@mui/material/Link";
+import LoggingHelper from "@/utils/LoggingHelper";
 
 // middleware makes sure the profile page is only accessed by authenticated users
 export default function ProfileForm() {
@@ -16,7 +17,7 @@ export default function ProfileForm() {
     const [imagePreview, setImagePreview] = useState('')
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.files)
+        LoggingHelper.log(e.target.files)
 
         if (e.target.files) {
             // URL from uploaded image for previewing
@@ -40,13 +41,13 @@ export default function ProfileForm() {
         if (currentUser && 'id' in currentUser) {
             try {
                 const response = await axios.put(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/${currentUser.id}`, filteredFormData);
-                console.log(response)
+                LoggingHelper.log(response)
                 setSubmitResult( {message: response.data.result, isError: false} );
                 // new user details merged with existing ones including token to stay logged in
                 handleUpdateUser({...currentUser, ...response.data.data});
 
             } catch (err) {
-                console.log(err);
+                LoggingHelper.error(err as Error);
                 if (err instanceof AxiosError) setSubmitResult( {message: err.response?.data.result, isError: true} );
             }        
         } else {

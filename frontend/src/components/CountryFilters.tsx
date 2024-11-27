@@ -29,10 +29,10 @@ function CountryFilters({countries, selectedRegion, handleRegionChange, selected
         regions.get(country.region)!.add(country.subregion);
     });
     let subregionResult = regions.get(selectedRegion);
-    let subregions = subregionResult ? Array.from(subregionResult) : [];
+    let subregions = subregionResult ? Array.from(subregionResult) : ['Select a region first'];
 
     return (
-        <Grid container my={2}>
+        <Grid container my={2} rowSpacing={2} columnSpacing={2}>
             <Grid item>
                 <CountryFilter label="Region" selectedValue={selectedRegion} handleChange={handleRegionChange} options={Array.from(regions.keys())}/>
                 <CountryFilter label="Sub-region" selectedValue={selectedSubregion} handleChange={handleSubregionChange} options={subregions}/>

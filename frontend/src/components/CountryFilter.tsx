@@ -1,5 +1,6 @@
 'use client';
 
+import TextHelper from "@/utils/TextHelper";
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material"
 
 interface CountryFilterProps {
@@ -23,7 +24,7 @@ function CountryFilter({label, selectedValue, handleChange, options}: CountryFil
                 onChange={handleChange}
             >
                 {displayOptions.map(option => (
-                    <MenuItem key={option} value={option}>{option.charAt(0).toUpperCase() + option.substring(1).toLowerCase()}</MenuItem>
+                    <MenuItem key={option} value={option}>{option.split(' ').map(word => TextHelper.ucFirst(word)).join(' ')}</MenuItem>
                 ))}
             </Select>
         </FormControl>        

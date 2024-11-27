@@ -24,6 +24,7 @@ import TourismActivities from "@/components/TourismActivities";
 import TourismPhotos from "@/components/TourismPhotos";
 import CountryActions from "@/components/CountryActions";
 import CookieHelper from "@/utils/CookieHelper";
+import LoggingHelper from "@/utils/LoggingHelper";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
@@ -78,7 +79,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
   const country = await getCountryDetails(params.code);
   const localCoords = await getLocalCoords();
   const tourismInfo = await getTourismInfo(params.code);
-  console.log(country);
+  LoggingHelper.log(country);
 
   const borderingCountries = country.borders?.map(bc => ({...bc, flagImg: bc.flag.svgLink})) 
 
@@ -86,8 +87,8 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
         <main className={styles.main}>
             <div className={styles.description}>
                 <Container maxWidth="xl">
-                    <Grid container justifyContent="space-between" columnSpacing={{xs: 2, md: 6}}>
-                        <Grid item xs={10} sx={{mb: 2}}>
+                    <Grid container justifyContent="space-between" columnSpacing={{xs: 1, md: 4}}>
+                        <Grid item xs={9} sx={{mb: 2}}>
                             <Typography component="h2" variant="h2">
                                 {country.name}{" "}
                                 <Button
@@ -119,7 +120,7 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={2} textAlign="right">
+                        <Grid item xs={3} textAlign="right">
                             <CountryActions code={country.code} favCount={country.favouriteCount}/>
                             <ScrollToSection
                                 startIcon={<InfoIcon />}
@@ -187,16 +188,16 @@ export default async function CountryDetailsPage({ params }: { params: { code: s
                             especially from <strong>{tourismInfo.bestMonths}</strong>. Here&apos;s what you could encounter:</Typography>
                         </Grid>
 
-                        <Grid item xs={6} md={4} lg={3}>
+                        <Grid item xs={12} sm={6} lg={3}>
                             <TourismReasons reasons={tourismInfo.reasons} />
                         </Grid>
-                        <Grid item xs={6} md={4} lg={3}>
+                        <Grid item xs={12} sm={6} lg={3}>
                             <TourismWarnings warnings={tourismInfo.warnings} safetyRating={tourismInfo.safety_rating}/>
                         </Grid>           
-                        <Grid item xs={6} md={4} lg={3}>
+                        <Grid item xs={12} sm={6} lg={3}>
                             <TourismCuisine highlights={tourismInfo.cuisine} />
                         </Grid>    
-                        <Grid item xs={6} md={4} lg={3}>
+                        <Grid item xs={12} sm={6} lg={3}>
                             <TourismActivities activities={tourismInfo.topThingsToDo} />
                         </Grid>   
 

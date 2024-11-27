@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import axios from 'axios';
 import { User, useUserContext } from '../context/UserContext';
 import FormFeedback from './FormFeedback';
+import LoggingHelper from '@/utils/LoggingHelper';
 
 // based on https://github.com/mui/material-ui/blob/v5.14.10/docs/data/material/getting-started/templates/sign-in/SignIn.tsx
 export default function LoginForm({handleClose}: {handleClose?: () => void}) {
@@ -29,7 +30,7 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
       let response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/login`, { email, password });
       const loggedInUser: User = {...response.data.data};
 
-      console.log(loggedInUser)
+      LoggingHelper.log(loggedInUser)
       handleUpdateUser(loggedInUser)
       setErrMsg(response.data.result)
 
@@ -38,7 +39,7 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
     } catch (err) {
         let message = 'Unknown Error'
         if (err instanceof Error) message = err.message; // only access the .message property if this is definitely an Error   
-        console.log(err)
+        LoggingHelper.error(err as Error)
         setErrMsg(message)
     } 
   };

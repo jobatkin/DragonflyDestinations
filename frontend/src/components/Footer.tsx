@@ -12,9 +12,9 @@ function Footer() {
     return (
         <Container maxWidth="xl">
             <Divider sx={{my: 1}}/>
-            <Grid container justifyContent="space-between">
-                <Grid item><Typography>&copy; Copyright {new Date().getFullYear()} Dragonfly Destinations. All rights reserved.</Typography></Grid>
-                <Grid item><Stack direction="row" spacing={2}>{links}</Stack></Grid>
+            <Grid container justifyContent="space-between" my={1}>
+                <Grid item><Typography textAlign={{xs: 'center', sm: 'left'}}>&copy; Copyright {new Date().getFullYear()} Dragonfly Destinations. All rights reserved.</Typography></Grid>
+                <Grid item><Stack direction="row" flexWrap="wrap" justifyContent={{xs: 'center', sm: 'flex-start'}} spacing={2}>{links}</Stack></Grid>
             </Grid>
         </Container>
     )

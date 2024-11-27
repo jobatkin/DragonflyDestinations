@@ -37,7 +37,7 @@ function CountryActions({code, favCount}: {code: string, favCount?: number}) {
                 setSubmitResult({message: response.data.result, isError: false});
             }
         } catch(err) {
-            console.log(err);
+            LoggingHelper.error(err as Error);
             setSubmitResult({message: `Could not save favourite: ${(err as Error).message}`, isError: true});
         }
 

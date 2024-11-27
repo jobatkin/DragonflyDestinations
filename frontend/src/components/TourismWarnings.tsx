@@ -1,5 +1,6 @@
 import FmdBadIcon from '@mui/icons-material/FmdBad';
 import TourismItems from "./TourismItems";
+import LoggingHelper from '@/utils/LoggingHelper';
 
 export const safetyRatings = [
     { limit: 0, risk: 'Unknown', colour: '#888888', detail: 'Travel safety is unknown, proceed with caution'},
@@ -15,7 +16,7 @@ function TourismWarnings({warnings, safetyRating}: {warnings: string[], safetyRa
 
     const extraItem = { iconValue: safetyRating || 0, bgColour: safetyInfo.colour, heading: `${safetyInfo.risk} Risk`, text: safetyInfo.detail };
 
-    console.log(safetyInfo)
+    LoggingHelper.log(safetyInfo)
     return (
         <TourismItems items={warnings} colour="secondary" icon={<FmdBadIcon/>} heading="Things to watch out for:"
             extraItem={extraItem}/>

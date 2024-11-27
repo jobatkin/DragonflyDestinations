@@ -87,7 +87,7 @@ function NavBar() {
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page.link} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center" color="#d8d8d8">{page.label}</Typography>
+                                    <Typography textAlign="center" component={Link} href={page.link} color="#d8d8d8">{page.label}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -98,6 +98,7 @@ function NavBar() {
                             mr: 2,
                             fontWeight: 700,
                             letterSpacing: ".2rem",
+                            fontSize: {xs: 26}
                         }}>
                         <DDLogo alt="Dragonfly Destinations" wings="#c6974988" body="#505E9Baa"/>
                         Dragonfly Destinations

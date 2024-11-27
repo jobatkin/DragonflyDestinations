@@ -10,11 +10,12 @@ interface RefreshButtonProps {
     onRefresh?: () => void,
     refreshingText?: string, 
     buttonSize?: ButtonProps["size"],
-    color?: ButtonProps["color"]
+    color?: ButtonProps["color"],
+    scrollToTop?: boolean; // New prop to control scrolling behavior
 }
 
 // forces a server refresh of the current page using a server action
-export default function RefreshButton({buttonText, onRefresh, refreshingText = 'Refreshing...', buttonSize = "medium", color = "primary"}: RefreshButtonProps) {
+export default function RefreshButton({buttonText, onRefresh, refreshingText = 'Refreshing...', buttonSize = "medium", color = "primary", scrollToTop = false}: RefreshButtonProps) {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const pathname = usePathname()
 
@@ -22,7 +23,8 @@ export default function RefreshButton({buttonText, onRefresh, refreshingText = '
         setIsRefreshing(true);
         await forceRefresh(pathname); // refresh the current path
         if (onRefresh) onRefresh();
-        //window.location.reload();
+        if (scrollToTop) window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top
+        setIsRefreshing(false);        
     };
   
     return (

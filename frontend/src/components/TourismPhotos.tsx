@@ -12,6 +12,7 @@ function TourismPhotos({photos, country}: {photos: string[], country: string}) {
                     overrideSrc={`${photo}?fit=crop&auto=format`}
                     alt={`${country} tourist attraction #${i+1}`}
                     loading="lazy" fill
+                    sizes="420px"
                 />
             </ImageListItem>
         ))}

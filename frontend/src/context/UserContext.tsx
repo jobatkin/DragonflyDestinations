@@ -53,7 +53,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
             deleteCookie('user');
             deleteCookie('guestUser');
         }        
-        console.log(user)
+        LoggingHelper.log(user);
         setCurrentUser(user);
     };
 

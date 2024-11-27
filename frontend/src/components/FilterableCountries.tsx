@@ -27,7 +27,7 @@ function FilterableCountries({countries}: FilterableCountries) {
 
     // create the actual country cards based on the selected filters and sort option
     const countryCards = sortedCountries.map(country => (
-        <Grid key={country.name} xs={6} md={4} lg={3} item>
+        <Grid key={country.name} xs={12} sm={6} md={4} lg={3} item>
             <CountryCard {...country} flagImg={country.flag.svgLink} colour="info" single={false}/>
         </Grid>
     ))
@@ -36,7 +36,6 @@ function FilterableCountries({countries}: FilterableCountries) {
         let newSortBy:SortType = 'name';
         if (countrySortOptions.includes(sortBy as SortType)) newSortBy = sortBy as SortType;
 
-        // console.log(`sorting by ${newSortBy} ${sortOrder}`)
         setSortBy(newSortBy);
         setSortAscending(sortOrder == 'ASC');
     }
