@@ -1,3 +1,4 @@
+'use client'
 import { User, useUserContext } from "@/context/UserContext"
 import { Card, CardActions, CardContent, CardHeader, Grid, Typography } from "@mui/material"
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
