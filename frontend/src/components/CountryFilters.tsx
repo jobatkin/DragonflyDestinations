@@ -1,9 +1,9 @@
 'use client';
 
-import { Box, Grid, SelectChangeEvent } from "@mui/material";
+import { Grid, SelectChangeEvent } from "@mui/material";
 import { CountryWithFlag } from "@/types";
 import CountryFilter from "./CountryFilter";
-import CountrySorting, { SortType, countrySortOptions } from "./CountrySorting";
+import CountrySorting, { SortType } from "./CountrySorting";
 
 interface CountryFiltersProps {
     countries: CountryWithFlag[],

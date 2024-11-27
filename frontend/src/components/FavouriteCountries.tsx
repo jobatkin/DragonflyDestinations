@@ -6,6 +6,7 @@ import FavouriteListControls from "./FavouriteListControls";
 import { MutableRefObject, useRef, useState } from "react";
 import { UserFavourite } from "@/types";
 import { PanInfo } from "framer-motion";
+import LoggingHelper from "@/utils/LoggingHelper";
 
 // figure out which of the favourite lists the active dragged country is currently in
 function getDragListTarget(info: PanInfo, dropZoneRefs: MutableRefObject<(HTMLDivElement | null)[]>) {

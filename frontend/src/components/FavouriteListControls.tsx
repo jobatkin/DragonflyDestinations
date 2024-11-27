@@ -4,6 +4,7 @@ import { Button, Grid, Link, TextField } from "@mui/material"
 import axios from "axios";
 import FormFeedback from "./FormFeedback";
 import { useState } from "react";
+import LoggingHelper from "@/utils/LoggingHelper";
 
 // allows a user to update the name of a list of favourites, or delete it if it's not the only one
 function FavouriteListControls({listId, listName, isFirst = true}: {listId: number, listName: string, isFirst?: boolean}) {
