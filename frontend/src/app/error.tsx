@@ -18,7 +18,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         <main className={styles.main}>
             <div className={styles.description}>
                 <Container maxWidth="xl">
-                    <Typography variant="h3" component="h3" gutterBottom>Oops, that's our bad. Something went wrong.</Typography>
+                    <Typography variant="h3" component="h3" gutterBottom>Oops, that&apos;s our bad. Something went wrong.</Typography>
                     <Typography color="textDisabled" variant="body2" sx={{wordBreak: "break-all"}} gutterBottom>{error.message}</Typography>
                     <Typography gutterBottom>You can try again, go back to the last page, or start again from the homepage.</Typography>
 
