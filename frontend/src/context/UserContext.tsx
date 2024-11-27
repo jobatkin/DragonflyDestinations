@@ -3,6 +3,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { getCookie, setCookie, deleteCookie } from 'cookies-next';
 import { FavouriteList } from "@/types";
+import LoggingHelper from "@/utils/LoggingHelper";
 
 export interface GuestUser {
     highScore: number

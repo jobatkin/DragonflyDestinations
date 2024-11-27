@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import CookieHelper from './utils/CookieHelper'
+import LoggingHelper from './utils/LoggingHelper'
  
 // specify protected routes - everything else is public
 const protectedRoutes = ['/dashboard', '/profile']
