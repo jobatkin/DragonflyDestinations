@@ -13,6 +13,14 @@ router.post('/register', uploadFile, (req, res) => {
     Controllers.userController.registerUser(req, res)
 })
 
+router.post('/forgotpw', (req, res) => {
+    Controllers.userController.forgotPassword(req, res)
+})
+
+router.post('/resetpw', (req, res) => {
+    Controllers.userController.resetPassword(req, res)
+})
+
 router.put('/:id', verifyToken, uploadFile, (req, res) => {
     Controllers.userController.updateUser(req, res)
 })

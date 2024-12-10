@@ -56,6 +56,64 @@ const loginUser = async (req, res) => {
     }
 }
 
+// if a user with the given email exists, create a code to email them to verify identity and change password
+const forgotPassword = async (req, res) => {
+    const {email} = req.body;
+    try {
+        const userInstance = await Models.User.findOne({ 
+            where: { email: email }, 
+        });
+
+        if (userInstance) {
+            let resetCode = Math.floor(Math.random() * 999999); // generate a random 6 digit code
+            resetCode = String(resetCode).padStart(6, '0'); // with leading zeros if needed
+
+            await userInstance.update({resetCode}); // store reset code in db to match against user input
+
+            // send back user details including code, so we can email it to them
+            return res.status(200).json({ result: 'Reset code sent successfully', data: {email, resetCode} });
+        } else {
+            return res.status(404).json({ result: `User with email ${email} not found, please register first` });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ result: err.message })
+    }
+}
+
+// if the resetcode matches the one stored for this email, allow a new password to be set
+const resetPassword = async (req, res) => {
+    const {email, resetCode, newPassword} = req.body;
+    try {
+        const userInstance = await Models.User.findOne({ 
+            where: { email: email }, 
+        });
+        const user = userInstance ? userInstance.get({ plain: true }) : null;
+
+        if (user) {
+            if (user.resetCode != resetCode) return res.status(400).json({ result: `Invalid password reset code` });
+
+            // otherwise the code was correct, reset the password to the new value
+            let encryptedPassword = await bcrypt.hash(newPassword, 10);
+            const updatedUserInstance = await userInstance.update({password: encryptedPassword, resetCode: null});
+            const updatedUser = updatedUserInstance ? updatedUserInstance.get({ plain: true }) : null;
+
+            // Login updated usre by creating a token based on their id and email
+            const token = createToken(updatedUser.id, email);
+            // save user token
+            updatedUser.token = token;
+
+            // send back user details including code
+            return res.status(200).json({ result: 'Password updated successfully', data: updatedUser });
+        } else {
+            return res.status(404).json({ result: `User with email ${email} not found, please register first` });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ result: err.message })
+    }
+}
+
 // registers a new user by validating their details, encrypting their password, and generating a token
 const registerUser = async (req, res) => {
 
@@ -225,5 +283,5 @@ const deleteUser = (req, res) => {
 }
 
 module.exports = {
-    loginUser, registerUser, updateUser, deleteUser, getUserScores, saveUserAnswer, getLeaderboard
+    loginUser, registerUser, updateUser, deleteUser, getUserScores, saveUserAnswer, getLeaderboard, forgotPassword, resetPassword
 }

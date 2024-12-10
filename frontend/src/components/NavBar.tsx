@@ -16,6 +16,7 @@ import Link from "next/link";
 import DDLogo from "./DDLogo";
 import { User, useUserContext } from "@/context/UserContext";
 import AuthenticationDialog from "./AuthenticationDialog";
+import ProfilePhoto from "./ProfilePhoto";
 
 export const pages = [{label: "Discover", link: "/discover"}, {label: "Surprise", link: "/surprise"}, {label: "Connect", link: "/connect"}, {label: "Challenge", link: "/challenge"}];
 const settings = [{label: "Profile", link: "/profile", onClick: undefined}, {label: "Dashboard", link: "/dashboard", onClick: undefined}];
@@ -119,8 +120,7 @@ function NavBar() {
                     <Box sx={{flexGrow: 0}}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                {(isLoggedIn && currentUser && 'userName' in currentUser) ? <Avatar alt={currentUser.userName} src={currentUser.profilePhoto} /> : 
-                                    <Avatar alt="No User" src="/nouser.png" /> }
+                                <ProfilePhoto />
                             </IconButton>
                         </Tooltip>
                         <Menu

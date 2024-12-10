@@ -4,6 +4,7 @@ class DistanceHelper {
         return degrees * (Math.PI / 180);
     }
     
+    // calculates the distance in kilometres between two lat/long coordinates
     static calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
         const R = 6371; // Earth's radius in kilometers
         const dLat = DistanceHelper.toRadians(lat2 - lat1);

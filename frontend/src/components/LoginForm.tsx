@@ -13,6 +13,7 @@ import axios from 'axios';
 import { User, useUserContext } from '../context/UserContext';
 import FormFeedback from './FormFeedback';
 import LoggingHelper from '@/utils/LoggingHelper';
+import MessageHelper from '@/utils/MessageHelper';
 
 // based on https://github.com/mui/material-ui/blob/v5.14.10/docs/data/material/getting-started/templates/sign-in/SignIn.tsx
 export default function LoginForm({handleClose}: {handleClose?: () => void}) {
@@ -27,20 +28,18 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
     event.preventDefault();
 
     try {
-      let response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/login`, { email, password });
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/login`, { email, password });
       const loggedInUser: User = {...response.data.data};
 
-      LoggingHelper.log(loggedInUser)
-      handleUpdateUser(loggedInUser)
-      setErrMsg(response.data.result)
+      LoggingHelper.log(loggedInUser);
+      handleUpdateUser(loggedInUser);
+      setErrMsg(response.data.result);
 
       if (handleClose) handleClose();
 
     } catch (err) {
-        let message = 'Unknown Error'
-        if (err instanceof Error) message = err.message; // only access the .message property if this is definitely an Error   
-        LoggingHelper.error(err as Error)
-        setErrMsg(message)
+        LoggingHelper.error(err as Error);
+        setErrMsg(MessageHelper.getErrorMessage(err as Error));
     } 
   };
 
@@ -85,7 +84,7 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
               
               <Grid container sx={{textAlign: 'left'}}>
                 <Grid item xs={6}>
-                  <Link href="/forgotpw" variant="body2">Forgot password?</Link>
+                  <Link href={`/forgotpw?email=${email}`} variant="body2">Forgot password?</Link>
                 </Grid>
                 <Grid item xs={6}>
                   <Link href="/connect" variant="body2">Don&apos;t have an account? Sign Up</Link>

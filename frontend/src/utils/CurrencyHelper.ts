@@ -3,14 +3,21 @@ import { validCurrencies } from "@/types";
 // Singleton Helper class to handle caching currencies so we don't need to lookup every value every time
 export default class CurrencyHelper {
     #cache = new Map(); // caches the conversion amount based on the from and to currencies, with an expiry timestamp
-    expMinutes; 
+    #expMinutes; 
     #expMS;
 
     static #instance: CurrencyHelper;
 
     constructor(expMinutes: number = 60) {
-        this.expMinutes = expMinutes;
-        this.#expMS = this.expMinutes * 60 * 1000;
+        this.#expMinutes = expMinutes;
+        this.#expMS = this.#expMinutes * 60 * 1000;
+    }
+
+    updateCacheTimeout(mins: number) {
+        if (mins > 0) {
+            this.#expMinutes = mins;
+            this.#expMS = this.#expMinutes * 60 * 1000;
+        }
     }
 
     get(from: typeof validCurrencies[number], to: typeof validCurrencies[number]) {

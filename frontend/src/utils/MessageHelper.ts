@@ -1,3 +1,5 @@
+import axios from "axios";
+
 class MessageHelper {
 
     static correctResponses = [
@@ -26,10 +28,40 @@ class MessageHelper {
         "Incorrect, but keep your spirits up! There's plenty more to go!"
     ];
     
-    // generates a random message for the user whe they answer a quiz question
+    // generates a random message for the user when they answer a quiz question
     static getQuizMessage(correct: boolean) {
         const randomResponse = Math.floor(Math.random() * 10);
         return correct ? MessageHelper.correctResponses[randomResponse] : MessageHelper.incorrectResponses[randomResponse];
+    }
+
+    // based on the error thrown, get a user-friendly error message
+    static getErrorMessage(error: Error) {
+        if (error === null) return ''; // if no error, message is blank
+
+        if (axios.isAxiosError(error)) {
+            const response = error?.response
+        
+            if (error.code === 'ERR_NETWORK') return 'Network error, could not connect. Please try again.';
+            else if (error.code === 'ERR_CANCELED') return 'Request cancelled, could not complete. Please try again.';
+
+            if (response) {
+                // if the backend included a specific error message, use that
+                if (response.data.result) return response.data.result;
+
+                // Request was executed but returned a non-success (2xx) error code with no specific message
+                if (response.status === 404) {
+                    return 'The requested resource does not exist or has been deleted';
+                } else if (response.status === 401) {
+                    return 'Please login to access this resource';
+                }
+
+                // use a generic message
+                return error.message;
+            }
+        }
+
+        // Not an axios error, just use the message property
+        return error.message;
     }
 }
 

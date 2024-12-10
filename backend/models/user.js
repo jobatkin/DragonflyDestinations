@@ -18,6 +18,9 @@ User.init({
         email: {
             type: DataTypes.STRING, allowNull: false, required: true, unique: true
         },
+        resetCode: {
+            type: DataTypes.STRING, allowNull: true
+        },
         password: {
             type: DataTypes.STRING, allowNull: false, required: true
         },
