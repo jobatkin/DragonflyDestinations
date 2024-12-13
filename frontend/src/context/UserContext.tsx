@@ -38,10 +38,13 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
 
     // need to load user data from cookie via useEffect to prevent hydration issues
     useEffect(() => {
-        const userData = getCookie('user'); // official user account in database
-        const guestUserData = getCookie('guestUser'); // non-logged in user, stores scores temporarily
-        const cookieUser: User = userData ? JSON.parse(userData) : (guestUserData ? JSON.parse(guestUserData) : {} as User); // turns the user cookie object into a User
-        setCurrentUser(cookieUser)
+        const loadUser = async () => {
+            const userData = await getCookie('user'); // official user account in database
+            const guestUserData = await getCookie('guestUser'); // non-logged in user, stores scores temporarily
+            const cookieUser: User = userData ? JSON.parse(userData) : (guestUserData ? JSON.parse(guestUserData) : {} as User); // turns the user cookie object into a User
+            setCurrentUser(cookieUser)
+        };
+        loadUser();
     },[])    
 
     // sets user object in state, shared via context
