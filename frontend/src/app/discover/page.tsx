@@ -7,7 +7,7 @@ import CookieHelper from "@/utils/CookieHelper";
 // get all countries from the backend API
 async function getAllCountries() {
 
-    const includeFavourites = CookieHelper.favouriteParam();
+    const includeFavourites = await CookieHelper.favouriteParam();
     const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/api/countries/"+includeFavourites, { next: { revalidate: 24*3600 } });
 
     if (!res.ok) {

@@ -5,11 +5,11 @@ import { CountryAnswer, questionTypes } from "@/types";
 import { Button, Grid, Typography } from "@mui/material"
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import axios from "axios";
 import { useState } from "react";
 import MessageHelper from "@/utils/MessageHelper";
 import RefreshButton from "./RefreshButton";
 import Image from "next/image";
+import APIHelper from "@/utils/APIHelper";
 
 interface ChallengeQuestionProps {
     answers: CountryAnswer[], 
@@ -38,8 +38,8 @@ function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
         // save result in db for user if logged in
         if (currentUser && isLoggedIn && 'id' in currentUser) {
             const userResponse = { question_type: questionType, result: correct };
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/${currentUser.id}/answer`, userResponse);
-            const updatedUser = response.data.data as User;
+            const response = await APIHelper.postData(`/api/users/${currentUser.id}/answer`, userResponse);
+            const updatedUser = response.data as User;
             
             handleUpdateUser(updatedUser);
         } else {
@@ -62,7 +62,7 @@ function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
     const getAnswerOption = (answer: CountryAnswer) => {
         // flag questions need an img tag to display the flag on the button
         if (questionType == 'flag') {
-            return <Image src={answer.flag} alt="Country flag" layout="fill" objectFit="contain" style={{padding: "1em"}}/>;
+            return <Image src={answer.flag.svgLink} width={answer.flag.width} height={answer.flag.height} alt="Country flag" style={{padding: "1em", maxWidth: "100%", height: "auto"}}/>;
         
         // region questions need the 'wrong' answers to come from the full list of regions, not the other countries as several could be from the same region
         } else if (questionType == 'region') {

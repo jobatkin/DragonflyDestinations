@@ -1,8 +1,8 @@
 'use client'
 import { useUserContext } from "@/context/UserContext";
+import APIHelper from "@/utils/APIHelper";
 import LoggingHelper from "@/utils/LoggingHelper";
 import { Button } from "@mui/material";
-import axios from "axios";
 
 // Displays an Add New List button if user is logged in - when clicked creates a new favourites list
 function NewListButton() {
@@ -11,8 +11,8 @@ function NewListButton() {
 
     const handleAddList = async () => {
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/lists/${currentUser.id}`, {name: 'New List'});
-            const updatedLists = [...currentUser.lists, response.data.data];
+            const response = await APIHelper.postData(`/api/lists/${currentUser.id}`, {name: 'New List'});
+            const updatedLists = [...currentUser.lists, response.data];
             handleUpdateUser({...currentUser, lists: updatedLists});
         } catch (err) {
             LoggingHelper.error(err as Error);

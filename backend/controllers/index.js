@@ -4,4 +4,5 @@ module.exports={
     favouritesController: require('./favouritesController'),
     listController: require('./listController'),
     submissionsController: require('./submissionsController'),
+    errorController: require('./errorController'),
 }

@@ -48,12 +48,12 @@ const addFavourite = async (req, res) => {
         let list;
 
         if (!user) {
-            res.status(404).json({ result: "User not found, cannot add favourite" }); return;
+            return res.status(404).json({ result: "User not found, cannot add favourite" }); 
         }
         console.log(user)
 
         if (!country) {
-            res.status(404).json({ result: `Country ${countryCode} not found, cannot add favourite` }); return;
+            return res.status(404).json({ result: `Country ${countryCode} not found, cannot add favourite` }); 
         }
 
         // if no list is specified, find or create a default

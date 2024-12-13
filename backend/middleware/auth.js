@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
 
     if (!token) {
         // bounce back to front end if no token. could also parse token here to check specific role
-        return res.status(403).send("A token is required for authentication");
+        return res.status(403).json({result: "A token is required for authentication"});
     }
 
     try {
@@ -18,7 +18,7 @@ const verifyToken = (req, res, next) => {
         console.log(decoded)
     } catch (err) {
         console.log(err)
-        return res.status(401).send("Invalid Token");
+        return res.status(401).json({result: "Invalid or expired token"});
     }
     // successful authorisation, execute next part of the route - ie. the controller function
     return next();
@@ -28,7 +28,7 @@ const createToken = (userId, userEmail) => {
     const token = jwt.sign(
         { user_id: userId, userEmail },
         process.env.JWT_KEY,
-        { expiresIn: "2h" }
+        { expiresIn: "7d" } // expires in a week
     );
     return token;
 }

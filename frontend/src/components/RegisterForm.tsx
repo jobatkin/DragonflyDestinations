@@ -7,12 +7,13 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import axios, { AxiosError } from "axios";
-import { Container, Input } from "@mui/material";
+import { AxiosError } from "axios";
+import { Container } from "@mui/material";
 import { useUserContext } from "@/context/UserContext";
 import FormFeedback from "./FormFeedback";
 import UserDetailsForm from "./UserDetailsForm";
 import LoggingHelper from "@/utils/LoggingHelper";
+import APIHelper from "@/utils/APIHelper";
 
 interface RegisterFormProps {
     handleClose?: () => void, 
@@ -52,10 +53,10 @@ export default function RegisterForm({handleClose}: RegisterFormProps) {
         }
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/register`, data);
+            const response = await APIHelper.postData(`/api/users/register`, data);
             LoggingHelper.log(response)
-            setSubmitResult( {message: response.data.result, isError: false} );
-            handleUpdateUser(response.data.data);
+            setSubmitResult( {message: response.result, isError: false} );
+            handleUpdateUser(response.data);
 
             if (handleClose) handleClose();
         } catch (err) {

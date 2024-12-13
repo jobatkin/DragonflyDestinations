@@ -5,6 +5,33 @@ const { createToken } = require('../middleware/auth');
 const { Op } = require('sequelize');
 const { includeFavouriteCountries } = require("./favouritesController");
 
+const getUserWithFavourites = async (idOrEmail) => {
+    const where = { };
+    if (isFinite(idOrEmail)) where.id = idOrEmail;
+    else where.email = idOrEmail;
+
+    const userInstance = await Models.User.findOne({ 
+        where: where, 
+        include: [{ model: Models.List, attributes: ['id', 'name'], include: [{ model: Models.Favourite, include: includeFavouriteCountries }] }]
+    });
+    const user = userInstance ? userInstance.get({ plain: true }) : null;
+
+    if (user) {
+        // flatten favourites for ease of use in front end
+        user.lists = user.lists.map(list => ({
+            ...list,
+            favourites: list.favourites.map(favourite => ({
+                id: favourite.id, 
+                countryCode: favourite.countryCode, 
+                countryName: favourite.country.name, 
+                countryFlag: favourite.country.flag.svgLink
+            }))
+        }));   
+    } 
+
+    return user;
+}
+
 // creates a JWT token and encrypts the password
 // https://www.section.io/engineering-education/how-to-build-authentication-api-with-jwt-token-in-nodejs/
 const loginUser = async (req, res) => {
@@ -18,31 +45,13 @@ const loginUser = async (req, res) => {
             return; // when sending responses and finishing early, manually return or end the function to stop further processing
         }
         // Validate if user exists in our database
-        const userInstance = await Models.User.findOne({ 
-            where: { email: email }, 
-            include: [{ model: Models.List, attributes: ['id', 'name'], include: [{ model: Models.Favourite, include: includeFavouriteCountries }] }]
-        });
-        const user = userInstance ? userInstance.get({ plain: true }) : null;
+        const user = await getUserWithFavourites(email);
 
         // if they do exist, make sure their password matches - need to check encrypted version of password
         if (user && (await bcrypt.compare(password, user.password))) {
             // Create token for use based on their id and email
             const token = createToken(user.id, email);
-            // save user token
             user.token = token;
-
-            console.log(user)
-
-            // flatten favourites for ease of use in front end
-            user.lists = user.lists.map(list => ({
-                ...list,
-                favourites: list.favourites.map(favourite => ({
-                    id: favourite.id, 
-                    countryCode: favourite.countryCode, 
-                    countryName: favourite.country.name, 
-                    countryFlag: favourite.country.flag.svgLink
-                }))
-            }));
 
             console.log(user)
 
@@ -255,7 +264,7 @@ const updateUser = async (req, res) => {
     try {
         const [rowsUpdated] = await Models.User.update(userProfile, { where: { id: req.params.id } });
         if (rowsUpdated > 0) {
-            const updatedUser = await Models.User.findByPk(req.params.id, {include: Models.Favourite});
+            const updatedUser = await getUserWithFavourites(req.params.id);
             res.status(200).json({ result: 'User updated successfully', data: updatedUser });
         }
         else {

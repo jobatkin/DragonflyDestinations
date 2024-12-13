@@ -2,16 +2,16 @@ import { cookies } from "next/headers";
 
 class CookieHelper {
 
-    static isAuthenticated() {
+    static async isAuthenticated() {
         // extract the user from the cookie
-        const cookieUserString = cookies().get('user')?.value
+        const cookieUserString = (await cookies()).get('user')?.value
         const authUser = cookieUserString && JSON.parse(cookieUserString);
         
         return authUser && 'token' in authUser;
     }
 
-    static favouriteParam() {
-        return this.isAuthenticated() ? "?includeFavourites=true" : '';    
+    static async favouriteParam() {
+        return (await this.isAuthenticated()) ? "?includeFavourites=true" : '';    
     }
 }
 

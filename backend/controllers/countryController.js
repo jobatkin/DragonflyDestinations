@@ -7,7 +7,7 @@ const questionFields = [ 'code', 'name', 'capital', 'region' ];
 
 // helper method to generate the sequelize options for selecting countries with the right attributes and table inclusions/joins
 const getCountryOptions = (req) => {
-    const flagInclude = { model: Models.Flag, attributes: ['id', 'svgLink', 'description'] };
+    const flagInclude = { model: Models.Flag, attributes: ['id', 'svgLink', 'width', 'height', 'description'] };
     const options = { include: [flagInclude], attributes: defaultFields }; // default order, default attributes, include flag info
 
     // limit to the given amount of countries in the limit parameter
@@ -59,7 +59,7 @@ const getCountry = (req, res) => {
     Models.Country.findOne({ 
         where: { code: req.params.code }, 
         include: [
-            { model: Models.Flag, attributes: ['id', 'svgLink', 'pngLink', 'description'] }, 
+            { model: Models.Flag, attributes: ['id', 'svgLink', 'pngLink', 'description', 'width', 'height'] }, 
             { model: Models.Language, attributes: ['code', 'language'], through: { attributes: [] } }, 
             { model: Models.Currency, attributes: ['code', 'name', 'symbol'], through: { attributes: [] } },
             { model: Models.Country, as: 'borders', attributes: defaultFields,
@@ -92,7 +92,7 @@ const getQuestion = async (req, res) => {
     const options = {
         raw: true,
         order: Sequelize.random(),
-        include: [{model: Models.Flag, attributes: ["svgLink"]}],
+        include: [{model: Models.Flag, attributes: ["svgLink", 'width', 'height']}],
         attributes: questionFields,
         limit: 4,
     }; // random order, include svg flag info
@@ -104,10 +104,12 @@ const getQuestion = async (req, res) => {
         const correct = Math.floor(Math.random() * 4); // randomly choose the right answer from the list
         const answers = countries.map((country, i) => ({
             ...country,
-            flag: country["flag.svgLink"],
+            // filter the object to just the flag keys, then use that array of key-value pairs as object entries
+            flag: {...Object.fromEntries(Object.entries(country).filter(([key, value]) => key.startsWith('flag.')).map(([key, value]) => [key.substring(5), value]))},
             correct: i == correct,
         }));
         console.log(answers);
+
 
         res.status(200).json({
             result: "Random answers successfully generated",

@@ -9,11 +9,11 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
-import axios from 'axios';
 import { User, useUserContext } from '../context/UserContext';
 import FormFeedback from './FormFeedback';
 import LoggingHelper from '@/utils/LoggingHelper';
 import MessageHelper from '@/utils/MessageHelper';
+import APIHelper from '@/utils/APIHelper';
 
 // based on https://github.com/mui/material-ui/blob/v5.14.10/docs/data/material/getting-started/templates/sign-in/SignIn.tsx
 export default function LoginForm({handleClose}: {handleClose?: () => void}) {
@@ -28,12 +28,12 @@ export default function LoginForm({handleClose}: {handleClose?: () => void}) {
     event.preventDefault();
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/login`, { email, password });
-      const loggedInUser: User = {...response.data.data};
+      const response = await APIHelper.postData(`/api/users/login`, { email, password });
+      const loggedInUser: User = {...response.data};
 
       LoggingHelper.log(loggedInUser);
       handleUpdateUser(loggedInUser);
-      setErrMsg(response.data.result);
+      setErrMsg(response.result);
 
       if (handleClose) handleClose();
 

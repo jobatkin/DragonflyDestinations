@@ -39,11 +39,13 @@ module.exports = async function initialiseCountries() {
                     region: country.region, 
                     subregion: country.subregion
                 }
-                const insertFlag = {
+                let insertFlag = {
                     svgLink: country.flags.svg,            
                     pngLink: country.flags.png,
                     description: country.flags.alt || flagDescriptions[country.cca3]
                 }
+                const { width, height } = await getSVGDimensions(country.flags.svg);
+                insertFlag = { ...insertFlag, width, height};
 
                 // insert this country unless it already exists, in which case update it
                 const [newCountry, createdCountry] = await Models.Country.upsert({
@@ -133,6 +135,37 @@ async function maybeLoadData(file, url, dataProp = null, maxAgeDays = 7) {
     }
 
     return data;
+}
+
+async function getSVGDimensions(svgLink) {
+    try {
+        // Fetch the SVG content
+        const response = await axios.get(svgLink, { responseType: 'text' });
+        const svgText = response.data;
+
+        // Extract width and height or viewBox using a regex
+        const widthMatch = svgText.match(/<svg[^>]*\swidth="([\d.]+)"/);
+        const heightMatch = svgText.match(/<svg[^>]*\sheight="([\d.]+)"/);
+        const viewBoxMatch = svgText.match(/<svg[^>]*\sviewBox="([\d.\s]+)"/);
+
+        let width = widthMatch ? parseFloat(widthMatch[1]) : null;
+        let height = heightMatch ? parseFloat(heightMatch[1]) : null;
+
+        // Fallback to viewBox if width/height are not present
+        if ((!width || !height) && viewBoxMatch) {
+            const [, , viewBoxWidth, viewBoxHeight] = viewBoxMatch[1].split(/\s+/).map(Number);
+            width = width || viewBoxWidth;
+            height = height || viewBoxHeight;
+        }
+
+        if (!width || !height) {
+            console.error(`${svgLink} SVG has no valid width/height or viewBox defined.`);
+        }
+
+        return { width, height };
+    } catch (error) {
+        console.error(`Error fetching or parsing SVG ${svgLink}:`, error);
+    }
 }
 
 // inserts the languages for this country across our many-to-many tables

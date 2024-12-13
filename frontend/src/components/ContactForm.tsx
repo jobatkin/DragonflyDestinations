@@ -3,9 +3,9 @@ import { Box, Button, Grid, TextField } from "@mui/material"
 import { useState } from "react";
 import FormFeedback from "./FormFeedback";
 import EmailHelper from "@/utils/EmailHelper";
-import axios from "axios";
 import { useUserContext } from "@/context/UserContext";
 import LoggingHelper from "@/utils/LoggingHelper";
+import APIHelper from "@/utils/APIHelper";
 
 function ContactForm() {
 
@@ -26,7 +26,7 @@ function ContactForm() {
                 message: formData.get('message'),
                 userId: (currentUser && 'id' in currentUser) ? currentUser.id : null
             }
-            const dbResponse = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/submissions`, submission);
+            const dbResponse = await APIHelper.postData(`/api/submissions`, submission);
 
             LoggingHelper.log(emailResponse);
             LoggingHelper.log(dbResponse);

@@ -2,7 +2,6 @@ import styles from "../../page.module.css";
 import { CountryDetails, TourismInfo } from "@/types";
 import { Button, Container, Grid, Typography } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import GoogleMap from "@/components/GoogleMap";
 import FlagDetails from "@/components/FlagDetails";
 import CountryStatistics from "@/components/CountryStatistics";
@@ -28,7 +27,7 @@ import LoggingHelper from "@/utils/LoggingHelper";
 
 // get the complete details for the country with the given code from the API
 async function getCountryDetails(code: string) {
-    const includeFavourites = CookieHelper.favouriteParam();
+    const includeFavourites = await CookieHelper.favouriteParam();
 
     const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/api/countries/" + code + includeFavourites,
         { next: { revalidate: 1800 } } // country data expires every 30 mins during testing
@@ -74,141 +73,142 @@ async function getLocalCoords() {
     return {lat: json.location.latitude, lon: json.location.longitude, homeCountry: json.country.name};
 }
 
-export default async function CountryDetailsPage({ params }: { params: { code: string } }) {
+export default async function CountryDetailsPage(props: { params: Promise<{ code: string }> }) {
+    const params = await props.params;
 
-  const country = await getCountryDetails(params.code);
-  const localCoords = await getLocalCoords();
-  const tourismInfo = await getTourismInfo(params.code);
-  LoggingHelper.log(country);
+    const country = await getCountryDetails(params.code);
+    const localCoords = await getLocalCoords();
+    const tourismInfo = await getTourismInfo(params.code);
+    LoggingHelper.log(country);
 
-  const borderingCountries = country.borders?.map(bc => ({...bc, flagImg: bc.flag.svgLink})) 
+    const borderingCountries = country.borders?.map(bc => ({...bc, flagImg: bc.flag.svgLink}))
 
-  return (
-        <main className={styles.main}>
-            <div className={styles.description}>
-                <Container maxWidth="xl">
-                    <Grid container justifyContent="space-between" columnSpacing={{xs: 1, md: 4}}>
-                        <Grid item xs={9} sx={{mb: 2}}>
-                            <Typography component="h2" variant="h2">
-                                {country.name}{" "}
-                                <Button
-                                    href={`/discover/?region=${country.region}`}
-                                    color="secondary"
-                                    size="large"
-                                    sx={{fontWeight: "bold"}}
-                                >
-                                    {country.region}
-                                </Button>
-                            </Typography>
-                            <Typography
-                                bgcolor={"rgba(255,255,255,0.1)"} color="info.contrastText" component="span"
-                                sx={{
-                                    display: "inline-block",
-                                    padding: "5px",
-                                    borderRadius: "4px",
-                                    marginRight: "10px",
-                                }}
-                            >
-                                {country.code}
-                            </Typography>
-                            <Typography
-                                className={montserrat.className} color="info.contrastText"
-                                component="span" variant="h5"
-                                sx={{fontFamily: "inherit"}}
-                            >
-                                Officially known as: {country.officialName}
-                            </Typography>
-                        </Grid>
+    return (
+          <main className={styles.main}>
+              <div className={styles.description}>
+                  <Container maxWidth="xl">
+                      <Grid container justifyContent="space-between" columnSpacing={{xs: 1, md: 4}}>
+                          <Grid item xs={9} sx={{mb: 2}}>
+                              <Typography component="h2" variant="h2">
+                                  {country.name}{" "}
+                                  <Button
+                                      href={`/discover/?region=${country.region}`}
+                                      color="secondary"
+                                      size="large"
+                                      sx={{fontWeight: "bold"}}
+                                  >
+                                      {country.region}
+                                  </Button>
+                              </Typography>
+                              <Typography
+                                  bgcolor={"rgba(255,255,255,0.1)"} color="info.contrastText" component="span"
+                                  sx={{
+                                      display: "inline-block",
+                                      padding: "5px",
+                                      borderRadius: "4px",
+                                      marginRight: "10px",
+                                  }}
+                              >
+                                  {country.code}
+                              </Typography>
+                              <Typography
+                                  className={montserrat.className} color="info.contrastText"
+                                  component="span" variant="h5"
+                                  sx={{fontFamily: "inherit"}}
+                              >
+                                  Officially known as: {country.officialName}
+                              </Typography>
+                          </Grid>
 
-                        <Grid item xs={3} textAlign="right">
-                            <CountryActions code={country.code} favCount={country.favouriteCount}/>
-                            <ScrollToSection
-                                startIcon={<InfoIcon />}
-                                color="extra"
-                                buttonText="Tourism Info"
-                                destinationId="tourism"
-                            />
-                        </Grid>
+                          <Grid item xs={3} textAlign="right">
+                              <CountryActions code={country.code} favCount={country.favouriteCount}/>
+                              <ScrollToSection
+                                  startIcon={<InfoIcon />}
+                                  color="extra"
+                                  buttonText="Tourism Info"
+                                  destinationId="tourism"
+                              />
+                          </Grid>
 
-                        <Grid item xs={12}>
-                            <ReadMore text={TextHelper.makeSentence(country.geography)} />{" "}
-                            <ReadMore text={TextHelper.makeSentence(country.background)} />
-                        </Grid>
+                          <Grid item xs={12}>
+                              <ReadMore text={TextHelper.makeSentence(country.geography)} />{" "}
+                              <ReadMore text={TextHelper.makeSentence(country.background)} />
+                          </Grid>
 
-                        <Grid item xs={12} md={6} lg={5}>
-                            <GoogleMap
-                                countryName={country.name}
-                                lat={country.latitude}
-                                lng={country.longitude}
-                                mapLink={country.googleMap}
-                            />
-                            <CountryDistance
-                                {...localCoords}
-                                destCountry={country.name}
-                                destLat={country.latitude}
-                                destLon={country.longitude}
-                            />
-                            <GeographicInfo
-                                terrain={country.terrain}
-                                naturalResources={country.natural_resources}
-                                industries={country.industries}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <CountryStatistics {...country} />
-                            <CountryLanguages
-                                languages={country.languages}
-                                other_languages={country.other_languages}
-                            />
-                            <CountryCurrencies currencies={country.currencies} />
-                            <CapitalCity
-                                city={country.capital}
-                                timezone={country.capital_tz}
-                                coords={[country.latitude, country.longitude]}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={3}>
-                            <FlagDetails {...country.flag} name={country.name} />
-                            <Typography variant="h4" component="h4">Bordering Countries</Typography>
-                            {borderingCountries && borderingCountries.length > 0 ? (
-                                <BorderingCountries borders={borderingCountries} />
-                            ) : (
-                                <p>{country.name} has no bordering countries.</p>
-                            )}
-                            <UNCountry unMember={country.unMember} countryName={country.name} />
-                        </Grid>
-                    </Grid>
-                </Container>
+                          <Grid item xs={12} md={6} lg={5}>
+                              <GoogleMap
+                                  countryName={country.name}
+                                  lat={country.latitude}
+                                  lng={country.longitude}
+                                  mapLink={country.googleMap}
+                              />
+                              <CountryDistance
+                                  {...localCoords}
+                                  destCountry={country.name}
+                                  destLat={country.latitude}
+                                  destLon={country.longitude}
+                              />
+                              <GeographicInfo
+                                  terrain={country.terrain}
+                                  naturalResources={country.natural_resources}
+                                  industries={country.industries}
+                              />
+                          </Grid>
+                          <Grid item xs={12} md={6} lg={4}>
+                              <CountryStatistics {...country} />
+                              <CountryLanguages
+                                  languages={country.languages}
+                                  other_languages={country.other_languages}
+                              />
+                              <CountryCurrencies currencies={country.currencies} />
+                              <CapitalCity
+                                  city={country.capital}
+                                  timezone={country.capital_tz}
+                                  coords={[country.latitude, country.longitude]}
+                              />
+                          </Grid>
+                          <Grid item xs={12} md={6} lg={3}>
+                              <FlagDetails {...country.flag} name={country.name} />
+                              <Typography variant="h4" component="h4">Bordering Countries</Typography>
+                              {borderingCountries && borderingCountries.length > 0 ? (
+                                  <BorderingCountries borders={borderingCountries} />
+                              ) : (
+                                  <p>{country.name} has no bordering countries.</p>
+                              )}
+                              <UNCountry unMember={country.unMember} countryName={country.name} />
+                          </Grid>
+                      </Grid>
+                  </Container>
 
-                <Container maxWidth="xl" id="tourism" sx={{mt: 6}}>
-                    <Grid container justifyContent="space-between" columnSpacing={{xs: 2, md: 6}}>
-                        <Grid item xs={12}>
-                            <Typography variant="h2" component="h2">Visiting {country.name}</Typography>
-                            <Typography variant="body1" gutterBottom>You&apos;re in for a treat! {country.name} is a fascinating place to explore, 
-                            especially from <strong>{tourismInfo.bestMonths}</strong>. Here&apos;s what you could encounter:</Typography>
-                        </Grid>
+                  <Container maxWidth="xl" id="tourism" sx={{mt: 6}}>
+                      <Grid container justifyContent="space-between" columnSpacing={{xs: 2, md: 6}}>
+                          <Grid item xs={12}>
+                              <Typography variant="h2" component="h2">Visiting {country.name}</Typography>
+                              <Typography variant="body1" gutterBottom>You&apos;re in for a treat! {country.name} is a fascinating place to explore, 
+                              especially from <strong>{tourismInfo.bestMonths}</strong>. Here&apos;s what you could encounter:</Typography>
+                          </Grid>
 
-                        <Grid item xs={12} sm={6} lg={3}>
-                            <TourismReasons reasons={tourismInfo.reasons} />
-                        </Grid>
-                        <Grid item xs={12} sm={6} lg={3}>
-                            <TourismWarnings warnings={tourismInfo.warnings} safetyRating={tourismInfo.safety_rating}/>
-                        </Grid>           
-                        <Grid item xs={12} sm={6} lg={3}>
-                            <TourismCuisine highlights={tourismInfo.cuisine} />
-                        </Grid>    
-                        <Grid item xs={12} sm={6} lg={3}>
-                            <TourismActivities activities={tourismInfo.topThingsToDo} />
-                        </Grid>   
+                          <Grid item xs={12} sm={6} lg={3}>
+                              <TourismReasons reasons={tourismInfo.reasons} />
+                          </Grid>
+                          <Grid item xs={12} sm={6} lg={3}>
+                              <TourismWarnings warnings={tourismInfo.warnings} safetyRating={tourismInfo.safety_rating}/>
+                          </Grid>           
+                          <Grid item xs={12} sm={6} lg={3}>
+                              <TourismCuisine highlights={tourismInfo.cuisine} />
+                          </Grid>    
+                          <Grid item xs={12} sm={6} lg={3}>
+                              <TourismActivities activities={tourismInfo.topThingsToDo} />
+                          </Grid>   
 
-                        {tourismInfo.googlePhotos && 
-                            <Grid item xs={12}>
-                            <TourismPhotos photos={tourismInfo.googlePhotos} country={country.name} />
-                            </Grid>   
-                        }                                               
-                    </Grid>
-                </Container>
-            </div>
-        </main>
-    );
+                          {tourismInfo.googlePhotos && 
+                              <Grid item xs={12}>
+                              <TourismPhotos photos={tourismInfo.googlePhotos} country={country.name} />
+                              </Grid>   
+                          }                                               
+                      </Grid>
+                  </Container>
+              </div>
+          </main>
+      );
 }

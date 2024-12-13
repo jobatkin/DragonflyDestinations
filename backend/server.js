@@ -14,20 +14,23 @@ require("./dbConnect").connectMysql();
 app.use(express.json());
 app.use(cors());
 
-const countryRoutes = require('./routes/countryRoutes')
-app.use('/api/countries', countryRoutes)
+const countryRoutes = require('./routes/countryRoutes');
+app.use('/api/countries', countryRoutes);
 
 const userRoutes = require('./routes/userRoutes');
-app.use('/api/users', userRoutes)
+app.use('/api/users', userRoutes);
 
 const favouriteRoutes = require('./routes/favouriteRoutes');
-app.use('/api/favourites', favouriteRoutes)
+app.use('/api/favourites', favouriteRoutes);
 
 const listRoutes = require('./routes/listRoutes');
-app.use('/api/lists', listRoutes)
+app.use('/api/lists', listRoutes);
 
 const submissionRoutes = require('./routes/submissionRoutes');
-app.use('/api/submissions', submissionRoutes)
+app.use('/api/submissions', submissionRoutes);
+
+const errorRoutes = require('./routes/errorRoutes');
+app.use('/api/errorLog', errorRoutes);
 
 app.use("/images", express.static("public/images")); // required for image mappings
 

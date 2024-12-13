@@ -3,11 +3,11 @@ import { useUserContext } from "@/context/UserContext";
 import { Badge } from "@mui/material";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import axios from "axios";
 import FormFeedback from "./FormFeedback";
 import { useState } from "react";
 import FavouriteHelper from "@/utils/FavouriteHelper";
 import LoggingHelper from "@/utils/LoggingHelper";
+import APIHelper from "@/utils/APIHelper";
 
 function CountryActions({code, favCount}: {code: string, favCount?: number}) {
     const {currentUser, handleUpdateUser} = useUserContext();
@@ -17,7 +17,6 @@ function CountryActions({code, favCount}: {code: string, favCount?: number}) {
     // only allow users to favourite and see others favourites if they're logged in
     if (!currentUser || !('token' in currentUser)) return null;
 
-    //const isFavourite = currentUser.favourites.find(fav => fav.countryCode == code);
     const [isFavourite, listIndex] = FavouriteHelper.findFavourite(code, currentUser.lists);
 
     const handleToggleFavourite = async () => {
@@ -26,16 +25,16 @@ function CountryActions({code, favCount}: {code: string, favCount?: number}) {
         // if this country is already a favourite, remove it, otherwise add it
         try {
             if (isFavourite) {
-                const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_SERVER}/api/favourites/${isFavourite.id}`);
+                const response = await APIHelper.deleteData(`/api/favourites/${isFavourite.id}`);
                 updatedFavourites = updatedFavourites.filter(fav => fav.countryCode != code);
                 setCount(prevCount => prevCount - 1)
-                setSubmitResult({message: response.data.result, isError: false});
+                setSubmitResult({message: response.result, isError: false});
             }
             else {
-                const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/favourites/${currentUser.id}`, {type: 'favourite', countryCode: code});
-                updatedFavourites = [...updatedFavourites, response.data.data];
+                const response = await APIHelper.postData(`/api/favourites/${currentUser.id}`, {type: 'favourite', countryCode: code});
+                updatedFavourites = [...updatedFavourites, response.data];
                 setCount(prevCount => prevCount + 1)
-                setSubmitResult({message: response.data.result, isError: false});
+                setSubmitResult({message: response.result, isError: false});
             }
         } catch(err) {
             LoggingHelper.error(err as Error);

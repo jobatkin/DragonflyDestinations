@@ -3,13 +3,14 @@ import SmallCountryCard from "./SmallCountryCard"
 import { Box, Grid, Link, Typography, useTheme } from "@mui/material";
 import { useUserContext } from "@/context/UserContext";
 import FavouriteListControls from "./FavouriteListControls";
-import { MutableRefObject, useRef, useState } from "react";
+import { RefObject, useRef, useState } from "react";
 import { UserFavourite } from "@/types";
 import { PanInfo } from "framer-motion";
 import LoggingHelper from "@/utils/LoggingHelper";
+import APIHelper from "@/utils/APIHelper";
 
 // figure out which of the favourite lists the active dragged country is currently in
-function getDragListTarget(info: PanInfo, dropZoneRefs: MutableRefObject<(HTMLDivElement | null)[]>) {
+function getDragListTarget(info: PanInfo, dropZoneRefs: RefObject<(HTMLDivElement | null)[]>) {
     const { x: finalX, y: finalY } = info.point;
     const { scrollX, scrollY } = window; // Get the scroll offsets
     const verticalOverlap = 40; // number of pixels dragged item can stick out of drop area vertically
@@ -62,7 +63,7 @@ function FavouriteCountries() {
     };    
 
     // when the dragged country is dropped, remove it from the old list and add it to the new
-    const handleDrop = (event: MouseEvent | TouchEvent | null, info: PanInfo) => {
+    const handleDrop = async (event: MouseEvent | TouchEvent | null, info: PanInfo) => {
         if (draggedItem) {
             const { country, listIndex } = draggedItem;
             const updatedFavouriteLists = [...currentUser.lists];
@@ -75,8 +76,17 @@ function FavouriteCountries() {
                 updatedFavouriteLists[listIndex].favourites = updatedFavouriteLists[listIndex].favourites.filter(fav => fav.id != country.id);
                 // add dragged country to new list
                 updatedFavouriteLists[listIndexTarget].favourites = [...updatedFavouriteLists[listIndexTarget].favourites, country];
+                const updatedUserLists = {...currentUser, lists: updatedFavouriteLists};
                 
-                handleUpdateUser({...currentUser, lists: updatedFavouriteLists});
+                handleUpdateUser(updatedUserLists); // update in user stored in context
+
+                try {
+                    // update favourite stored in db
+                    const response = await APIHelper.updateData(`/api/favourites/${country.id}`, {listId: updatedFavouriteLists[listIndexTarget].id});
+                    LoggingHelper.log(response);
+                } catch (err) {
+                    LoggingHelper.error(err as Error);
+                }
             }
         }
         setDraggedItem(null);
@@ -96,6 +106,7 @@ function FavouriteCountries() {
 
     // give the active drop area a background colour while an item is dragged over it
     const dropAreaStyle = (listIndex: number) => dropArea == listIndex ? { background: theme.palette.extra.light} : {};
+    console.log(currentUser.lists)
 
     return (
         <Box component="div" sx={{my: 4}} ref={constraintsRef}>

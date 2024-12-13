@@ -2,12 +2,14 @@
 
 import { useUserContext } from "@/context/UserContext";
 import { Avatar, Box, Container, Grid, Typography } from "@mui/material";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useState } from "react";
 import FormFeedback from "./FormFeedback";
 import UserDetailsForm from "./UserDetailsForm";
 import Link from "@mui/material/Link";
 import LoggingHelper from "@/utils/LoggingHelper";
+import ProfilePhoto from "./ProfilePhoto";
+import APIHelper from "@/utils/APIHelper";
 
 // middleware makes sure the profile page is only accessed by authenticated users
 export default function ProfileForm() {
@@ -40,11 +42,11 @@ export default function ProfileForm() {
         
         if (currentUser && 'id' in currentUser) {
             try {
-                const response = await axios.put(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/${currentUser.id}`, filteredFormData);
-                LoggingHelper.log(response)
-                setSubmitResult( {message: response.data.result, isError: false} );
+                const response = await APIHelper.updateData(`/api/users/${currentUser.id}`, filteredFormData);
+                LoggingHelper.log(response);
+                setSubmitResult( {message: response.result, isError: false} );
                 // new user details merged with existing ones including token to stay logged in
-                handleUpdateUser({...currentUser, ...response.data.data});
+                handleUpdateUser({...currentUser, ...response.data});
 
             } catch (err) {
                 LoggingHelper.error(err as Error);
@@ -70,7 +72,7 @@ export default function ProfileForm() {
                 }}
             >
                 <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
-                    {imagePreview ? <Avatar alt={currentUser?.userName} src={imagePreview} /> : <Avatar alt={currentUser?.userName} src={currentUser?.profilePhoto} />}
+                    {imagePreview ? <Avatar alt={currentUser?.userName} src={imagePreview} /> : <ProfilePhoto />}
                 </Avatar>
                 <Typography component="h5" variant="h5">Update Profile</Typography>
 

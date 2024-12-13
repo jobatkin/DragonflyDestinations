@@ -17,7 +17,13 @@ Flag.init({
         },
         description: {
             type: DataTypes.STRING(1000)
-        }
+        },
+        width: {
+            type: DataTypes.INTEGER
+        },
+        height: {
+            type: DataTypes.INTEGER
+        }        
     },
     {
         sequelize: sequelizeInstance, modelName: 'flags', // use lowercase plural format

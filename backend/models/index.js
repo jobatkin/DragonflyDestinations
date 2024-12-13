@@ -12,6 +12,7 @@ const Scores = require('./scores.js')
 const Favourite = require('./favourite.js')
 const List = require('./list.js')
 const Submission = require('./submission.js')
+const ErrorLog = require('./errorLog.js')
 
 async function init() {
     // sync all models - creates tables
@@ -25,6 +26,7 @@ async function init() {
     await List.sync();
     await Favourite.sync();
     await Submission.sync();
+    await ErrorLog.sync();
 };
 init();
 
@@ -70,5 +72,6 @@ module.exports = {
     Scores,
     Favourite,
     List,
-    Submission
+    Submission,
+    ErrorLog
 };

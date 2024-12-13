@@ -3,12 +3,12 @@
 import { Button, Container, Grid, TextField } from "@mui/material";
 import { useSearchParams } from "next/navigation"
 import FormFeedback from "./FormFeedback";
-import axios from "axios";
 import { useState } from "react";
 import LoggingHelper from "@/utils/LoggingHelper";
 import MessageHelper from "@/utils/MessageHelper";
 import EmailHelper from "@/utils/EmailHelper";
 import { useUserContext } from "@/context/UserContext";
+import APIHelper from "@/utils/APIHelper";
 
 export default function ForgotPassword() {
     const searchParams = useSearchParams();
@@ -29,20 +29,20 @@ export default function ForgotPassword() {
                 const npw2 = formData.get('newPassword2');
 
                 if ( npw1 == npw2) {
-                    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/resetpw`, 
+                    const response = await APIHelper.postData(`/api/users/resetpw`, 
                         { email, resetCode: formData.get('resetCode'), newPassword: npw2 });
-                    if (response.status == 200) {
-                        setMessage(response.data.result);
-                        handleUpdateUser(response.data.data);
+                    if (response.data) {
+                        setMessage(response.result);
+                        handleUpdateUser(response.data);
                     }
                 }
                 else setMessage(passwordErrMsg);
             }
             else {
-                const response = await axios.post(`${process.env.NEXT_PUBLIC_API_SERVER}/api/users/forgotpw`, { email });
-                EmailHelper.sendPasswordResetEmail(response.data.data.resetCode, response.data.data.email);
-                setMessage(response.data.result);
-                setResetCode(response.data.data.resetCode);
+                const response = await APIHelper.postData(`/api/users/forgotpw`, { email });
+                EmailHelper.sendPasswordResetEmail(response.data.resetCode, response.data.email);
+                setMessage(response.result);
+                setResetCode(response.data.resetCode);
             }
 
         } catch (err) {

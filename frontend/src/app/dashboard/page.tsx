@@ -25,7 +25,7 @@ async function getUserScores(userid: number) {
 export default async function DashboardPage() {
 
     // extract the user from the cookie
-    const cookieUserString = cookies().get('user')?.value
+    const cookieUserString = (await cookies()).get('user')?.value
     const currentUserId = cookieUserString && JSON.parse(cookieUserString).id;
 
     if (!currentUserId) return <p>Please <Link href="/login" variant="body2">login</Link> to view your dashboard.</p>;

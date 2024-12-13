@@ -14,7 +14,7 @@ export interface CountryAnswer {
     name: string,
     capital: string,
     region: string,
-    flag: string,
+    flag: Flag,
     correct: boolean,
     displayWrongRegion: string
 }
@@ -23,7 +23,9 @@ export interface Flag {
     id: number,
     svgLink: string,
     pngLink: string,
-    description: string
+    description: string,
+    width: number,
+    height: number
 }
 
 export interface Language {
