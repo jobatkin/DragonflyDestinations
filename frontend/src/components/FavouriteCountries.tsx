@@ -106,7 +106,6 @@ function FavouriteCountries() {
 
     // give the active drop area a background colour while an item is dragged over it
     const dropAreaStyle = (listIndex: number) => dropArea == listIndex ? { background: theme.palette.extra.light} : {};
-    console.log(currentUser.lists)
 
     return (
         <Box component="div" sx={{my: 4}} ref={constraintsRef}>

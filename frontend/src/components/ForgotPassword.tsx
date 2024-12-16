@@ -15,7 +15,7 @@ export default function ForgotPassword() {
     const [email, setEmail] = useState(searchParams.get('email'))
     const [message, setMessage] = useState<string>('');
     const [resetCode, setResetCode] = useState('');
-    const {handleUpdateUser} = useUserContext();
+    const {currentUser, handleUpdateUser} = useUserContext();
 
     const passwordErrMsg = "Passwords do not match, try again";
 
@@ -33,7 +33,7 @@ export default function ForgotPassword() {
                         { email, resetCode: formData.get('resetCode'), newPassword: npw2 });
                     if (response.data) {
                         setMessage(response.result);
-                        handleUpdateUser(response.data);
+                        handleUpdateUser({...currentUser, ...response.data});
                     }
                 }
                 else setMessage(passwordErrMsg);

@@ -41,7 +41,7 @@ function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
             const response = await APIHelper.postData(`/api/users/${currentUser.id}/answer`, userResponse);
             const updatedUser = response.data as User;
             
-            handleUpdateUser(updatedUser);
+            handleUpdateUser({...currentUser, ...updatedUser});
         } else {
             let updatedUser:GuestUser = {highScore: 0, currentScore: 0, ...currentUser};
 
@@ -54,7 +54,7 @@ function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
                 updatedUser.currentScore = 0;
             }
 
-            handleUpdateUser(updatedUser);
+            handleUpdateUser({...currentUser, ...updatedUser});
         }
         setUserMessage(MessageHelper.getQuizMessage(correct));
     }
@@ -62,7 +62,7 @@ function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
     const getAnswerOption = (answer: CountryAnswer) => {
         // flag questions need an img tag to display the flag on the button
         if (questionType == 'flag') {
-            return <Image src={answer.flag.svgLink} width={answer.flag.width} height={answer.flag.height} alt="Country flag" style={{padding: "1em", maxWidth: "100%", height: "auto"}}/>;
+            return <Image src={answer.flag.svgLink} width={answer.flag.width} height={answer.flag.height} alt="Country flag" style={{padding: "1em", minWidth: "250px", maxWidth: "100%", height: "auto"}}/>;
         
         // region questions need the 'wrong' answers to come from the full list of regions, not the other countries as several could be from the same region
         } else if (questionType == 'region') {

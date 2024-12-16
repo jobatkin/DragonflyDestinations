@@ -20,20 +20,23 @@ function CountryActions({code, favCount}: {code: string, favCount?: number}) {
     const [isFavourite, listIndex] = FavouriteHelper.findFavourite(code, currentUser.lists);
 
     const handleToggleFavourite = async () => {
-        let updatedFavourites = [...currentUser.lists[listIndex].favourites];
+        let updatedFavourites = currentUser.lists[listIndex] ? [...currentUser.lists[listIndex].favourites] : [];
+        let updatedList = currentUser.lists[listIndex] ? {...currentUser.lists[listIndex]} : {id:0,name:'',favourites:[]};
 
         // if this country is already a favourite, remove it, otherwise add it
         try {
             if (isFavourite) {
                 const response = await APIHelper.deleteData(`/api/favourites/${isFavourite.id}`);
                 updatedFavourites = updatedFavourites.filter(fav => fav.countryCode != code);
-                setCount(prevCount => prevCount - 1)
+                updatedList.favourites = updatedFavourites;
+                setCount(prevCount => prevCount - 1);
                 setSubmitResult({message: response.result, isError: false});
             }
             else {
                 const response = await APIHelper.postData(`/api/favourites/${currentUser.id}`, {type: 'favourite', countryCode: code});
                 updatedFavourites = [...updatedFavourites, response.data];
-                setCount(prevCount => prevCount + 1)
+                updatedList = {...updatedList, id: response.data.listId, name: response.data.listName, favourites: updatedFavourites};
+                setCount(prevCount => prevCount + 1);
                 setSubmitResult({message: response.result, isError: false});
             }
         } catch(err) {
@@ -41,7 +44,7 @@ function CountryActions({code, favCount}: {code: string, favCount?: number}) {
             setSubmitResult({message: `Could not save favourite: ${(err as Error).message}`, isError: true});
         }
 
-        currentUser.lists[listIndex].favourites = updatedFavourites;
+        currentUser.lists[listIndex] = updatedList;
         handleUpdateUser(currentUser);
     }
 

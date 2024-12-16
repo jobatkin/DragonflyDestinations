@@ -12,7 +12,7 @@ export default class LoggingHelper {
     static error(err: Error) {
         if (process.env.NODE_ENV !== "production") {
             console.error(err);
-//        } else {
+        } else {
             LoggingHelper.logError(err);
         }
     }    

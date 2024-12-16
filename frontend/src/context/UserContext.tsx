@@ -35,6 +35,8 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     // store the current user in state at the top level
     const [currentUser, setCurrentUser] = useState<User | GuestUser | null>(null); // default user object
     const isLoggedIn = Boolean(currentUser && 'token' in currentUser);
+    LoggingHelper.log(isLoggedIn);
+    LoggingHelper.log(currentUser);
 
     // need to load user data from cookie via useEffect to prevent hydration issues
     useEffect(() => {

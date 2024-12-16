@@ -75,6 +75,7 @@ const addFavourite = async (req, res) => {
         const fav = favInstance ? favInstance.get({ plain: true }) : null;
         fav.countryName = country.toJSON().name;
         fav.countryFlag = country.toJSON().flag.svgLink;
+        fav.listName = list.toJSON().name;
 
         console.log(fav)
         res.status(200).json({ result: `Favourite added successfully`, data: fav });
