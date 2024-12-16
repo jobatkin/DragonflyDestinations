@@ -69,7 +69,7 @@ Here are the key API endpoints provided by the backend:
 - `DELETE /api/lists/:lid`: Delete a country list (authentication required)
 
 - `GET /api/submissions/:fid`: Get all submissions for a given form id
-- `POST /api/submissions/`: Add a new form submission
+- `POST /api/submissions/`: Store a new form submission in the database
 - `PUT /api/submissions/:id`: Update data for a given form submission (authentication required)
 - `DELETE /api/submissions/:id`: Delete a form submission (authentication required)
 
