@@ -17,6 +17,7 @@ The backend is structured around the **MVC (Model-View-Controller)** design patt
 - **Controllers**: Handle the core logic for each API route.
 - **Routes**: Define endpoints and their HTTP methods, delegating tasks to controllers.
 - **Utilities**: Helper functions for repetitive tasks, such as data validation and error handling.
+- **Middleware**: Intermediate functions for handling authentication and image uploading prior to controller functions.
 
 ## Technologies Used
 
