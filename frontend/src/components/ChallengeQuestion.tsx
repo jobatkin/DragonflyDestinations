@@ -94,6 +94,7 @@ function ChallengeQuestion({answers, questionType}: ChallengeQuestionProps) {
                     >
                         {getAnswerOption(answer)}
                     </Button>
+                    {(hasAnswered && questionType != 'region') && <Typography variant="h5" sx={{textAlign: "center", my: 1}}>{answer.name}</Typography>}
                 </Grid>
             ))}
             {hasAnswered && 
