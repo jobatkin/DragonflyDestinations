@@ -53,4 +53,26 @@ const error = {
     message: 'Request failed with status code 404'
 }
 
-module.exports = { country, flag, tourism, error }
+const user = {
+    userName: 'testuser',
+    profilePhoto: '/images/fake.jpg',
+    email: 'test@user.com',
+    password: '$2a$10$8Gyhkh/hUUaGL.cylft/sehqAR1O4VPF5KcOcmPEHaMGE49cLHBpO'
+}
+
+const list = {
+    name: 'Test List'
+}
+
+const favourite = {
+    countryCode: 'ALB'
+}
+
+const submission = {
+    form: 'contact', 
+    name: 'test user', 
+    email: 'test@user.com',
+    message: 'running unit tests'
+}
+
+module.exports = { country, flag, tourism, error, user, list, favourite, submission }

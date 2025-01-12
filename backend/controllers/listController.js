@@ -44,9 +44,8 @@ const addList = async (req, res) => {
         const user = await Models.User.findByPk(userId);
 
         if (!user) {
-            res.status(404).json({ result: "User not found, cannot add list" }); return;
+            return res.status(404).json({ result: `User ${userId} not found, cannot add list` }); 
         }
-        console.log(user)
 
         // create their list using special mixin method - https://sequelize.org/docs/v6/core-concepts/assocs/#special-methodsmixins-added-to-instances
         const listInstance = await user.createList(req.body);
@@ -72,15 +71,14 @@ const updateList = async (req, res) => {
         const [rowsUpdated] = await Models.List.update(list, { where: { id: listId } });
         if (rowsUpdated > 0) {
             const updatedList = await Models.List.findByPk(listId);
-            res.status(200).json({ result: 'List updated successfully', data: updatedList });
+            return res.status(200).json({ result: 'List updated successfully', data: updatedList });
         }
-        else {
-            res.status(404).json({ result: `List ${listId} not found` });
-        }
+            
+        return res.status(404).json({ result: `List ${listId} not found` });
     }
     catch(err) {
         console.log(err);
-        res.status(500).json({ result: err.message });
+        return res.status(500).json({ result: err.message });
     }
 }
 
@@ -90,8 +88,8 @@ const deleteList = (req, res) => {
         where: { id: req.params.lid }
     }).then(function (rowsDeleted) {
         // differentiate response if we DID find/delete a favourite or not
-        rowsDeleted > 0 ? 
-            res.status(200).json({ result: 'List deleted successfully' }) :
+        return rowsDeleted > 0 ? 
+            res.status(200).json({ result: 'List deleted successfully', data: req.params }) :
             res.status(404).json({ result: `List ${req.params.lid} not found` })
     }).catch(err => {
         console.log(err)

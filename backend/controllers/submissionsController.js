@@ -31,21 +31,20 @@ const updateSubmission = async (req, res) => {
     const submissionId = req.params.id;
     const submission = {...req.body};
     // don't update any fields to an empty value
-    for (let [key, value] in list) if (value.trim().length == 0) delete submission[key];
+    for (let [key, value] in submission) if (value.trim().length == 0) delete submission[key];
 
     try {
-        const [rowsUpdated] = await Models.Submission.update(list, { where: { id: submissionId } });
+        const [rowsUpdated] = await Models.Submission.update(submission, { where: { id: submissionId } });
         if (rowsUpdated > 0) {
             const updatedSubmission = await Models.Submission.findByPk(submissionId);
-            res.status(200).json({ result: 'Submission updated successfully', data: updatedSubmission });
+            return res.status(200).json({ result: 'Submission updated successfully', data: updatedSubmission });
         }
-        else {
-            res.status(404).json({ result: `Submission ${submissionId} not found` });
-        }
+
+        return res.status(404).json({ result: `Submission ${submissionId} not found` });
     }
     catch(err) {
         console.log(err);
-        res.status(500).json({ result: err.message });
+        return res.status(500).json({ result: err.message });
     }
 }
 
@@ -54,13 +53,13 @@ const deleteSubmission = (req, res) => {
     Models.Submission.destroy({
         where: { id: req.params.id }
     }).then(function (rowsDeleted) {
-        // differentiate response if we DID find/delete a favourite or not
-        rowsDeleted > 0 ? 
-            res.status(200).json({ result: 'Submission deleted successfully' }) :
+        // differentiate response if we DID find/delete a submission or not
+        return rowsDeleted > 0 ? 
+            res.status(200).json({ result: 'Submission deleted successfully', data: req.params }) :
             res.status(404).json({ result: `Submission ${req.params.id} not found` })
     }).catch(err => {
         console.log(err)
-        res.status(500).json({ result: err.message })
+        return res.status(500).json({ result: err.message })
     })
 }
 

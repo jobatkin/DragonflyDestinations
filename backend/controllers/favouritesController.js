@@ -114,7 +114,7 @@ const deleteFavourite = (req, res) => {
     }).then(function (rowsDeleted) {
         // differentiate response if we DID find/delete a favourite or not
         rowsDeleted > 0 ? 
-            res.status(200).json({ result: 'Favourite deleted successfully' }) :
+            res.status(200).json({ result: 'Favourite deleted successfully', data: req.params }) :
             res.status(404).json({ result: `Favourite ${req.params.fid} not found` })
     }).catch(err => {
         console.log(err)
