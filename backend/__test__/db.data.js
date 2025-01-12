@@ -57,7 +57,8 @@ const user = {
     userName: 'testuser',
     profilePhoto: '/images/fake.jpg',
     email: 'test@user.com',
-    password: '$2a$10$8Gyhkh/hUUaGL.cylft/sehqAR1O4VPF5KcOcmPEHaMGE49cLHBpO'
+    password: '$2a$12$pcAj9h6.9ZkZgR6ubq5TWewqOI2WUu1V8fwS29BSHQVpQCZmTbt1u', // testpass
+    resetCode: 123456
 }
 
 const list = {
@@ -75,4 +76,20 @@ const submission = {
     message: 'running unit tests'
 }
 
-module.exports = { country, flag, tourism, error, user, list, favourite, submission }
+const loginUser = {
+    email: user.email,
+    password: 'testpass'
+}
+
+const resetUser = {
+    email: user.email,
+    newPassword: loginUser.password,
+    resetCode: user.resetCode
+}
+
+const userScore = { 
+    question_type: 'region', 
+    result: 1
+}
+
+module.exports = { country, flag, tourism, error, user, loginUser, resetUser, list, favourite, submission, userScore }

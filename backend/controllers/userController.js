@@ -41,8 +41,7 @@ const loginUser = async (req, res) => {
 
         // Validate user input
         if (!(email && password)) {
-            res.status(400).json({ result: "All input is required" });
-            return; // when sending responses and finishing early, manually return or end the function to stop further processing
+            return res.status(400).json({ result: "All input is required" });
         }
         // Validate if user exists in our database
         const user = await getUserWithFavourites(email);
@@ -56,9 +55,10 @@ const loginUser = async (req, res) => {
             console.log(user)
 
             // send back logged in user details including token
-            res.status(200).json({ result: 'User successfully logged in', data: user });
+            return res.status(200).json({ result: 'User successfully logged in', data: user });
         }
-        else res.status(400).json({ result: "Invalid user credentials" });
+        
+        return res.status(400).json({ result: "Invalid user credentials" });
     } catch (err) {
         console.log(err);
         res.status(500).json({ result: err.message })
@@ -132,16 +132,14 @@ const registerUser = async (req, res) => {
 
         // Validate user input
         if (!(email && password && userName)) {
-            res.status(400).json({ result: "All input is required"});
-            return; // when sending responses and finishing early, manually return or end the function to stop further processing
+            return res.status(400).json({ result: "All input is required"});
         }
 
         // Validate if user exists in our database
         const oldUser = await Models.User.findOne({ where: { email }});
 
         if (oldUser) {
-            res.status(409).json({ result: "User already exists. Please login" });
-            return; // when sending responses and finishing early, manually return or end the function to stop further processing
+            return res.status(409).json({ result: "User already exists. Please login" });
         }
 
         let encryptedPassword = await bcrypt.hash(password, 10);
@@ -167,7 +165,7 @@ const registerUser = async (req, res) => {
         console.log(user);
 
         // return new user
-        res.status(201).json({ result: "User successfully registered", data: user });
+        res.status(200).json({ result: "User successfully registered", data: user });
     } catch (err) {
         console.log(err);
         res.status(500).json({ result: err.message })
@@ -212,7 +210,7 @@ const saveUserAnswer = async (req, res) => {
     try {
         const user = await Models.User.findByPk(userId);
         if (!user) {
-            res.status(404).json({ result: "User not found, cannot record score" })
+            return res.status(404).json({ result: "User not found, cannot record score" });
         }
         console.log(user)
 
@@ -265,11 +263,10 @@ const updateUser = async (req, res) => {
         const [rowsUpdated] = await Models.User.update(userProfile, { where: { id: req.params.id } });
         if (rowsUpdated > 0) {
             const updatedUser = await getUserWithFavourites(req.params.id);
-            res.status(200).json({ result: 'User updated successfully', data: updatedUser });
+            return res.status(200).json({ result: 'User updated successfully', data: updatedUser });
         }
-        else {
-            res.status(404).json({ result: `User ${req.params.id} not found` });
-        }
+
+        return res.status(404).json({ result: `User ${req.params.id} not found` });
     }
     catch(err) {
         console.log(err);
@@ -282,8 +279,8 @@ const deleteUser = (req, res) => {
         where: { id: req.params.id }
     }).then(function (rowsDeleted) {
         // differentiate response if we DID find/delete a user or not
-        rowsDeleted > 0 ? 
-            res.status(200).json({ result: 'User deleted successfully' }) :
+        return rowsDeleted > 0 ? 
+            res.status(200).json({ result: 'User deleted successfully', data: req.params }) :
             res.status(404).json({ result: `User ${req.params.id} not found` })
     }).catch(err => {
         console.log(err)
