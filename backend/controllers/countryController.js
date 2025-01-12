@@ -89,19 +89,20 @@ const getCountryTourism = (req, res) => {
 
 // generates 4 random countries and randomly chooses one as the 'right' answer - from this can ask about flag, capital, or region
 const getQuestion = async (req, res) => {
+    const numAnswers = parseInt(req.query.numAnswers) || 4; // default to 4 answers
     const options = {
         raw: true,
         order: Sequelize.random(),
         include: [{model: Models.Flag, attributes: ["svgLink", 'width', 'height']}],
         attributes: questionFields,
-        limit: 4,
+        limit: numAnswers,
     }; // random order, include svg flag info
 
     try {
         const countries = await Models.Country.findAll(options);
         console.log(countries);
 
-        const correct = Math.floor(Math.random() * 4); // randomly choose the right answer from the list
+        const correct = Math.floor(Math.random() * numAnswers); // randomly choose the right answer from the list
         const answers = countries.map((country, i) => ({
             ...country,
             // filter the object to just the flag keys, then use that array of key-value pairs as object entries
